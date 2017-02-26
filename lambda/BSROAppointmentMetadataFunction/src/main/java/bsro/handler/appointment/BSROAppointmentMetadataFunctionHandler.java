@@ -24,18 +24,33 @@ import com.amazonaws.util.json.JSONObject;
 import bsro.appointment.model.Metadata;
 import bsro.webservice.BSROWebServiceResponse;
 import bsro.webservice.BSROWebServiceResponseCode;
+import bsro.webservice.error.Errors;
 
 public class BSROAppointmentMetadataFunctionHandler implements RequestHandler<Object, Object> {
 	
 	public Object handleRequest(Object input, Context context) {
 		
-		BSROWebServiceResponse bsroWebServiceResponse = new BSROWebServiceResponse();
-		
 		// Extract input parameters
 		HashMap<String, String> params = (HashMap<String, String>) input;
 		
-		String storeNumberParam = params.get("storeNumber").toString();
-		String servicesParam = params.get("services").toString();
+		BSROWebServiceResponse bsroWebServiceResponse = new BSROWebServiceResponse();
+		
+		String storeNumberParam = "";
+		String servicesParam = "";
+		
+		try {
+			storeNumberParam = params.get("storeNumber").toString();
+			servicesParam = params.get("services").toString();
+		} catch(NullPointerException e) {
+			context.getLogger().log("NullPointerException Occured while fetching Appointment Metadata : " + e.getMessage());
+		}
+		
+		if(isNullOrEmpty(storeNumberParam)) {
+			return getValidationMessage("Invalid Store Number");
+		}
+		if(isNullOrEmpty(servicesParam)) {
+			return getValidationMessage("Invalid Services");
+		}
 		
 		String url = "https://sandbox-api.appointment-plus.com/Bridgestone/Rules"; // Move this uri to prop
 		
@@ -119,5 +134,22 @@ public class BSROAppointmentMetadataFunctionHandler implements RequestHandler<Ob
 		paramBuilder.append(nameValueDeli).append("response_type").append(nameValuePairDeli).append(URLEncoder.encode(responseType,"UTF-8"));
 		
 		return paramBuilder.toString();
+	}
+	
+	public static boolean isNullOrEmpty(String str) {
+        if (str == null || str.trim().equals("") || str.trim().equals("null")) {
+            return true;
+        } 
+        return false;
+    }
+    
+    private BSROWebServiceResponse getValidationMessage(String message){
+		BSROWebServiceResponse response = new BSROWebServiceResponse();
+		Errors errors = new Errors();
+		errors.getGlobalErrors().add(message);
+		response.setErrors(errors);
+		response.setStatusCode(BSROWebServiceResponseCode.VALIDATION_ERROR.name());
+		response.setPayload(null);
+		return response;
 	}
 }
