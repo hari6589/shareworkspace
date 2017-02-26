@@ -26,11 +26,13 @@ import org.json.JSONObject;
 
 import bsro.webservice.BSROWebServiceResponse;
 import bsro.webservice.BSROWebServiceResponseCode;
+import bsro.webservice.error.Errors;
 
 import com.bridgestone.bsro.aws.appointment.model.Day;
 import com.bridgestone.bsro.aws.appointment.model.Metadata;
 import com.bridgestone.bsro.aws.appointment.model.Service;
 import com.bridgestone.bsro.aws.appointment.model.Time;
+import com.bridgestone.bsro.aws.appointment.util.Utility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
@@ -43,6 +45,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 
 public class AppointmentService {
+	
+	private Utility utility;
+	
 	public Object getAppointmentService(Object input, Context context) {
 		BSROWebServiceResponse bsroWebServiceResponse = new BSROWebServiceResponse();
 		List<Service> services = new ArrayList<Service>();
@@ -82,8 +87,21 @@ public class AppointmentService {
 		// Extract input parameters
 		HashMap<String, String> params = (HashMap<String, String>) input;
 		
-		String storeNumberParam = params.get("storeNumber").toString();
-		String servicesParam = params.get("services").toString();
+		String storeNumberParam = "";
+		String servicesParam = "";
+		try {
+			storeNumberParam = params.get("storeNumber").toString();
+			servicesParam = params.get("services").toString();
+		} catch(NullPointerException e) {
+			context.getLogger().log("NullPointerException Occured while fetching Appointment Metadata : " + e.getMessage());
+		}
+		
+		if(utility.isNullOrEmpty(storeNumberParam)) {
+			return utility.getValidationMessage("Invalid Store Number");
+		}
+		if(utility.isNullOrEmpty(servicesParam)) {
+			return utility.getValidationMessage("Invalid Services");
+		}
 		
 		String url = "https://sandbox-api.appointment-plus.com/Bridgestone/Rules"; // Move this uri to prop
 		
@@ -120,7 +138,7 @@ public class AppointmentService {
 					}
 				}
 			} else {
-				context.getLogger().log("BSROAppointmentMetadataFunctionHandler - HTTP Status code is not 200");
+				context.getLogger().log("HTTP Status code is not 200");
 				bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			}
 			
@@ -128,19 +146,19 @@ public class AppointmentService {
 			httpClient.close();
 			
 		} catch (JSONException e) {
-			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - JSONException Occured while fetching Appointment Metadata : " + e.getMessage());
+			context.getLogger().log("JSONException Occured while fetching Appointment Metadata : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("JSONException : " + e.getMessage());
 		} catch (ClientProtocolException e) {
-			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - ClientProtocolException Occured while fetching Appointment Metadata : " + e.getMessage());
+			context.getLogger().log("ClientProtocolException Occured while fetching Appointment Metadata : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ClientProtocolException : " + e.getMessage());
 		} catch (ConnectTimeoutException e) {
-			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - ConnectTimeoutException Occured while fetching Appointment Metadata : " + e.getMessage());
+			context.getLogger().log("ConnectTimeoutException Occured while fetching Appointment Metadata : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ConnectTimeoutException : " + e.getMessage());
 		} catch (Exception e) {
-			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - Exception Occured while fetching Appointment Metadata : " + e.getMessage());
+			context.getLogger().log("Exception Occured while fetching Appointment Metadata : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.UNKNOWN_ERROR.name());
 			bsroWebServiceResponse.setMessage("Exception : " + e.getMessage());
 		}
@@ -175,10 +193,33 @@ public class AppointmentService {
 		
 		// Extract input parameters
 		HashMap<String, String> props = (HashMap<String, String>) input;
-		String locationIdParam = props.get("locationId").toString();
-		String startDateParam = props.get("startDate").toString();
-		String numDaysParam = props.get("numDays").toString();
-		String employeeIdParam = props.get("employeeId").toString();
+		
+		String locationIdParam = "";
+		String startDateParam = "";
+		String numDaysParam = "";
+		String employeeIdParam = "";
+		
+		try {
+			locationIdParam = props.get("locationId").toString();
+			startDateParam = props.get("startDate").toString();
+			numDaysParam = props.get("numDays").toString();
+			employeeIdParam = props.get("employeeId").toString();
+		} catch(NullPointerException e) {
+			context.getLogger().log("NullPointerException Occured while fetching Appointment Metadata : " + e.getMessage());
+		}
+		
+		if(utility.isNullOrEmpty(locationIdParam)) {
+			return utility.getValidationMessage("Invalid Location Id");
+		}
+		if(utility.isNullOrEmpty(startDateParam)) {
+			return utility.getValidationMessage("Invalid Start Date");
+		}
+		if(utility.isNullOrEmpty(numDaysParam)) {
+			return utility.getValidationMessage("Invalid Number of Days");
+		}
+		if(utility.isNullOrEmpty(employeeIdParam)) {
+			return utility.getValidationMessage("Invalid Employee Id");
+		}
 		
 		String url = "https://sandbox-api.appointment-plus.com/Staff/GetOpenDates"; // Move this uri to prop
 		
@@ -215,7 +256,7 @@ public class AppointmentService {
 					}
 				}
 			} else {
-				context.getLogger().log("BSROAppointmentDayFunctionHandler - HTTP Status code is not 200");
+				context.getLogger().log("HTTP Status code is not 200");
 				bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			}
 			
@@ -223,19 +264,19 @@ public class AppointmentService {
 			httpClient.close();
 			
 		} catch (JSONException e) {
-			context.getLogger().log("BSROAppointmentDayFunctionHandler - JSONException Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("JSONException Occured while fetching Appointment Days : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("JSONException : " + e.getMessage());
 		} catch (ClientProtocolException e) {
-			context.getLogger().log("BSROAppointmentDayFunctionHandler - ClientProtocolException Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("ClientProtocolException Occured while fetching Appointment Days : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ClientProtocolException : " + e.getMessage());
 		} catch (ConnectTimeoutException e) {
-			context.getLogger().log("BSROAppointmentDayFunctionHandler - ConnectTimeoutException Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("ConnectTimeoutException Occured while fetching Appointment Days : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ConnectTimeoutException : " + e.getMessage());
 		} catch (Exception e) {
-			context.getLogger().log("BSROAppointmentDayFunctionHandler - Exception Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("Exception Occured while fetching Appointment Days : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.UNKNOWN_ERROR.name());
 			bsroWebServiceResponse.setMessage("Exception : " + e.getMessage());
 		}
@@ -273,11 +314,33 @@ public class AppointmentService {
 		
 		// Extract input parameters
 	    HashMap<String, String> props = (HashMap<String, String>) input;
-		String locationIdParam = props.get("locationId").toString();
-		String selectedDateParam = props.get("selectedDate").toString();
-		String serviceIdsParam = props.get("serviceIds").toString();
-		String employeeIdParam = props.get("employeeId").toString();
-			
+		String locationIdParam = "";
+		String selectedDateParam = "";
+		String serviceIdsParam = "";
+		String employeeIdParam = "";
+		
+		try {
+			locationIdParam = props.get("locationId").toString();
+			selectedDateParam = props.get("selectedDate").toString();
+			serviceIdsParam = props.get("serviceIds").toString();
+			employeeIdParam = props.get("employeeId").toString();
+		} catch(NullPointerException e) {
+			context.getLogger().log("NullPointerException Occured while fetching Appointment Metadata : " + e.getMessage());
+		}
+		
+		if(utility.isNullOrEmpty(locationIdParam)) {
+			return utility.getValidationMessage("Invalid Location Id");
+		}
+		if(utility.isNullOrEmpty(selectedDateParam)) {
+			return utility.getValidationMessage("Invalid Selected Date");
+		}
+		if(utility.isNullOrEmpty(serviceIdsParam)) {
+			return utility.getValidationMessage("Invalid Services");
+		}
+		if(utility.isNullOrEmpty(employeeIdParam)) {
+			return utility.getValidationMessage("Invalid Employee Id");
+		}
+		
 		String url = "https://sandbox-api.appointment-plus.com/Bridgestone/GetOpenSlots"; // Move this uri to prop
 		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -319,7 +382,7 @@ public class AppointmentService {
 				    bsroWebServiceResponse.setPayload(timeSlots);
 				}
 			} else {
-				context.getLogger().log("BSROAppointmentTimeFunctionHandler - HTTP Status code is not 200");
+				context.getLogger().log("HTTP Status code is not 200");
 				bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			}
 
@@ -327,23 +390,23 @@ public class AppointmentService {
 			httpClient.close();
 						
 		} catch (JSONException e) {
-			context.getLogger().log("BSROAppointmentTimeFunctionHandler - JSONException Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("JSONException Occured while fetching Appointment Time Slots : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("JSONException : " + e.getMessage());
 		} catch (ClientProtocolException e) {
-			context.getLogger().log("BSROAppointmentTimeFunctionHandler - ClientProtocolException Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("ClientProtocolException Occured while fetching Appointment Time Slots : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ClientProtocolException : " + e.getMessage());
 		} catch (ConnectTimeoutException e) {
-			context.getLogger().log("BSROAppointmentTimeFunctionHandler - ConnectTimeoutException Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("ConnectTimeoutException Occured while fetching Appointment Time Slots : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ConnectTimeoutException : " + e.getMessage());
 		} catch (ParseException e) {
-			context.getLogger().log("BSROAppointmentTimeFunctionHandler - ParseException Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("ParseException Occured while fetching Appointment Time Slots : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ParseException : " + e.getMessage());
 		} catch (Exception e) {
-			context.getLogger().log("BSROAppointmentTimeFunctionHandler - Exception Occured while fetching Appointment Time Slots : " + e.getMessage());
+			context.getLogger().log("Exception Occured while fetching Appointment Time Slots : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.UNKNOWN_ERROR.name());
 			bsroWebServiceResponse.setMessage("Exception : " + e.getMessage());
 		}
