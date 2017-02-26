@@ -1,0 +1,6 @@
+D:\AWSWorkspace\BSROBatteryLifeFunction\src\main\java\bsro\webservice\BSROWebServiceResponse.java
+D:\AWSWorkspace\BSROBatteryLifeFunction\src\main\java\bsro\webservice\error\Errors.java
+D:\AWSWorkspace\BSROBatteryLifeFunction\src\main\java\bsro\webservice\BSROWebServiceRequest.java
+D:\AWSWorkspace\BSROBatteryLifeFunction\src\main\java\bsro\webservice\BSROWebServiceResponseCode.java
+D:\AWSWorkspace\BSROBatteryLifeFunction\src\main\java\bsro\dynamodb\mapper\battery\engine\BatteryLife.java
+D:\AWSWorkspace\BSROBatteryLifeFunction\src\main\java\bsro\handler\battery\BSROBatteryLifeFunctionHandler.java
