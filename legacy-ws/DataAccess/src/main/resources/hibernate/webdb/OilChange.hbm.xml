@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2012 3:49:10 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.oil.OilChange" table="OIL_CHANGE">
+        <id name="articleNumber" type="long">
+            <column name="ARTICLE_NUMBER" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="oilTypeId" type="long">
+            <column name="OIL_TYPE_ID" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="articleName" type="string">
+            <column name="ARTICLE_NAME" length="4000" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="4000" not-null="true" />
+        </property>
+        <set name="oilChangeStorePrices" inverse="true">
+            <key>
+                <column name="OIL_CHANGE_ARTICLE_NUMBER" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.oil.OilChangeStorePrice" />
+        </set>
+    </class>
+</hibernate-mapping>

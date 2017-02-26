@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.appointment.AppointmentChoice" schema="RTMS_WEBDB" table="APPOINTMENT_CHOICE">
+    <id column="APPOINTMENT_CHOICE_ID" name="appointmentChoiceId" type="java.lang.Long">
+      <generator class="sequence">
+        <param name="sequence">APPOINTMENT_CHOICE_SEQ</param>
+      </generator>
+    </id>
+    <property column="CHOICE" name="choice" not-null="false" type="java.lang.Integer"/>
+    <property column="DATETIME" name="datetime" not-null="false" type="java.util.Date"/>
+    <property column="DROPOFF_TIME" name="dropOffTime" not-null="false" type="java.util.Date"/>
+    <property column="PICKUP_TIME" name="pickUpTime" not-null="false" type="java.util.Date"/>
+    <property column="DROP_WAIT_OPTION" name="dropWaitOption" not-null="false" type="java.lang.String"/>
+    <property column="APPOINTMENT_ID" name="appointmentId" not-null="true" type="java.lang.Long"/>
+  </class>
+</hibernate-mapping>

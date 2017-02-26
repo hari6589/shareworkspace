@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 23, 2008 3:31:04 PM by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpRequestLog" table="TP_REQUEST_LOG" schema="RTMS_WEBDB">
+        <id name="tpRequestId" type="long">
+            <column name="TP_REQUEST_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">TP_REQUEST_SEQ</param>
+            </generator>
+        </id>
+        <property name="tpUserId" type="long">
+            <column name="TP_USER_ID" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="requestDate" type="date">
+            <column name="REQUEST_DATE" length="7" not-null="true" />
+        </property>
+        <property name="storeNumber" type="long">
+            <column name="STORE_NUMBER" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="modelYear" type="string">
+            <column name="MODEL_YEAR" length="30" />
+        </property>
+        <property name="makeName" type="string">
+            <column name="MAKE_NAME" length="30" />
+        </property>
+        <property name="modelName" type="string">
+            <column name="MODEL_NAME" length="30" />
+        </property>
+        <property name="submodel" type="string">
+            <column name="SUBMODEL" length="80" />
+        </property>
+    </class>
+</hibernate-mapping>

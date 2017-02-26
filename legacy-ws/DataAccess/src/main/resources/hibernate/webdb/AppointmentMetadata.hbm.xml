@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bfrc.dataaccess.model.appointment">
+    <class name="AppointmentMetadata" table="APPOINTMENT_METADATA" schema="RTMS_WEBDB">
+        <id name="appointmentId" column="APPOINTMENT_ID" type="java.lang.Long"/>
+
+        <property name="locationId" column="LOCATION_ID" type="java.lang.Long" />
+        <property name="employeeId" column="EMPLOYEE_ID" type="java.lang.Long" />
+        <property name="appointmentStatusId" column="APPOINTMENT_STATUS_ID" type="java.lang.Long" />
+        <property name="otherDetails" column="OTHER_DETAILS" type="java.lang.String" />
+        <property name="createdDate" column="CREATED_DATE" type="java.util.Date" />
+        <property name="servicesCSV" column="SERVICES_CSV" type="java.lang.String" />
+    </class>
+</hibernate-mapping>

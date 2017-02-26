@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.bfrc.pojo.appointment">
+    <class name="AppointmentSentStatus" table="APPOINTMENT_SENT_STATUS">
+        <id name="appointmentId" column="APPOINTMENT_ID" type="java.lang.Long"/>
+
+        <property name="status" column="STATUS" type="java.lang.String" />
+        <property name="updateDate" column="UPDATE_DATE" type="java.util.Date" />
+        <property name="emailTrackingNumber" column="EMAIL_TRACKING_NUMBER" type="java.lang.String" />
+        <property name="emailStatusMessage" column="EMAIL_STATUS_MESSAGE" type="java.lang.String" />
+        <property name="bookingConfirmationId" column="BOOKING_CONFIRMATION_ID" type="java.lang.String" />
+    </class>
+</hibernate-mapping>

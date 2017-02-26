@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 19, 2011 12:23:55 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class entity-name="TireImage2" name="com.bfrc.pojo.tire.jda2.TireImage" table="TIRE_IMAGE" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="displayId" type="long">
+            <column name="DISPLAY_ID" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="productImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="PRODUCT_IMAGE" />
+        </property>
+        <property name="productNameImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="PRODUCT_NAME_IMAGE" />
+        </property>
+    </class>
+</hibernate-mapping>

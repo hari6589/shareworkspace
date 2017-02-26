@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.dataaccess.model.store">
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.dataaccess.model.store.StoreHolidayHour" table="STORE_HOLIDAY_HOURS" schema="RTMS_WEBDB">
+         <composite-id name="storeHolidayHourId" class="com.bfrc.dataaccess.model.store.StoreHolidayHourId">
+          <key-property name="holidayId" type="long">
+            <column name="HOLIDAY_ID" precision="6" scale="0" />
+        </key-property>
+            <key-property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="6" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="openTime" type="string">
+            <column name="OPEN_TIME" length="5" not-null="true" />
+        </property>
+        <property name="closeTime" type="string">
+            <column name="CLOSE_TIME" length="5" not-null="true" />
+        </property>      
+    </class>
+    <query name="com.bfrc.dataaccess.model.store.StoreHolidayHour.findStoreHolidayHour" cacheable="false">
+     	<![CDATA[
+			 FROM StoreHolidayHour shh
+		    where shh.storeHolidayHourId.storeNumber=? and shh.storeHolidayHourId.holidayId=?		    
+    	]]>
+    </query>
+    <sql-query name="com.bfrc.dataaccess.model.store.StoreHolidayHour.findStoreHolidayHoursByStoreType" cacheable="false">
+	    <return class="com.bfrc.dataaccess.model.store.StoreHolidayHour" />
+ 		    select shh.* from RTMS_WEBDB.store_holiday_hours shh where shh.store_number in 
+ 		     (select s.store_number from store s where trim(s.store_type) in (:storeType)) and
+ 		     shh.holiday_id in (:holidayId)
+ 		    order by shh.store_number, shh.holiday_id
+	</sql-query>
+</hibernate-mapping>

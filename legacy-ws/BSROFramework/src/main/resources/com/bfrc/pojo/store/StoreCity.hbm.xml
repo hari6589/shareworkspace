@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bfrc.pojo.store">
+    <class name="StoreCity"  table="STORE" schema="RTMS_WEBDB">
+        <id name="city" column="CITY" type="java.lang.String"/>
+    </class>
+
+	<sql-query name="StoreCity">
+	    <return class="StoreCity" alias="StoreCity" >
+			<return-property name="city" column="CITY"/>
+		</return>
+ 		select distinct city
+		from store
+		where state=:state
+		and trim(store_type)=:siteName
+		order by city
+	</sql-query>
+</hibernate-mapping>

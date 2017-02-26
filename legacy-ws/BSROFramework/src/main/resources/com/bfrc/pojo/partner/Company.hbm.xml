@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.partner.Company" table="PARTNER_COMPANY">
+        <id name="id" type="long">
+            <column name="ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">PARTNER_COMPANY_SEQ</param>
+            </generator>
+        </id>
+        <property name="createdDate" lazy="false" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="active" lazy="false" type="boolean">
+            <column name="ACTIVE" precision="1" scale="0" />
+        </property>
+        <property name="acceptTerms" lazy="false" type="java.lang.Boolean">
+            <column name="ACCEPT_TERMS" precision="1" scale="0" />
+        </property>
+        <property name="name" lazy="false" type="string">
+            <column name="NAME" length="100" not-null="true" />
+        </property>
+        <property name="emailAddress" lazy="false" type="string">
+            <column name="EMAIL_ADDRESS" length="255" />
+        </property>
+        <property name="signupCode" lazy="false" type="string">
+            <column name="SIGNUP_CODE" length="20" />
+        </property>
+        <property name="message" lazy="false" type="string">
+            <column name="MESSAGE" length="1000" />
+        </property>
+        <property name="question1" lazy="false" type="string">
+            <column name="QUESTION1" length="100" />
+        </property>
+        <property name="question2" lazy="false" type="string">
+            <column name="QUESTION2" length="100" />
+        </property>
+        <property name="question3" lazy="false" type="string">
+            <column name="QUESTION3" length="100" />
+        </property>
+        <property name="employees" lazy="false" type="string">
+            <column name="EMPLOYEES" length="20" />
+        </property>
+        <property name="image" lazy="false" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="IMAGE" />
+        </property>
+        <property name="signupCount" lazy="false" update="false" insert="false"
+        	formula="(select count(*) from users u where u.partner_company_id=id)"
+        	generated="always" />
+        <set name="signups" inverse="true">
+            <key>
+                <column name="PARTNER_COMPANY_ID" precision="11" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.pojo.User" />
+        </set>
+    </class>
+</hibernate-mapping>

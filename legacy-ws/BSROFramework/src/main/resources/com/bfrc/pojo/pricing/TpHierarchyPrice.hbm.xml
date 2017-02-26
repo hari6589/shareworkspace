@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 18, 2007 10:31:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpHierarchyPrice" table="TP_HIERARCHY_PRICE" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.pricing.TpHierarchyPriceId">
+            <key-property name="priceBookId" type="long">
+                <column name="PRICE_BOOK_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="line" type="long">
+                <column name="LINE" precision="10" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="valveStem" type="big_decimal">
+            <column name="VALVE_STEM" precision="15" not-null="true" />
+        </property>
+        <property name="wheelBalanceWeight" type="big_decimal">
+            <column name="WHEEL_BALANCE_WEIGHT" precision="15" not-null="true" />
+        </property>
+        <property name="wheelBalanceLabor" type="big_decimal">
+            <column name="WHEEL_BALANCE_LABOR" precision="15" not-null="true" />
+        </property>
+        <property name="roadHazardPercent" type="big_decimal">
+            <column name="ROADHAZARD_PERCENT" precision="5"/>
+        </property>
+        <property name="roadHazardMinAmount" type="big_decimal">
+            <column name="ROADHAZARD_MIN_AMOUNT" precision="5" />
+        </property>
+    </class>
+</hibernate-mapping>

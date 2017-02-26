@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 23, 2007 4:02:41 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.jda.TireWebsource" table="TIRE_WEBSOURCE" schema="BFS_TIRE_CATALOG_JDA">
+        <composite-id name="id" class="com.bfrc.pojo.tire.jda.TireWebsourceId">
+            <key-property name="sku" type="long">
+                <column name="SKU" precision="11" scale="0" />
+            </key-property>
+            <key-property name="websource" type="string">
+                <column name="WEBSOURCE" length="4" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

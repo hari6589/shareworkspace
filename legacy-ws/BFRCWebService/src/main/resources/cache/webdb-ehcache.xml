@@ -1,0 +1,54 @@
+<ehcache>
+
+	<diskStore path="java.io.tmpdir/ehcache/webDbWs" />
+
+	<defaultCache 
+		maxElementsInMemory="100" 
+		eternal="false"
+		timeToIdleSeconds="120" 
+		timeToLiveSeconds="600" 
+		overflowToDisk="false"
+		diskPersistent="false" 
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU" />
+
+	<cache 
+		name="com.bfrc.dataaccess.model.maintenance.OperationTypes"
+		maxElementsInMemory="300" 
+		eternal="true" 
+		overflowToDisk="false"
+		diskPersistent="false">
+	</cache>
+	<cache 
+		name="com.bfrc.dataaccess.model.maintenance.Components"
+		maxElementsInMemory="300" 
+		eternal="true" 
+		overflowToDisk="false"
+		diskPersistent="false">
+	</cache>
+	
+	<cache 
+		name="com.bfrc.dataaccess.model.appointment.AppointmentServiceDesc"
+		maxElementsInMemory="25" 
+		eternal="true" 
+		overflowToDisk="false"
+		diskPersistent="false">
+	</cache>	
+	
+	<cache 
+		name="com.bfrc.dataaccess.model.store.Store"
+		maxElementsInMemory="300" 
+		eternal="true" 
+		overflowToDisk="false"
+		diskPersistent="false">
+	</cache>	
+	
+	<cache 
+		name="com.bfrc.dataaccess.model.contact.Feedback"
+		maxElementsInMemory="50" 
+		eternal="true" 
+		overflowToDisk="false"
+		diskPersistent="false">
+	</cache>
+		
+</ehcache>

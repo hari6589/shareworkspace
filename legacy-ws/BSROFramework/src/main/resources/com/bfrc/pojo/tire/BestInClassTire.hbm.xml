@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 23, 2012 11:53:30 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.BestInClassTire" table="BEST_IN_CLASS_TIRE" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="displayId" type="long">
+            <column name="DISPLAY_ID" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+    </class>
+    <sql-query name="getBestInClassTires">
+	    <return class="Display2" alias="tire" />
+	    <![CDATA[
+        select distinct tire.ID, tire.VALUE, tire.BRAND_ID, tire.WARRANTY_ID, tire.TIREGROUP_ID, tire.CATEGORY_ID, tire.SEGMENT_ID, 
+            tire.CLASS_ID, tire.DESCRIPTION, tire.GENERATE_CATALOG_PAGE
+		    from BFS_TIRE_CATALOG_JDA.DISPLAY tire, BFS_TIRE_CATALOG_JDA.BEST_IN_CLASS_TIRE bic, BFS_TIRE_CATALOG_JDA.CONFIGURATION sku, 
+		    BFS_TIRE_CATALOG_JDA.TIRE_WEBSOURCE ws
+		    where tire.ID = bic.DISPLAY_ID
+		    and sku.DISPLAY_ID=tire.ID and sku.SKU = ws.SKU and ws.WEBSOURCE=?
+		order by tire.VALUE
+		]]>
+	</sql-query>
+</hibernate-mapping>

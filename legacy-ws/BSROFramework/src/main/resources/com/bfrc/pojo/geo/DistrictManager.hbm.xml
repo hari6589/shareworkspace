@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.geo.DistrictManager" table="DISTRICT_MANAGER" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.geo.DistrictManagerId">
+            <key-property name="districtId" type="string">
+                <column name="DISTRICT_ID" length="4" />
+            </key-property>
+            <key-property name="managerType" type="string">
+                <column name="MANAGER_TYPE" length="3" />
+            </key-property>
+            <key-property name="name" type="string">
+                <column name="NAME" length="50" />
+            </key-property>
+        </composite-id>
+        <property name="emailAddress" type="string">
+            <column name="EMAIL_ADDRESS" length="50" />
+        </property>
+        <many-to-one name="district" column="DISTRICT_ID" insert="false" update="false" lazy="false" />
+    </class>
+</hibernate-mapping>

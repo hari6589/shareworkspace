@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Nov 02 17:10:28 CST 2005                         -->
+<hibernate-mapping package="com.bfrc.pojo.email">
+
+    <class name="EmailUnsubscribe" table="EMAIL_UNSUBSCRIBE">
+        <id name="unsubscribeId" column="UNSUBSCRIBE_ID" type="java.lang.Long">
+            <generator class="sequence">
+            	<param name="sequence">UNSUBSCRIBE_SEQ</param>
+            </generator>
+        </id>
+ 
+        <property name="emailAddress" column="EMAIL_ADDRESS" type="java.lang.String"  not-null="true" />
+        <property name="unsubscribeDate" column="UNSUBSCRIBE_DATE" type="java.util.Date"  not-null="true" />
+        <property name="source" column="SOURCE" type="java.lang.String"  not-null="true" />
+    </class>
+    
+</hibernate-mapping>

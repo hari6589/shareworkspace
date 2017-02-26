@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 9, 2007 10:54:09 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.admin.AdminApp" table="ADMIN_APPS" schema="RTMS_WEBDB">
+        <id name="applicationId" type="long">
+            <column name="APPLICATION_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+            <property name="name" type="string">
+                <column name="APPLICATION_NAME" length="40" />
+            </property>
+            <property name="link" type="string">
+                <column name="APPLICATION_LINK" length="40" />
+            </property>
+            <property name="webSite" type="string">
+                <column name="WEB_SITE" length="10" />
+            </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 23, 2007 4:02:41 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.jda.FeatureJoin" table="FEATURE_JOIN" schema="BFS_TIRE_CATALOG_JDA">
+        <composite-id name="id" class="com.bfrc.pojo.tire.jda.FeatureJoinId">
+            <key-property name="displayId" type="long">
+                <column name="DISPLAY_ID" precision="11" scale="0" />
+            </key-property>
+            <key-property name="featureId" type="long">
+                <column name="FEATURE_ID" precision="11" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

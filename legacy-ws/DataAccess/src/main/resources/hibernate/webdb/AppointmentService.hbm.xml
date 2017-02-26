@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.appointment.AppointmentService" select-before-update="true" schema="RTMS_WEBDB" table="APPOINTMENT_SERVICE">
+    <id column="APPOINTMENT_SERVICE_ID" name="appointmentServiceId" type="java.lang.Long">
+      <generator class="sequence">
+        <param name="sequence">APPOINTMENT_SERVICE_SEQ</param>
+      </generator>
+    </id>
+    <property column="SERVICE_ID" name="serviceId" not-null="true" type="java.lang.Integer"/>
+    <property column="APPOINTMENT_ID" name="appointmentId" not-null="true" type="java.lang.Long"/>
+  </class>
+</hibernate-mapping>

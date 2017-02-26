@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.promotion.PromotionLandingType" table="PROMOTION_LANDING_TYPE">
+        <id name="promoTypeId" type="long">
+            <column name="PROMO_TYPE_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="promoName" type="string">
+            <column name="PROMO_NAME" length="50" unique="true" />
+        </property>
+        <property name="promoType" type="string">
+            <column name="PROMO_TYPE" length="1" />
+        </property>
+        <property name="target" type="string">
+            <column name="TARGET" length="10" />
+        </property>
+        <property name="landingPageId" type="string">
+            <column name="LANDING_PAGE_ID" length="200" />
+        </property>
+        <property name="maintOffer" type="java.lang.Boolean">
+            <column name="MAINT_OFFER" precision="1" scale="0" />
+        </property>
+        <property name="repairOffer" type="java.lang.Boolean">
+            <column name="REPAIR_OFFER" precision="1" scale="0" />
+        </property>
+        <property name="tireOffer" type="java.lang.Boolean">
+            <column name="TIRE_OFFER" precision="1" scale="0" />
+        </property>                      
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="10" />
+        </property>         
+    </class>  
+</hibernate-mapping>

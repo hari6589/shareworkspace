@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 23, 2007 4:02:41 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.jda.Configuration" table="CONFIGURATION" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="sku" type="long">
+            <column name="SKU" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="mileage" class="com.bfrc.pojo.tire.jda.Mileage" fetch="select">
+            <column name="MILEAGE_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="traction" class="com.bfrc.pojo.tire.jda.Traction" fetch="select">
+            <column name="TRACTION_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="sidewall" class="com.bfrc.pojo.tire.jda.Sidewall" fetch="select">
+            <column name="SIDEWALL_ID" precision="11" scale="0" />
+        </many-to-one>
+        <many-to-one name="display" class="com.bfrc.pojo.tire.jda.Display" fetch="select">
+            <column name="DISPLAY_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="speed" class="com.bfrc.pojo.tire.jda.Speed" fetch="select">
+            <column name="SPEED_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="temperature" class="com.bfrc.pojo.tire.jda.Temperature" fetch="select">
+            <column name="TEMPERATURE_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="technology" class="com.bfrc.pojo.tire.jda.Technology" fetch="select">
+            <column name="TECHNOLOGY_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="crossSection" type="string">
+            <column name="CROSS_SECTION" length="4" not-null="true" />
+        </property>
+        <property name="aspect" type="string">
+            <column name="ASPECT" length="4" not-null="true" />
+        </property>
+        <property name="rimSize" type="string">
+            <column name="RIM_SIZE" length="4" not-null="true" />
+        </property>
+        <property name="treadwear" type="string">
+            <column name="TREADWEAR" length="4" not-null="true" />
+        </property>
+        <property name="label" type="string">
+            <column name="LABEL" not-null="true" />
+        </property>
+        <property name="oemFlag" type="string">
+            <column name="OEM_FLAG" length="2" />
+        </property>
+        <property name="loadIndex" type="java.lang.Long">
+            <column name="LOAD_INDEX" precision="11" scale="0" />
+        </property>
+        <property name="loadRange" type="string">
+            <column name="LOAD_RANGE" length="2" />
+        </property>
+        <property name="DLoadIndex" type="java.lang.Long">
+            <column name="D_LOAD_INDEX" precision="11" scale="0" />
+        </property>
+        <property name="ply" type="string">
+            <column name="PLY" length="4" />
+        </property>
+        <property name="dd" type="java.lang.Character">
+            <column name="DD" length="1" />
+        </property>
+        <set name="tireWebsources" inverse="true">
+            <key>
+                <column name="SKU" precision="11" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.pojo.tire.jda.TireWebsource" />
+        </set>
+    </class>
+</hibernate-mapping>

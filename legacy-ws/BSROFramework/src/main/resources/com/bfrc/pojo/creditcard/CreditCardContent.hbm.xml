@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.creditcard.CreditCardContent" table="CFNA_CREDIT_CARD_CONTENT" schema="RTMS_WEBDB">
+        <id name="siteId" type="int">
+            <column name="SITE_ID" precision="5" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">CFNA_CREDIT_CARD_SEQ</param>
+            </generator>
+        </id>
+        <property name="minimumPurchaseAmount" type="java.math.BigDecimal">
+            <column name="MINIMUM_PURCHASE_AMOUNT" scale="10" precision="2" />
+        </property>
+        <property name="gracePeriodInMonths" type="java.lang.Integer">
+            <column name="GRACE_PERIOD_IN_MONTHS" scale="5" />
+        </property>
+        <property name="promotionStartDate" type="date">
+            <column name="PROMOTION_START_DATE" length="7" />
+        </property>
+        <property name="promotionEndDate" type="date">
+            <column name="PROMOTION_END_DATE" length="7" />
+        </property>
+         <property name="aprInPercent" type="java.math.BigDecimal">
+            <column name="APR_IN_PERCENT" scale="10" precision="2"  />
+        </property>
+         <property name="minimumFinanceCharge" type="java.math.BigDecimal">
+            <column name="MINIMUM_FINANCE_CHARGE" scale="10" precision="2" />
+        </property>
+         <property name="creditCardImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="CREDIT_CARD_IMAGE"  />
+        </property>
+        <one-to-one name="website" class="com.bfrc.pojo.contact.WebSite" ></one-to-one>
+        
+    </class>
+</hibernate-mapping>

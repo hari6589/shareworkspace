@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.mediacampaign.MediaCampaignParameters" table="MEDIA_CAMPAIGN_PARAMETERS" schema="RTMS_WEBDB">
+    	<id name="mediaCampaignId" type="java.lang.Long">
+            <column name="MEDIA_CAMPAIGN_ID" precision="10" scale="0" />
+        </id>
+        <property name="keys" type="java.lang.String">
+            <column name="KEYS" length="30" not-null="true" />
+        </property>
+        <property name="description" type="java.lang.String">
+            <column name="DESCRIPTION" length="256" not-null="false" />
+        </property>
+    </class>
+</hibernate-mapping>

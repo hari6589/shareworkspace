@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.aces.BaseVehicle" schema="BFS_TIRE_SELECTOR" table="ACES_BASEVEHICLE">
+  		<id name="baseVehicleId" type="long">
+      		<column name="BASEVEHICLEID"/>
+      		<generator class="assigned"/>
+    	</id>
+    	<property name="year" type="java.lang.Integer">
+      		<column name="YEARID" precision="10"/>
+	    </property>
+	    <many-to-one name="make" class="com.bfrc.dataaccess.model.aces.VehicleMake" lazy="false">
+	        <column name="MAKEID" precision="10" scale="0"  />
+	    </many-to-one>
+	    <many-to-one name="model" class="com.bfrc.dataaccess.model.aces.VehicleModel" lazy="false">
+	        <column name="MODELID" precision="10" scale="0"  />
+	    </many-to-one>
+
+  </class>
+</hibernate-mapping>

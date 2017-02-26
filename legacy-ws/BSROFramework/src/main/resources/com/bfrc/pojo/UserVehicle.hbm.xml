@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.UserVehicle" table="USER_VEHICLE">
+        <id name="id" type="long">
+            <column name="ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">USER_VEHICLE_SEQ</param>
+            </generator>
+        </id>
+        <property name="acesVehicleId" type="long">
+            <column name="ACES_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="year" type="string">
+            <column name="YEAR" length="50" not-null="true" />
+        </property>
+        <property name="make" type="string">
+            <column name="MAKE" length="50" not-null="true" />
+        </property>
+        <property name="model" type="string">
+            <column name="MODEL" length="80" not-null="true" />
+        </property>
+        <property name="submodel" type="string">
+            <column name="SUBMODEL" length="150" />
+        </property>
+        <property name="originalTires" type="string">
+            <column name="ORIG_TIRES" length="1" />
+        </property>
+        <property name="tiresReplaced" type="string">
+            <column name="TIRES_REPLACED" length="1" />
+        </property>
+        <property name="annualMileage" type="int">
+            <column name="ANNUAL_MILEAGE" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="currentMileage" type="int">
+            <column name="CURR_MILEAGE" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="mileageDate" type="timestamp">
+            <column name="MILEAGE_DATE" length="7" not-null="true" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="active" type="boolean">
+            <column name="ACTIVE" precision="1" scale="0" not-null="true" />
+        </property>
+        <many-to-one name="user" column="USERS_ID" class="com.bfrc.pojo.User" />
+    </class>
+</hibernate-mapping>

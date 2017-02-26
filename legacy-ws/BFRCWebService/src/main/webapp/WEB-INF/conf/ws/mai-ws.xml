@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/jee 
+                            http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+	
+	<bean id="apptDataDAO" 
+		class="com.bfrc.apptdata.dao.ApptDataDAOHibernate"
+		p:sessionFactory-ref="apptDataSessionFactory" />
+	
+<!-- 	<bean id="apptDataConfig" class="com.bfrc.apptdata.util.ApptDataConfig" -->
+<!-- 		p:apptServiceSoapAddress="http://12.160.139.93/MAMC_Appointment/MAMC_Appointment.asmx" -->
+<!-- 		p:apptChoiceSoapAddress="http://12.160.139.93/MAMC_Appointment_Choice/MAMC_Appointment_Choice.asmx" -->
+<!-- 		p:apptServiceSoapAddress="http://12.160.139.93/MAMC_Appointment_Service/MAMC_Appointment_Service.asmx"/> -->
+	<bean id="apptDataConfig" class="com.bfrc.apptdata.util.ApptDataConfig">
+		<property name="apptSoapAddress">
+			<value>novalue</value>			
+		</property>
+		<property name="apptChoiceSoapAddress">
+			<value>novalue</value>			
+		</property>
+		<property name="apptServiceSoapAddress">
+			<value>novalue</value>			
+		</property>
+	</bean>
+		
+	<bean id="contactDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.ContactDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.contact.Contact</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+
+ <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="465" />
+        <property name="username" value="app.trace@gmail.com" />
+        <property name="password" value="gdluckCs0ng" />
+        <property name="javaMailProperties">
+        <props>
+            <prop key="mail.smtp.auth">true</prop>
+            <prop key="mail.debug">true</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+            <prop key="mail.smtp.socketFactory.fallback">false</prop>
+            <prop key="mail.smtp.socketFactory.port">465</prop>
+        </props>
+        </property>
+    </bean>
+        <!-- mail Manager -->
+        <bean id="mailManager" class="com.bfrc.framework.spring.MailManager">
+                <property name="mailSender">
+                        <ref local="mailSender" />
+                </property>
+        </bean>
+
+</beans>

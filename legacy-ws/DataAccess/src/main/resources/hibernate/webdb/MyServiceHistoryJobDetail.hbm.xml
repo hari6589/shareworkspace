@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryJobDetail" table="MY_SERVICE_HISTORY_JOB_DETAIL" schema="RTMS_WEBDB">
+        <id name="myServiceHistJobDetailId" type="long">
+            <column name="MY_SERVICE_HIST_JOB_DETAIL_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_SERVICE_HISTORY_JOB_DET_SEQ</param>
+            </generator>
+        </id>
+		<many-to-one name="serviceHistoryJob" class="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryJob" fetch="select">
+            <column name="MY_SERVICE_HIST_JOB_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="articleNumber" type="long">
+            <column name="ARTICLE_NUMBER" length="10"/>
+        </property>
+        <property name="quantity" type="int">
+            <column name="QUANTITY" precision="10" scale="0"/>
+        </property>
+        <property name="sequence" type="int">
+            <column name="SEQUENCE" precision="10" />
+        </property>
+        <property name="price" type="java.math.BigDecimal">
+            <column name="PRICE" precision="8" scale="2"/>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="200"/>
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="3"/>
+        </property>
+        <property name="itemPrice" type="java.math.BigDecimal">
+            <column name="ITEM_PRICE" precision="8" scale="2"/>
+        </property>
+    </class>
+</hibernate-mapping>

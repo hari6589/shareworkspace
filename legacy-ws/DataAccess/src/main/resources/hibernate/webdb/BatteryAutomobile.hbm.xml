@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="app.bsro.model.battery.BatteryAutomobile" table="INTERSTATE_AUTOMOBILE" schema="RTMS_WEBDB">
+        <id name="automobileId" type="long">
+            <column name="AUTOMOBILE_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="productCode" type="string">
+            <column name="PRODUCT_CODE" length="10" />
+        </property>
+        <property name="productLine" type="string">
+            <column name="PRODUCT_LINE" length="50" />
+        </property>
+        <property name="make" type="string">
+            <column name="MAKE" length="50" />
+        </property>
+        <property name="model" type="string">
+            <column name="MODEL" length="50" />
+        </property>
+        <property name="year" type="long">
+            <column name="YEAR" precision="4" scale="0" />
+        </property>
+        <property name="engine" type="string">
+            <column name="ENGINE" length="50" />
+        </property>
+        <property name="ptr" type="string">
+            <column name="PTR" length="50" />
+        </property>
+        <property name="note" type="string">
+            <column name="NOTE" length="50" />
+        </property>
+        <property name="note1" type="string">
+            <column name="NOTE1" length="50" />
+        </property>
+        <property name="note2" type="string">
+            <column name="NOTE2" length="50" />
+        </property>
+        <property name="note3" type="string">
+            <column name="NOTE3" length="50" />
+        </property>
+        <property name="optn" type="string">
+            <column name="OPTN" />
+        </property>
+        <property name="bci" type="string">
+            <column name="BCI" length="50" />
+        </property>
+        <property name="notes" type="string">
+            <column name="NOTES" length="50" />
+        </property>
+        <property name="cca" type="string">
+            <column name="CCA" length="10" />
+        </property>
+    </class>
+    <sql-query name="BatteryAutomobile.getYearList" cacheable="true">
+		<return-scalar column="Year" type="long"/>
+	  	<![CDATA[
+	   		SELECT DISTINCT YEAR
+       		  FROM INTERSTATE_AUTOMOBILE
+       		 ORDER BY 1 DESC
+     	]]>
+    </sql-query>
+    <sql-query name="BatteryAutomobile.getMakeList" cacheable="true">
+	 	<return-scalar column="Make" type="string"/>
+	  	<![CDATA[
+	   		SELECT DISTINCT MAKE
+       		  FROM INTERSTATE_AUTOMOBILE
+             WHERE YEAR= :year
+             ORDER BY 1
+     	]]>
+    </sql-query>
+    <sql-query name="BatteryAutomobile.getModelList" cacheable="true">
+	 	<return-scalar column="MODEL" type="string"/>
+	  	<![CDATA[
+	   		SELECT DISTINCT MODEL
+         	  FROM INTERSTATE_AUTOMOBILE
+       		 WHERE YEAR = :year
+       		   AND lower(MAKE) = lower(:makeName)
+       		 ORDER BY 1
+     	]]>
+    </sql-query>
+    <sql-query name="BatteryAutomobile.getEngineList" cacheable="true">
+		<return-scalar column="Engine" type="string"/>
+	  	<![CDATA[
+	   		SELECT DISTINCT ENGINE
+       		  FROM INTERSTATE_AUTOMOBILE
+       		 WHERE YEAR = :year
+       		   AND lower(MAKE) = lower(:makeName)
+       		   AND lower(MODEL) = lower(:modelName)
+       		 ORDER BY 1
+     	]]>
+     </sql-query>
+     <sql-query name="BatteryAutomobile.getBatteryAutomobileList" cacheable="true">
+     	<return class="app.bsro.model.battery.BatteryAutomobile" />
+	  	<![CDATA[
+	   		SELECT AUTOMOBILE_ID, PRODUCT_CODE, PRODUCT_LINE, MAKE, MODEL, YEAR, ENGINE, 
+	               PTR, NOTE, NOTE1, NOTE2, NOTE3, OPTN, BCI, NOTES, CCA
+       		  FROM INTERSTATE_AUTOMOBILE
+       		 WHERE YEAR = :year
+           	   AND lower(MAKE)  = lower(:makeName)
+               AND lower(MODEL) = lower(:modelName)
+               AND lower(ENGINE) = lower(:engineSize)
+       	     ORDER BY PRODUCT_CODE, CCA
+     	]]>
+    </sql-query>
+    
+</hibernate-mapping>

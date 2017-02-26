@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="app.bsro.model.promotions.PromotionDisclaimer" schema="RTMS_WEBDB" table="PROMOTION_DISCLAIMER">
+  	<composite-id class="app.bsro.model.promotions.PromotionDisclaimerId" name="id">
+      <key-property name="website" type="string">
+        <column name="WEB_SITE" length="10"/>
+      </key-property>
+      <key-property name="landingPageId" type="string">
+        <column name="LANDING_PAGE_ID" length="50"/>
+      </key-property>
+    </composite-id>
+    
+    <property name="description" type="string">
+      <column length="1000" name="DESCRIPTION"/>
+    </property>
+  </class>
+  
+  <sql-query name="PromotionDisclaimer.getDisclaimerMessage">
+		<return-scalar column="Description" type="string"/>
+	  	<![CDATA[
+	   		SELECT DISTINCT DESCRIPTION 
+			    FROM PROMOTION_DISCLAIMER
+			    WHERE lower(WEB_SITE) = lower(:website)
+			     AND lower(LANDING_PAGE_ID) = lower(:landingPageId)
+     	]]>
+    </sql-query>
+</hibernate-mapping>

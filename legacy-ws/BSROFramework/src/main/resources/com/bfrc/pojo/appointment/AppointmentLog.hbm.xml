@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 14, 2007 11:50:22 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.appointment.AppointmentLog" table="APPOINTMENT_LOG" schema="RTMS_WEBDB">
+        <id name="appointmentLogId" type="long">
+            <column name="APPOINTMENT_LOG_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">APPOINTMENT_LOG_SEQ</param>
+            </generator>
+        </id>
+        <property name="logValue" type="org.springframework.orm.hibernate3.support.ClobStringType">
+            <column name="LOG_VALUE" />
+        </property>
+    </class>
+</hibernate-mapping>

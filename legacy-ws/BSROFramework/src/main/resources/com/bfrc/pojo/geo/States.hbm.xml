@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.geo">
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="States" table="STATES" schema="RTMS_WEBDB">
+        <id name="state" type="string">
+            <column name="STATE" length="2" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="25" not-null="true" />
+        </property>
+    </class>
+	<sql-query name="States">
+	    <return class="States" alias="states" >
+			<return-property name="state" column="STATE"/>
+			<return-property name="name" column="NAME"/>
+		</return>
+ 		select state,name 
+		from states 
+		order by name
+	</sql-query>
+</hibernate-mapping>

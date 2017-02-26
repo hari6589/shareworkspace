@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.aces.VehicleConfiguration" schema="BFS_TIRE_SELECTOR" table="VEHICLE_CONFIGURATION">
+  		<id name="vehicleConfigId" type="long">
+      		<column name="VEHICLE_CONFIG_ID"/>
+      		<generator class="assigned"/>
+    	</id>
+    	<many-to-one name="fitment" class="com.bfrc.dataaccess.model.vehicle.Fitment" lazy="false">
+	        <column name="ACES_VEHICLE_ID" precision="10" scale="0"  />
+	    </many-to-one>
+		<property name="bodyNumDoors" type="string">
+      		<column length="3" name="BODY_NUM_DOORS"/>
+	    </property>
+	    <property name="brakeAbs" type="string">
+      		<column length="30" name="BRAKE_ABS_NAME"/>
+	    </property>
+	    <property name="brakeSystemName" type="string">
+      		<column length="30" name="BRAKE_SYSTEM_NAME"/>
+	    </property>
+	    <property name="frontBrakeType" type="string">
+      		<column length="30" name="FRONT_BRAKE_TYPE_NAME "/>
+	    </property>
+	    <property name="rearBrakeType" type="string">
+      		<column length="30" name="REAR_BRAKE_TYPE_NAME "/>
+	    </property>
+	    <property name="driveType" type="string">
+      		<column length="30" name="DRIVE_TYPE_NAME"/>
+	    </property>
+	  	<property name="engineDisplacementLiters" type="string">
+      		<column length="6" name="ENGINEBASE_LITER"/>
+	    </property>
+	    <property name="engineDisplacementCC" type="string">
+      		<column length="8" name="ENGINEBASE_CC"/>
+	    </property>	    
+	    <property name="engineNumCylinders" type="string">
+      		<column length="2" name="ENGINEBASE_NUM_CYLINDERS"/>
+	    </property>
+	    <property name="engineBlockType" type="string">
+      		<column length="2" name="ENGINEBASE_BLOCKTYPE"/>
+	    </property>
+	    <property name="valvesPerEngine" type="string">
+      		<column length="3" name="VALVES_PER_ENGINE"/>
+	    </property>
+	    <property name="engineFuelType" type="string">
+      		<column length="30" name="FUEL_TYPE_NAME"/>
+	    </property>
+	    <property name="engineFuelControlType" type="string">
+      		<column length="50" name="FUEL_SYSTEM_CONTROL_TYPE_NAME"/>
+	    </property>
+	    <property name="engineFuelSystemDesign" type="string">
+      		<column length="50" name="FUEL_SYSTEM_DESIGN_NAME"/>
+	    </property>
+	    <property name="engineHorsepower" type="string">
+      		<column length="10" name="ENGINE_HORSEPOWER"/>
+	    </property>
+	    <property name="frontSpringType" type="string">
+      		<column length="50"  name="FRONT_SPRING_TYPE_NAME"/>
+	    </property>
+	    <property name="rearSpringType" type="string">
+      		<column length="50"  name="REAR_SPRING_TYPE_NAME"/>
+	    </property>
+	    <property name="steeringSystemName" type="string">
+      		<column length="30" name="STEERING_SYSTEM_NAME"/>
+	    </property>
+	    <property name="transmissionControlType" type="string">
+      		<column length="50" name="TRANSMISSION_CONTROL_TYPE_NAME"/>
+	    </property>	    
+	    <property name="transmissionNumSpeeds" type="string">
+      		<column length="3" scale="0" name="TRANSMISSION_NUM_SPEEDS"/>
+	    </property>	    
+	    <property name="lastUpdateDate" type="date">
+      		<column length="7" name="LAST_UPDATE_DATE"/>
+	    </property>
+
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyProductQuote" table="MY_PRODUCT_QUOTES" schema="RTMS_WEBDB">
+        <id name="myProductQuoteId" type="long">
+            <column name="MY_PRODUCT_QUOTE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_PRODUCT_QUOTES_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="user" class="com.bfrc.dataaccess.model.myprofile.BFSUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="quoteId" type="long">
+            <column name="QUOTE_ID" precision="10" scale="0" />
+        </property>
+        <property name="productType" column="PRODUCT_TYPE" not-null="true">     	
+         	<type name="com.bfrc.dataaccess.util.CustomEnumType">
+         		<param name="enumClass">com.bfrc.dataaccess.model.myprofile.ProductType</param>
+         		<param name="identifierMethod">getType</param>
+         		<param name="valueOfMethod">getEnum</param>
+         	</type>
+        </property>       
+        <property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE" length="7"/>
+        </property>
+        <property name="expireDate" type="date">
+            <column name="EXPIRE_DATE" length="7"/>
+        </property>
+    </class>
+</hibernate-mapping>

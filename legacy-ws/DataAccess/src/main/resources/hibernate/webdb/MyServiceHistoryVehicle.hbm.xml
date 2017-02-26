@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryVehicle" table="MY_SERVICE_HISTORY_VEHICLE" schema="RTMS_WEBDB">
+        <id name="myServiceHistVehicleId" type="long">
+            <column name="MY_SERVICE_HIST_VEHICLE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_SERVICE_HISTORY_VEHICLE_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="myVehicle" class="com.bfrc.dataaccess.model.myprofile.MyVehicle" fetch="select">
+            <column name="MY_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+       <!-- <property name="vehicleId" type="long">
+            <column name="SERVICE_VEHICLE_ID" precision="10" scale="0"/>
+        </property> -->
+        <property name="lastDownloadDate" type="date">
+            <column name="LAST_DOWNLOAD_DATE" length="7"/>
+        </property>
+        <property name="customerId" type="long">
+            <column name="CUSTOMER_ID" precision="10" scale="0"/>
+        </property>
+        <bag name="invoices" table="MY_SERVICE_HISTORY_INVOICE" inverse="true" cascade="all" lazy="false" >
+            <key>
+                <column name="MY_SERVICE_HIST_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryInvoice" />
+        </bag>
+    </class>
+</hibernate-mapping>

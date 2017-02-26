@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 16, 2012 4:18:28 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.storeadmin.BsroCorpUsers" table="BSRO_CORP_USERS" schema="RTMS_WEBDB">
+        <id name="emailAddress" type="string">
+            <column name="EMAIL_ADDRESS" length="80" />
+            <generator class="assigned" />
+        </id>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" not-null="true" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="80" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

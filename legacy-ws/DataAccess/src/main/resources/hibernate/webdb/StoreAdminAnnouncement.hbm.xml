@@ -1,0 +1,440 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 19, 2011 7:57:35 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" table="STORE_ADMIN_ANNOUNCEMENT" schema="RTMS_WEBDB">
+        <id name="announcementId" type="long">
+            <column name="ANNOUNCEMENT_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">STORE_ADMIN_ANNOUNCEMENT_SEQ</param>
+            </generator>
+        </id>
+        <property name="friendlyId" type="string">
+            <column name="FRIENDLY_ID" length="100" />
+        </property>
+        <property name="brand" type="string">
+            <column name="BRAND" length="50" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="100" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="1000" />
+        </property>
+         <property name="imageId" type="java.lang.Long">
+            <column name="IMAGE_ID" precision="10" scale="0" />
+        </property>
+        <property name="startDate" type="timestamp">
+            <column name="START_DATE" length="7" />
+        </property>
+        <property name="endDate" type="timestamp">
+            <column name="END_DATE" length="7" />
+        </property>
+        <property name="requestReason" type="string">
+            <column name="REQUEST_REASON" length="1000" />
+        </property>
+        <property name="denyReason" type="string">
+            <column name="DENY_REASON" length="1000" />
+        </property>
+        <property name="articleNumber" type="java.lang.Long">
+            <column name="ARTICLE_NUMBER" precision="10" scale="0" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CREATED_BY" length="130" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="modifiedBy" type="string">
+            <column name="MODIFIED_BY" length="130" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="20" />
+        </property>
+        <property name="position" type="string">
+            <column name="POSITION" length="10" />
+        </property>
+        <many-to-one name="storeAdminLibraryImage" class="com.bfrc.dataaccess.model.storeadmin.StoreAdminLibraryImage" 
+          	column="IMAGE_ID" unique="true" not-null="true" insert="false" update="false" lazy="false" fetch="select"/>
+    </class>
+	<!-- current announcements -->
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findZoneManagerCurrentAnnouncementsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[ 
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+             and (lower(announcement.STATUS) <> 'inactive')
+             and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+								and  lower(email_address)=lower(?))
+            )
+		)
+        order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findZoneManagerCurrentAnnouncementsByZoneId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+             and (lower(announcement.STATUS) <> 'inactive')
+             and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+                       			and  hd.DISTRICT_ZONE=?
+                       	)
+             )
+		)
+        order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findDistrictManagerCurrentAnnouncementsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+       select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+             and (lower(announcement.STATUS) <> 'inactive')
+             and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  lower(email_address)=lower(?))
+                )
+		)
+        order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findDistrictManagerCurrentAnnouncementsByDistrictId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[  
+       select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+             and (lower(announcement.STATUS) <> 'inactive')
+             and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  DISTRICT_ID=?)
+                )
+		)
+        order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findNationalCurrentAnnouncements">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+            from STORE_ADMIN_ANNOUNCEMENT announcement
+            where 
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+            and (lower(announcement.STATUS) <> 'inactive')
+        order by announcement.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findNationalCurrentApprovedAnnouncements">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        	select announcement.* 
+            from STORE_ADMIN_ANNOUNCEMENT announcement  
+            where TO_CHAR (announcement.start_date, 'YYYY-MM-DD') <= TO_CHAR(sysdate, 'YYYY-MM-DD') and  
+            	  TO_CHAR (announcement.end_date , 'YYYY-MM-DD') >= TO_CHAR(sysdate, 'YYYY-MM-DD') and 
+            	  lower(announcement.STATUS)='approved' and 
+            	  trim(announcement.BRAND) in (:brand) 
+        		  order by announcement.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<!-- Expired and inactive announcements -->
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findNationalExpiredAnnouncements">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+            from STORE_ADMIN_ANNOUNCEMENT announcement
+            where  (sysdate > announcement.END_DATE) or (lower(announcement.STATUS) = 'inactive')
+        order by announcement.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findZoneManagerExpiredAnnouncementsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[ 
+       select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+             ((sysdate > announcement.END_DATE) or (lower(announcement.STATUS) = 'inactive'))
+             and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+								and  lower(email_address)=lower(?))
+                )
+		)
+        order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findZoneManagerExpiredAnnouncementsByZoneId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+            ((sysdate > announcement.END_DATE) or (lower(announcement.STATUS) = 'inactive'))
+            and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+ 						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+                        		and  hd.DISTRICT_ZONE=?
+                   		)
+                )
+		)
+        order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findDistrictManagerExpiredAnnouncementsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+            from STORE_ADMIN_ANNOUNCEMENT announcement, STORE_ADMIN_ANNOUNC_STORE_JOIN osjoin 
+            where 
+            announcement.ANNOUNCEMENT_ID = osjoin.ANNOUNCEMENT_ID 
+            and ( 
+            	(sysdate > announcement.END_DATE) or (lower(announcement.STATUS) = 'inactive')
+            )
+            and osjoin.STORE_NUMBER in 
+            (
+                select store.store_number 
+                from STORE store 
+                where 
+                    district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  lower(email_address)=lower(?))
+             )
+         order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findDistrictManagerExpiredAnnouncementsByDistrictId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[  
+        select announcement.* 
+            from STORE_ADMIN_ANNOUNCEMENT announcement, STORE_ADMIN_ANNOUNC_STORE_JOIN osjoin 
+            where 
+            announcement.ANNOUNCEMENT_ID = osjoin.ANNOUNCEMENT_ID 
+            and ( 
+            	(sysdate > announcement.END_DATE) or (lower(announcement.STATUS) = 'inactive')
+            )
+            and osjoin.STORE_NUMBER in 
+            (
+                select store.store_number 
+                from STORE store 
+                where 
+                    district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  DISTRICT_ID=?)
+             )
+         order by announcement.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findNationalActionAnnouncementItems">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+ 		select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+            and 
+            lower(announcement.STATUS) in ('pending_zon_approval','pending_nat_approval')
+        order by announcement.CREATED_DATE desc
+        ]]>
+	</sql-query>
+    <sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findZoneManagerActionAnnouncementsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+            and 
+            lower(announcement.STATUS)='pending_zon_approval'
+            and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+								and  lower(email_address)=lower(?))
+            )
+		)
+        order by announcement.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findZoneManagerActionAnnouncementsByZoneId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+            ((sysdate < announcement.END_DATE) or (announcement.END_DATE is null)) 
+            and 
+            lower(announcement.STATUS)='pending_zon_approval'
+            and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+                                and  hd.DISTRICT_ZONE=?)
+                )
+            )
+            order by announcement.CREATED_DATE desc
+            ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findDistrictManagerAnnouncementStoresByAnnouncementId">
+	    <return class="com.bfrc.dataaccess.model.store.Store" />
+	    <![CDATA[  
+        select distinct store.* 
+			from STORE store
+			INNER JOIN STORE_ADMIN_ANNOUNC_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.announcement_id = ?
+			and store.DISTRICT_ID in (select DISTRICT_ID from DISTRICT_MANAGER where lower(email_address)=lower(?)) 
+         order by store.store_number asc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findZoneManagerAnnouncementStoresByAnnouncementId">
+	    <return class="com.bfrc.dataaccess.model.store.Store" />
+	    <![CDATA[
+        select distinct store.*
+			from STORE store
+			INNER JOIN STORE_ADMIN_ANNOUNC_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.announcement_id = ?
+            and store.DISTRICT_ID in  
+                   (select DISTRICT_ID 
+                    from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                        where 
+                        hd.DISTRICT_ZONE=zm.ZONE_ID 
+                        and  lower(email_address)=lower(?)
+                   )
+         order by store.district_id, store.store_number asc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findNationalAnnouncementStoresByAnnouncementId">
+	    <return class="com.bfrc.dataaccess.model.store.Store" />
+	    <![CDATA[
+        select distinct store.* 
+			from STORE store
+			INNER JOIN STORE_ADMIN_ANNOUNC_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.announcement_id = ?
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findNationalAnnouncementStoresByAnnouncementIdAndStoreType">
+	    <return-scalar column="storeNumber" type="java.lang.Long"/>
+	    <![CDATA[
+        select distinct store.store_number as storeNumber 
+			from STORE store
+			INNER JOIN STORE_ADMIN_ANNOUNC_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.announcement_id = ? and 
+			trim(store.store_type) = ?
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findAnnouncementsByStoreId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+			TO_CHAR (announcement.start_date, 'YYYY-MM-DD') <= TO_CHAR(sysdate, 'YYYY-MM-DD')
+			and TO_CHAR (announcement.end_date , 'YYYY-MM-DD') >= TO_CHAR(sysdate, 'YYYY-MM-DD')
+            and lower(announcement.STATUS)='approved'
+            and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number = ?
+			)
+            order by announcement.CREATED_DATE desc
+            ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findAnnouncementsByStoreIdAndBrand">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+			TO_CHAR (announcement.start_date, 'YYYY-MM-DD') <= TO_CHAR(sysdate, 'YYYY-MM-DD')
+			and TO_CHAR (announcement.end_date , 'YYYY-MM-DD') >= TO_CHAR(sysdate, 'YYYY-MM-DD')
+            and lower(announcement.STATUS)='approved'
+            and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number = ?
+			)
+			and announcement.BRAND = ?
+            order by announcement.CREATED_DATE desc
+            ]]>
+	</sql-query>
+
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement.findAnnouncementsByStoreIdAndDate">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement" />
+	    <![CDATA[
+        select announcement.* 
+ 		    from STORE_ADMIN_ANNOUNCEMENT announcement 
+            where 
+			TO_CHAR (announcement.start_date, 'YYYY-MM-DD') <= TO_CHAR(?, 'YYYY-MM-DD')
+			and TO_CHAR (announcement.end_date , 'YYYY-MM-DD') >= TO_CHAR(?, 'YYYY-MM-DD')
+            and lower(announcement.STATUS)='approved'
+            and announcement.ANNOUNCEMENT_ID in (
+				select ANNOUNCEMENT_ID from STORE_ADMIN_ANNOUNC_STORE_JOIN psjoin
+				where psjoin.store_number = ?
+			)
+            order by announcement.CREATED_DATE desc
+            ]]>
+	</sql-query>
+
+</hibernate-mapping>

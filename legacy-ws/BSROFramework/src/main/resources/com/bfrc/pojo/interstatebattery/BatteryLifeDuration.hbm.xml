@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 27, 2010 2:32:11 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.interstatebattery.BatteryLifeDuration" table="BATTERY_LIFE_DURATION" schema="RTMS_WEBDB">
+        <id name="batteryLifeRegionId" type="long">
+            <column name="BATTERY_LIFE_REGION_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="batteryLifeRegionName" type="string">
+            <column name="BATTERY_LIFE_REGION_NAME" length="50" />
+        </property>
+        <property name="batteryLifeAverage" type="big_decimal">
+            <column name="BATTERY_LIFE_AVERAGE" precision="10" />
+        </property>
+    </class>
+    <sql-query name="getBatteryLifeDurationByZipCode">
+	    <return class="com.bfrc.pojo.interstatebattery.BatteryLifeDuration" />
+	        SELECT 
+	            a.BATTERY_LIFE_REGION_ID, a.BATTERY_LIFE_REGION_NAME, 
+	            a.BATTERY_LIFE_AVERAGE
+            FROM  BATTERY_LIFE_DURATION a, BATTERY_LIFE_REGION b
+            WHERE a.BATTERY_LIFE_REGION_ID = b.BATTERY_LIFE_REGION_ID 
+                AND b.BATTERY_LIFE_ZIP3 = :zip3
+	</sql-query>
+</hibernate-mapping>

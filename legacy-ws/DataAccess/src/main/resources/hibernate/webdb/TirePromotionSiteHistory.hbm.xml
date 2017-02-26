@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.promotion.TirePromotionSiteHistory" schema="TIRE_PROMOTION" table="TIRE_PROMOTION_SITE_HISTORY">
+    <id name="siteHistoryId" type="long">
+      <column name="SITE_HISTORY_ID" precision="10" scale="0"/>
+      <generator class="sequence">
+        <param name="sequence">tire_promotion.SITE_HISTORY_ID_SEQ</param>
+      </generator>
+    </id>
+    <many-to-one class="com.bfrc.dataaccess.model.promotion.TirePromotionEvent" fetch="select" name="tirePromotionEvent">
+      <column name="PROMO_ID" not-null="true" precision="10" scale="0"/>
+    </many-to-one>
+    <property name="siteName" type="string" length="10" column="SITE_NAME" not-null="true"/>
+    <property name="lastChangedBy" type="string" length="50" column="LAST_CHANGED_BY" not-null="true"/>
+    <property name="lastChangedDate" type="date" length="7" column="LAST_CHANGED_DATE" not-null="true"/>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 18, 2007 10:31:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpTirePrice" table="TP_TIRE_PRICE" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.pricing.TpTirePriceId">
+            <key-property name="priceBookId" type="long">
+                <column name="PRICE_BOOK_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="article" type="long">
+                <column name="ARTICLE" precision="10" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="retailPrice" type="big_decimal">
+            <column name="RETAIL_PRICE" precision="15" not-null="true" />
+        </property>
+        <property name="onsale" type="char">
+            <column name="ONSALE" length="1" not-null="true" />
+        </property>
+        <property name="endDate" type="date">
+            <column name="END_DATE" length="7" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

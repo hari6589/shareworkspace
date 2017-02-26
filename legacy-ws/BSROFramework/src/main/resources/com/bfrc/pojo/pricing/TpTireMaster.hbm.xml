@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 18, 2007 10:31:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpTireMaster" table="TP_TIRE_MASTER" schema="RTMS_WEBDB">
+        <id name="article" type="long">
+            <column name="ARTICLE" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="50" not-null="true" />
+        </property>
+        <property name="line" type="long">
+            <column name="LINE" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="feeTypeCode" type="long">
+            <column name="FEE_TYPE_CODE" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="exciseTax" type="big_decimal">
+            <column name="EXCISE_TAX" precision="15" not-null="true" />
+        </property>
+        <property name="itaxCode" type="long">
+            <column name="ITAXCODE" precision="10" not-null="true" />
+        </property>
+    </class>
+    <sql-query name="getTirePricingPriceRange">
+	 <return-scalar column="RetailPriceLow" type="big_decimal"/>
+	 <return-scalar column="RetailPriceHigh" type="big_decimal"/>
+	  <![CDATA[
+	   SELECT
+   		min(tp_Retail_Price) as RetailPriceLow, max(tp_Retail_Price) as RetailPriceHigh
+ 		FROM
+   		(SELECT
+		   		nvl(a.Retail_Price,0) as tp_retail_price,
+		   		b.store_number as sl_store_number,
+		   		e.fee_type_code as tm_fee_type_code
+			FROM TP_Tire_Price a,
+	     		TP_Hierarchy_Price d,
+	     		TP_Tire_Master e,
+	     		TP_Store_List b,
+	     		store s
+			WHERE b.store_number = s.store_number
+				AND s.store_type in (:storeType)
+				AND a.Price_Book_ID = b.Price_Book_ID
+	     		AND a.Price_Book_ID = d.Price_Book_ID
+	     		AND e.article = a.article
+	     		AND d.Line=e.Line
+	     		AND a.Article
+	     		in (:articles)
+	     		)
+   		derived_price
+		left outer join
+    		TP_Tire_Fee c
+		on derived_price.sl_store_number = c.store_number
+    		and derived_price.tm_fee_type_code = c.fee_type_code
+    		and (nvl(c.amount,0) > 0 or nvl(c.percent,0) > 0)
+     ]]>
+    </sql-query>
+</hibernate-mapping>

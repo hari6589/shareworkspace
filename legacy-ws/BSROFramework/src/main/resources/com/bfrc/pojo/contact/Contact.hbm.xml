@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 9, 2007 10:55:22 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping package="com.bfrc.pojo.contact">
+    <class name="Contact" table="BFRC_WEB_SITE_CONTACT" schema="RTMS_WEBDB">
+        <id name="contactId" type="int">
+            <column name="CONTACT_ID" precision="5" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="CONTACT_NAME" length="50" />
+        </property>
+        <property name="email" type="string">
+            <column name="CONTACT_EMAIL" length="250" />
+        </property>
+        <set name="feedbackContacts" inverse="true">
+            <key>
+                <column name="CONTACT_ID" precision="5" scale="0" />
+            </key>
+            <one-to-many class="FeedbackContact" />
+        </set>
+    </class>
+	<sql-query name="BFRCWebSiteContact">
+    	<return-scalar column="email" type="string"/>
+		select c.contact_name||'&lt;'||c.contact_email||'&gt;' AS email
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc 
+		where f.SITE_ID=s.SITE_ID 
+		and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID  
+		and fc.CONTACT_ID=c.CONTACT_ID  
+		and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID 
+		and fc.FEEDBACK_ID=f.FEEDBACK_ID 
+		and c.contact_email not in ('ZONE_MANAGER','DISTRICT_MANAGER','ZONE_OPERATIONS_MANAGER','NA_MANAGER','REGION_MANAGER')
+		and s.SITE_NAME=:siteName 
+		and ft.FEEDBACK_TYPE_NAME=:feedbackType 
+		and f.FEEDBACK_SUBJECT=:feedbackSubject 
+		and ct.CONTACT_TYPE_NAME=:contactType 
+		
+		
+		union
+		
+		
+		select d.name||'&lt;'||d.email_address||'&gt;' AS email
+		from DISTRICT_MANAGER d,STORE s 
+		where s.district_id=d.district_id
+		and s.store_number=:storeNumber
+		and exists
+		(		
+		select c.contact_email
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc 
+		where f.SITE_ID=s.SITE_ID 
+		and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID  
+		and fc.CONTACT_ID=c.CONTACT_ID  
+		and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID 
+		and fc.FEEDBACK_ID=f.FEEDBACK_ID 
+		and c.contact_email='DISTRICT_MANAGER' 
+		and s.SITE_NAME=:siteName 
+		and ft.FEEDBACK_TYPE_NAME=:feedbackType 
+		and f.FEEDBACK_SUBJECT=:feedbackSubject 
+		and ct.CONTACT_TYPE_NAME=:contactType 
+		)
+		
+		
+		union
+		
+		
+		select z.name||'&lt;'||z.email_address||'&gt;' AS email
+		from zone_manager z,hr_districts h,store s
+		where to_number(z.zone_id)=to_number(h.district_zone)
+		and h.district_id=s.district_id
+		and manager_type in ('ZVP','ZQM','ZMM') 
+		and s.store_number=:storeNumber
+		and exists
+		(		
+		select c.contact_email 
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc 
+		where f.SITE_ID=s.SITE_ID 
+		and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID  
+		and fc.CONTACT_ID=c.CONTACT_ID  
+		and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID 
+		and fc.FEEDBACK_ID=f.FEEDBACK_ID 
+		and c.contact_email='ZONE_MANAGER'
+		and s.SITE_NAME=:siteName 
+		and ft.FEEDBACK_TYPE_NAME=:feedbackType 
+		and f.FEEDBACK_SUBJECT=:feedbackSubject 
+		and ct.CONTACT_TYPE_NAME=:contactType
+		)
+		
+		
+		union
+
+
+        select z.name||'&lt;'||z.email_address||'&gt;' AS email
+        from zone_manager z,hr_districts h,store s
+        where to_number(z.zone_id)=to_number(h.district_zone)
+        and h.district_id=s.district_id
+        and manager_type in ('ZOM')
+        and s.store_number=:storeNumber
+        and exists
+        (
+        select c.contact_email
+        from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc
+        where f.SITE_ID=s.SITE_ID
+        and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID
+        and fc.CONTACT_ID=c.CONTACT_ID
+        and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID
+        and fc.FEEDBACK_ID=f.FEEDBACK_ID
+        and c.contact_email='ZONE_OPERATIONS_MANAGER'
+        and s.SITE_NAME=:siteName
+        and ft.FEEDBACK_TYPE_NAME=:feedbackType
+        and f.FEEDBACK_SUBJECT=:feedbackSubject
+        and ct.CONTACT_TYPE_NAME=:contactType
+       	)
+       	 
+        union		
+		
+		select n.account_manager_name||'&lt;'||n.account_manager_email_address||'&gt;' AS email
+		from NA_MANAGERS n,NA_MANAGER_STATE_LOOKUP nl 
+		where n.id=nl.account_manager_id
+		and nl.state=:state
+		and exists
+		(		
+		select c.contact_email
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc 
+		where f.SITE_ID=s.SITE_ID 
+		and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID  
+		and fc.CONTACT_ID=c.CONTACT_ID  
+		and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID 
+		and fc.FEEDBACK_ID=f.FEEDBACK_ID 
+		and c.contact_email='NA_MANAGER' 
+		and s.SITE_NAME=:siteName 
+		and ft.FEEDBACK_TYPE_NAME=:feedbackType 
+		and f.FEEDBACK_SUBJECT=:feedbackSubject 
+		and ct.CONTACT_TYPE_NAME=:contactType 
+		)
+       
+    union
+    
+    select r.name||'&lt;'||r.email_address||'&gt;' AS email
+        from region_manager r,hr_districts h,store s
+        where r.region_id=h.region_id
+        and h.district_id=s.district_id
+        and manager_type in ('RC','RM')
+        and s.store_number=:storeNumber
+        and exists
+        (
+        select c.contact_email
+        from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc
+        where f.SITE_ID=s.SITE_ID
+        and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID
+        and fc.CONTACT_ID=c.CONTACT_ID
+        and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID
+        and fc.FEEDBACK_ID=f.FEEDBACK_ID
+        and c.contact_email='REGION_MANAGER'
+        and s.SITE_NAME=:siteName
+        and ft.FEEDBACK_TYPE_NAME=:feedbackType
+        and f.FEEDBACK_SUBJECT=:feedbackSubject
+        and ct.CONTACT_TYPE_NAME=:contactType
+       	)
+	</sql-query>
+	<sql-query name="GetContactUsEmailsByWebSite">
+    	<return-scalar column="email" type="string"/>
+		select c.contact_name||'&lt;'||c.contact_email||'&gt;' AS email
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc 
+		where f.SITE_ID=s.SITE_ID 
+		and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID  
+		and fc.CONTACT_ID=c.CONTACT_ID  
+		and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID 
+		and fc.FEEDBACK_ID=f.FEEDBACK_ID 
+		and c.contact_email not in ('ZONE_MANAGER','DISTRICT_MANAGER','ZONE_OPERATIONS_MANAGER','NA_MANAGER')
+		and s.SITE_NAME=:siteName 
+		and ft.FEEDBACK_TYPE_NAME=:feedbackType 
+		and lower(f.FEEDBACK_SUBJECT)=lower(:feedbackSubject)
+		and ct.CONTACT_TYPE_NAME=:contactType 
+		
+    union
+		
+		
+		select d.name||'&lt;'||d.email_address||'&gt;' AS email
+		from DISTRICT_MANAGER d,STORE s 
+		where s.district_id=d.district_id
+		and s.SITE_NAME=:siteName 
+		and exists
+		(		
+		select c.contact_email
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc 
+		where f.SITE_ID=s.SITE_ID 
+		and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID  
+		and fc.CONTACT_ID=c.CONTACT_ID  
+		and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID 
+		and fc.FEEDBACK_ID=f.FEEDBACK_ID 
+		and c.contact_email='DISTRICT_MANAGER' 
+		and s.SITE_NAME=:siteName 
+		and ft.FEEDBACK_TYPE_NAME=:feedbackType 
+		and f.FEEDBACK_SUBJECT=:feedbackSubject 
+		and ct.CONTACT_TYPE_NAME=:contactType 
+		)
+		
+		
+		union
+		
+		
+		select z.name||'&lt;'||z.email_address||'&gt;' AS email
+		from zone_manager z,hr_districts h,store s
+		where to_number(z.zone_id)=to_number(h.district_zone)
+		and h.district_id=s.district_id
+		and manager_type in ('ZVP','ZQM','ZMM') 
+		and s.SITE_NAME=:siteName 
+		and exists
+		(		
+		select c.contact_email 
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc 
+		where f.SITE_ID=s.SITE_ID 
+		and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID  
+		and fc.CONTACT_ID=c.CONTACT_ID  
+		and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID 
+		and fc.FEEDBACK_ID=f.FEEDBACK_ID 
+		and c.contact_email='ZONE_MANAGER'
+		and s.SITE_NAME=:siteName 
+		and ft.FEEDBACK_TYPE_NAME=:feedbackType 
+		and f.FEEDBACK_SUBJECT=:feedbackSubject 
+		and ct.CONTACT_TYPE_NAME=:contactType
+		)
+		
+		
+		union
+
+
+        select z.name||'&lt;'||z.email_address||'&gt;' AS email
+        from zone_manager z,hr_districts h,store s
+        where to_number(z.zone_id)=to_number(h.district_zone)
+        and h.district_id=s.district_id
+        and manager_type in ('ZOM')
+        and s.SITE_NAME=:siteName 
+        and exists
+        (
+        select c.contact_email
+        from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_FEEDBACK_TYPE ft,BFRC_WEB_SITE_CONTACT c,BFRC_WEB_SITE_CONTACT_TYPE ct,BFRC_WEB_SITE_FEEDBACK_CONTACT fc
+        where f.SITE_ID=s.SITE_ID
+        and f.FEEDBACK_TYPE_ID=ft.FEEDBACK_TYPE_ID
+        and fc.CONTACT_ID=c.CONTACT_ID
+        and fc.CONTACT_TYPE_ID=ct.CONTACT_TYPE_ID
+        and fc.FEEDBACK_ID=f.FEEDBACK_ID
+        and c.contact_email='ZONE_OPERATIONS_MANAGER'
+        and s.SITE_NAME=:siteName
+        and ft.FEEDBACK_TYPE_NAME=:feedbackType
+        and f.FEEDBACK_SUBJECT=:feedbackSubject
+        and ct.CONTACT_TYPE_NAME=:contactType
+       	)
+       
+	</sql-query>
+</hibernate-mapping>

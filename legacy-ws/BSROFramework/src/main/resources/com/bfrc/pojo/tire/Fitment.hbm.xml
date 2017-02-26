@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+        Note: We may not need a composite id for this any more and can use
+              car_tire_id as the unique Fitment indicator
+-->
+    <class name="com.bfrc.pojo.tire.Fitment" table="FITMENT" schema="BFS_TIRE_SELECTOR">
+        <id name="carTireId" type="long">
+            <column name="CAR_TIRE_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+            <property name="acesVehicleId" type="long">
+                <column name="ACES_VEHICLE_ID" precision="10" scale="0" not-null="true"/>
+            </property>
+	        <property name="makeId" type="long">
+	            <column name="MAKE_ID" precision="10" scale="0" not-null="true" />
+	        </property>
+	        <property name="modelId" type="long">
+	            <column name="MODEL_ID" precision="10" scale="0" not-null="true" />
+	        </property>
+	        <property name="submodelId" type="long">
+	            <column name="SUBMODEL_ID" precision="10" scale="0"  />
+	        </property>
+            <property name="makeName" type="string">
+                <column name="MAKE_NAME" length="30" />
+            </property>
+            <property name="modelYear" type="string">
+                <column name="MODEL_YEAR" length="30" />
+            </property>
+            <property name="modelName" type="string">
+                <column name="MODEL_NAME" length="30" />
+            </property>
+            <property name="submodel" type="string">
+                <column name="SUBMODEL" length="50" />
+            </property>
+            <property name="standardInd" type="character">
+                <column name="STANDARD_IND" length="1" />
+            </property>
+            <property name="frb" type="character">
+                <column name="FRB" length="1" />
+            </property>
+            <property name="vehtype" type="string">
+                <column name="VEHTYPE" length="4" />
+            </property>
+            <property name="speedRating" type="string">
+                <column name="SPEED_RATING" length="4" />
+            </property>
+            <property name="crossSection" type="string">
+                <column name="CROSS_SECTION" length="4" />
+            </property>
+            <property name="aspect" type="string">
+                <column name="ASPECT" length="4" />
+            </property>
+            <property name="rimSize" type="string">
+                <column name="RIM_SIZE" length="4" />
+            </property>
+            <property name="tireSize" type="string">
+                <column name="TIRE_SIZE" length="15" />
+            </property>
+            <property name="loadIndex" type="string">
+                <column name="LOAD_INDEX" length="3" />
+            </property>
+            <property name="loadRange" type="string">
+                <column name="LOAD_RANGE" length="2" />
+            </property>
+        <property name="notes" type="string">
+            <column name="NOTES" />
+        </property>
+        <property name="frontInf" type="string">
+            <column name="FRONT_INF" length="8" />
+        </property>
+        <property name="rearInf" type="string">
+            <column name="REAR_INF" length="8" />
+        </property>
+        <property name="tpmsInd" type="java.lang.Integer">
+            <column name="TPMS_IND" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.store">
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="Store" table="STORE" schema="RTMS_WEBDB">
+        <id name="storeNumber" type="long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="address" type="string">
+            <column name="ADDRESS" length="60" not-null="true" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" length="50" not-null="true" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" not-null="true" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" not-null="true" />
+        </property>
+        <property name="phone" type="string" update="false">
+            <column name="PHONE" length="15" not-null="true" />
+        </property>
+        <property name="managerName" type="string">
+            <column name="MANAGER_NAME" length="50" />
+        </property>
+        <property name="managerEmailAddress" type="string">
+            <column name="MANAGER_EMAIL_ADDRESS" length="50" />
+        </property>
+        <property name="storeType" type="string">
+            <column name="STORE_TYPE" length="4" />
+        </property>
+        <property name="activeFlag" type="big_decimal">
+            <column name="ACTIVE_FLAG" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="geoMatch" type="string">
+            <column name="GEO_MATCH" length="1" />
+        </property>
+        <property name="latitude" type="float">
+            <column name="LATITUDE" />
+        </property>
+        <property name="longitude" type="float">
+            <column name="LONGITUDE" />
+        </property>
+        <property name="postalStatusCode" type="string">
+            <column name="POSTAL_STATUS_CODE" length="10" />
+        </property>
+        <property name="storeName" type="string">
+            <column name="STORE_NAME" length="50" />
+        </property>
+        <property name="onlineAppointmentActiveFlag" type="big_decimal">
+            <column name="ONLINE_APPOINTMENT_ACTIVE_FLAG" precision="22" scale="0" />
+        </property>
+        <property name="tirePricingActiveFlag" type="big_decimal">
+            <column name="TIRE_PRICING_ACTIVE_FLAG" precision="22" scale="0" />
+        </property>
+        <property name="fax" type="string">
+            <column name="FAX" length="15" />
+        </property>
+        <property name="fivestarActiveFlag" type="java.lang.Boolean">
+            <column name="FIVESTAR_ACTIVE_FLAG" precision="1" scale="0" />
+        </property>
+        <property name="websiteName" type="string">
+            <column name="WEBSITE_NAME" length="128" />
+        </property>
+        <property name="trackingPhone" type="string">
+            <column name="TRACKING_PHONE" length="15" />
+        </property>
+		<many-to-one name="district" column="DISTRICT_ID" insert="false" update="false" lazy="false" />
+ 		<one-to-one name="storeBanner" class="StoreBanner" lazy="false"/>
+
+
+        <set name="hours" inverse="false" lazy="false">
+        	<key column="store_number" not-null="true" />        	
+        	<one-to-many class="StoreHour" />
+        </set>
+        <list name="taxRates" lazy="false">
+        	<key column="store_number" />
+        	<list-index column="COUNTER" />
+        	<one-to-many class="com.bfrc.pojo.pricing.TpTaxDesc" />
+        </list>
+        <list name="taxStatus" lazy="false">
+        	<key column="store_number" />
+        	<list-index column="ITAXCODE" />
+        	<one-to-many class="com.bfrc.pojo.pricing.TpTaxStatus" />
+        </list>
+        
+    </class>
+	<sql-query name="StoreByStateCity">
+	    <return class="Store" alias="store" />
+ 		select {store.*}
+		from store
+		where state=:state
+		and city=:city
+		and trim(store_type)=:siteName
+		order by store_number
+	</sql-query>
+	<sql-query name="findStoresByZoneManagerEmail">
+	    <return class="Store" alias="store" />
+ 		select store.* from STORE store where district_id in
+        (select DISTRICT_ID from HR_DISTRICTS hd, ZONE_MANAGER zm  where hd.DISTRICT_ZONE=zm.ZONE_ID and  lower(email_address)=lower(:email))
+        order by district_id, store_number
+	</sql-query>
+	<sql-query name="findStoresByZoneId">
+	    <return class="Store" alias="store" />
+ 		select store.* from STORE store where district_id in
+        (select DISTRICT_ID from HR_DISTRICTS hd where  hd.DISTRICT_ZONE=:zoneId)
+        order by district_id, store_number
+	</sql-query>
+	<sql-query name="findStoresByDistrictManagerEmail">
+	    <return class="Store" alias="store" />
+ 		select store.* from STORE store where district_id in
+        (select DISTRICT_ID from DISTRICT_MANAGER where  lower(email_address)=lower(:email))
+         order by store_number
+	</sql-query>
+	<sql-query name="findStoresByDistrictId">
+	    <return class="Store" alias="store" />
+ 		select store.* from STORE store where district_id in
+        (select DISTRICT_ID from DISTRICT_MANAGER where  DISTRICT_ID=:districtId)
+         order by store_number
+	</sql-query>
+	
+</hibernate-mapping>

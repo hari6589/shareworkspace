@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 3, 2011 9:03:50 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.admin.AdminAppsUsers" table="ADMIN_APPS_USERS" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.admin.AdminAppsUsersId">
+            <key-property name="userId" type="long">
+                <column name="USER_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="applicationId" type="long">
+                <column name="APPLICATION_ID" precision="10" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

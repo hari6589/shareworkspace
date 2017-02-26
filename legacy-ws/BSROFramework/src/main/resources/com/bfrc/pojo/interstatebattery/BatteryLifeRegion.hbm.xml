@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 27, 2010 2:32:11 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.interstatebattery.BatteryLifeRegion" table="BATTERY_LIFE_REGION" schema="RTMS_WEBDB">
+        <id name="batteryLifeZip3" type="string">
+            <column name="BATTERY_LIFE_ZIP3" length="3" />
+            <generator class="assigned" />
+        </id>
+        <property name="batteryLifeRegionId" type="java.lang.Long">
+            <column name="BATTERY_LIFE_REGION_ID" precision="10" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

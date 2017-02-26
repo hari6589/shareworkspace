@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.keyvalue.KeyValueCategory" table="KEY_VALUE_CATEGORY" schema="RTMS_WEBDB">
+        <id name="keyValueCategoryId" type="long">
+            <column name="KEY_VALUE_CATEGORY_ID"  precision="10" scale="0"/>
+                  <generator class="sequence">
+            	<param name="sequence">KEY_VALUE_CATEGORY_SEQ</param>
+            </generator>
+        </id>
+        <property name="siteName" type="string">
+            <column name="SITE_NAME" length="100" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="100" />
+        </property>
+    </class>
+</hibernate-mapping>

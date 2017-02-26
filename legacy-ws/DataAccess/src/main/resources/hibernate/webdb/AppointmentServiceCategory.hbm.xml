@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  	<class name="com.bfrc.dataaccess.model.appointment.AppointmentServiceCategory" select-before-update="true" 
+  		schema="RTMS_WEBDB" table="APPOINTMENT_SERVICE_CATEGORY">
+    	<id name="categoryId" type="long">
+      		<column name="CATEGORY_ID"/>
+      		<generator class="assigned"/>
+    	</id>
+    	<property column="CATEGORY_DESC" name="categoryDesc" not-null="true" type="string"/>
+  	</class>
+</hibernate-mapping>

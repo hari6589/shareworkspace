@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.vehicle.WebSiteUserSubvehicle" table="WEB_SITE_USER_SUBVEHICLE">
+		<id name="webSiteUserSubvehicleId" type="long">
+			<column name="WEB_SITE_USER_SUBVEHICLE_ID" precision="10" scale="0" />
+			<generator class="sequence">
+				<param name="sequence">WEB_SITE_USER_SUBVEHICLE_SEQ</param>
+			</generator>
+		</id>
+		<many-to-one name="webSiteUserVehicle" class="com.bfrc.dataaccess.model.vehicle.WebSiteUserVehicle">
+			<column name="WEB_SITE_USER_VEHICLE_ID" length="10" not-null="true" />
+		</many-to-one>
+		<property name="vehicleType" type="string">
+			<column name="VEHICLE_TYPE" length="50" />
+		</property>
+		<property name="vehicleObjectId" type="string">
+			<column name="VEHICLE_OBJECT_ID" length="10" />
+		</property>
+		<property name="year" type="int">
+			<column name="YEAR" precision="4" scale="0" />
+		</property>
+		<property name="yearId" type="string">
+			<column name="YEAR_ID" length="50" />
+		</property>
+		<property name="make" type="string">
+			<column name="MAKE" length="50" />
+		</property>
+		<property name="makeId" type="string">
+			<column name="MAKE_ID" length="50" />
+		</property>
+		<property name="model" type="string">
+			<column name="MODEL" length="50" />
+		</property>
+		<property name="modelId" type="string">
+			<column name="MODEL_ID" length="50" />
+		</property>
+		<property name="submodel" type="string">
+			<column name="SUB_MODEL" length="50" />
+		</property>
+		<property name="submodelId" type="string">
+			<column name="SUB_MODEL_ID" length="50" />
+		</property>
+		<property name="engine" type="string">
+			<column name="ENGINE" length="50" />
+		</property>
+		<property name="engineId" type="string">
+			<column name="ENGINE_ID" length="50" />
+		</property>
+	</class>
+</hibernate-mapping>
+

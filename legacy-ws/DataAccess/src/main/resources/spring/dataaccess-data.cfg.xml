@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        				http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<!-- 
+		The below beans are used in the intervalsService object to parse out the different types
+		of service types.  We cannot change the table so we'll keep the distinction here.
+	 -->
+    <util:list id="serviceChecksList" list-class="java.util.ArrayList">
+		<value>MAINTENANCE SYSTEM NOTE 1-13</value>
+		<value>MAINTENANCE SYSTEM NOTE 1-14</value>
+		<value>MAINTENANCE SYSTEM NOTE 1-20</value>
+		<value>MAINTENANCE SYSTEM NOTE3-13 value=20</value>
+		<value>SERVICE 01</value>
+		<value>SERVICE 02</value>
+		<value>SERVICE 03</value>
+		<value>SERVICE 04</value>
+		<value>SERVICE 05</value>
+		<value>SERVICE 06</value>
+		<value>SERVICE 07</value>
+		<value>SERVICE 08</value>
+		<value>SERVICE 09</value>
+		<value>SERVICE 10</value>
+		<value>SERVICE 11</value>
+		<value>SERVICE 12</value>
+		<value>SERVICE 13</value>
+		<value>SERVICE 14</value>
+		<value>SERVICE 20</value>
+	</util:list>
+
+
+	<util:list id='requiredMaintenanceList' list-class="java.util.ArrayList">
+		<value>SERVICE A</value>
+		<value>SERVICE B</value>
+		<value>A SERVICE</value>
+		<value>B SERVICE</value>
+		<value>CHANGE ENGINE OIL (MAINT. I)</value>
+		<value>CHANGE ENGINE OIL (MAINT. II)</value>
+		<value>INSPECTION I</value>
+		<value>INSPECTION II</value>
+		<value>MAINTENANCE I</value>
+		<value>MAINTENANCE II</value>
+		<value>SCHEDULE 1</value>
+		<value>SCHEDULE 2</value>
+		<value>SCHEDULE A</value>
+		<value>SCHEDULE B</value>
+	</util:list>	
+	
+	<util:list id='maintenanceMilestonesList' list-class="java.util.ArrayList">
+		<value>ADDITIONAL MAINTENANCE</value>
+		<value>ALL</value>
+		<value>AS NECESSARY</value>
+		<value>CLASS A MOTORHOME</value>
+		<value>COMMERCIAL</value>
+		<value>COMPLIMENTARY SERVICE</value>
+		<value>CONDITION BASED SERVICE (CBS)</value>
+		<value>DIFFERENT TEMPERATURES</value>
+		<value>DIRT OR DUSTY ROADS</value>
+		<value>DUSTY</value>
+		<value>EXTREME</value>
+		<value>EXTREME CONDITIONS</value>
+		<value>EXTREME TEMPERATURE DRIVING</value>
+		<value>HIGH MILEAGE SERVICE</value>
+		<value>IDLING</value>
+		<value>MOUNTAINOUS</value>
+		<value>MOUNTAINOUS/LOW SPEED DRIVING</value>
+		<value>NORMAL</value>
+		<value>OFF ROAD</value>
+		<value>OFF-ROAD</value>
+		<value>OFF-ROAD MAINTENANCE</value>
+		<value>PLUS (+) SERVICE</value>
+		<value><![CDATA[POLICE & TAXI]]></value>
+		<value>PREMIUM</value>
+		<value>SANDY AREAS</value>
+		<value>SEVERE</value>
+		<value>SHORT TRIP</value>
+		<value>SHORT TRIPS/COLD WEATHER</value>
+		<value>STANDARD OPERATION SERVICE</value>
+		<value>TOWING</value>
+		<value>TRAFFIC</value>
+	</util:list>
+	
+	<util:list id='additionalPeriodicMaintenanceList' list-class="java.util.ArrayList">
+		<value>BRAKE FLUID</value>
+		<value>COOLANT</value>
+		<value>TIME</value>
+	</util:list>    
+    
+	
+	<!-- 
+		The below beans are used in the EPA/MPG as data lookups.
+	 -->
+	<util:map id="mpgTransmissions">
+	    <entry key="A" value="Automatic"/>
+	    <entry key="L" value="Automatic"/>
+	    <entry key="M" value="Manual"/>
+	    <entry key="S" value="Semi-Automatic"/>
+	    <entry key="SA" value="Semi-Automatic"/>
+	    <entry key="AM" value="Automatic Manual"/>
+	    <entry key="OT" value="Other"/>
+	    <entry key="AV-S" value="Other"/>
+	    <entry key="AV" value="Continuously Variable"/>
+	    <entry key="CVT" value="Continuously Variable"/>
+	</util:map>
+	
+	<util:map id="mpgDrives">
+		<entry key="R" value="2-Wheel Drive (Rear)"/>
+      	<entry key="F" value="2-Wheel Drive (Front)"/>
+       	<entry key="A" value="All Wheel Drive"/>
+       	<entry key="4" value="4-Wheel Drive"/>
+	</util:map>
+	
+	<util:map id="mpgFuels">
+		<entry key="G" value="Regular Unleaded"/>
+        <entry key="R" value="Regular Unleaded"/>
+        <entry key="GP" value="Premium Unleaded"/>
+        <entry key="P" value="Premium Unleaded"/>
+        <entry key="GPR" value="Premium Unleaded Required"/>
+        <entry key="DU" value="Diesel value=ultra low sulfur"/>
+        <entry key="D" value="Diesel Fuel"/>
+        <entry key="C" value="Compressed Natural Gas"/>
+        <entry key="E" value="Ethanol"/>
+        <entry key="EL" value="Electricity"/>
+	</util:map>
+	
+	<util:map id="mpgMakes">
+		<entry key="CHRYSLER GROUP LLC" value="CHRYSLER"/>
+		<entry key="GM" value="GMC"/>
+		<entry key="GENERAL MOTORS" value="GMC"/>
+		<entry key="LINCOLN-MERCURY" value="LINCOLN"/>
+		<entry key="MAZDA MOTOR CORP" value="MAZDA"/>
+		<entry key="PANTHER CAR COMPANY LIMITED" value="PANTHER"/>
+		<entry key="FORD MOTOR COMPANY" value="FORD"/>
+		<entry key="HYUNDAI MOTOR COMPANY" value="HYUNDAI"/>
+		<entry key="ISUZU MOTORS LIMITED" value="ISUZU"/>
+		<entry key="JAGUAR CARS" value="JAGUAR"/>
+		<entry key="JAGUAR CARS INC." value="JAGUAR"/>
+		<entry key="JEEP CORPORATION" value="JAGUAR"/>
+		<entry key="KIA MOTORS CORPORATION" value="KIA"/>
+		<entry key="MAZDA MOTOR" value="MAZDA"/>
+		<entry key="MITSUBISHI MOTORS AUST LTD" value="MITSUBISHI"/>
+		<entry key="MITSUBISHI MOTORS AUST. LTD." value="MITSUBISHI"/>
+		<entry key="MITSUBISHI MOTORS CO" value="MITSUBISHI"/>
+		<entry key="MITSUBISHI MOTORS NA" value="MITSUBISHI"/>
+		<entry key="NISSAN MOTOR CO. value= LTD." value="NISSAN"/>
+		<entry key="NISSAN MOTOR COMPANY value= LTD." value="NISSAN"/>
+		<entry key="ROLLS-ROYCE MOTOR CARS LTD." value="ROLLS-ROYCE"/>
+		<entry key="ROLLS-ROYCE MOTORS LTD." value="ROLLS-ROYCE"/>
+		<entry key="SUZUKI MOTOR CO. value= LTD" value="SUZUKI"/>
+		<entry key="SUZUKI MOTOR CO. value= LTD." value="SUZUKI"/>
+		<entry key="SUZUKI MOTOR CO. value=LTD." value="SUZUKI"/>
+		<entry key="SUZUKI MOTOR CORP." value="SUZUKI"/>
+		<entry key="SUZUKI MOTOR CORPORATION" value="SUZUKI"/>
+		<entry key="VOLVO CAR CORPORATION" value="VOLVO"/>
+		<entry key="VW" value="VOLKSWAGEN"/>
+	</util:map>
+	
+</beans>

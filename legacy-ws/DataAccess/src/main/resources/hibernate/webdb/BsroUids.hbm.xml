@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.bfrc.dataaccess.model.uid.BsroUids" table="BSRO_UIDS" schema="RTMS_WEBDB">
+        <id name="userId" type="integer">
+            <column name="USER_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" />
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" />
+        </property>
+        <property name="storeNumber" type="string">
+            <column name="STORE_NUMBER" />
+        </property>
+        <property name="zoneNumber" type="string">
+            <column name="ZONE_NUMBER" />
+        </property>
+        <property name="districtId" type="string">
+            <column name="DISTRICT_ID" />
+        </property>
+       
+    </class>
+</hibernate-mapping>

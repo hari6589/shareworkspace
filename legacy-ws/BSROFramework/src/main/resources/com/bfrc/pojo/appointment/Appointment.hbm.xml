@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Fri Oct 28 09:57:01 CDT 2005                         -->
+<hibernate-mapping package="com.bfrc.pojo.appointment">
+
+    <class name="Appointment" table="APPOINTMENT">
+        <id name="appointmentId" column="APPOINTMENT_ID" type="java.lang.Long">
+            <generator class="sequence">
+            	<param name="sequence">APPOINTMENT_SEQ</param>
+            </generator>
+        </id>
+ 
+        <property name="storeNumber" column="store_number" type="java.lang.Long" not-null="false" />
+        <property name="vehicleYear" column="vehicle_year" type="java.lang.Long" not-null="false" />
+        <property name="vehicleMake" column="vehicle_make" type="java.lang.String"  not-null="false" />
+        <property name="vehicleModel" column="vehicle_model" type="java.lang.String"  not-null="false" />
+        <property name="vehicleSubmodel" column="vehicle_submodel" type="java.lang.String"  not-null="false" />
+        <property name="mileage" column="mileage" type="java.lang.Integer"  not-null="false" />
+        <property name="comments" column="comments" type="java.lang.String"  not-null="false" />
+        <property name="firstName" column="FIRST_NAME" type="java.lang.String"  not-null="false" />
+        <property name="lastName" column="LAST_NAME" type="java.lang.String"  not-null="false" />
+        <property name="address1" column="ADDRESS1" type="java.lang.String"  not-null="false" />
+        <property name="address2" column="ADDRESS2" type="java.lang.String" not-null="false" />
+        <property name="city" column="CITY" type="java.lang.String"  not-null="false" />
+        <property name="state" column="STATE" type="java.lang.String"  not-null="false" />
+        <property name="zip" column="ZIP" type="java.lang.String"  not-null="false" />
+        <property name="daytimePhone" column="daytime_phone" type="java.lang.String"  not-null="false" />
+        <property name="eveningPhone" column="evening_phone" type="java.lang.String"  not-null="false" />
+        <property name="cellPhone" column="cell_phone" type="java.lang.String"  not-null="false" />
+		<property name="emailAddress" column="email_address" type="java.lang.String"  not-null="false" />
+        <property name="emailSignup" column="email_signup" type="java.lang.String"  not-null="false" />
+        <property name="createdDate" column="CREATED_DATE" type="java.util.Date"  not-null="true" />
+        <property name="webSite" column="WEB_SITE" type="java.lang.String"  not-null="false" />
+        <property name="batteryQuoteId" column="BATTERY_QUOTE_ID" type="java.lang.Long" not-null="false" />
+        <property name="emailReminder" column="EMAIL_REMINDER_IND" type="java.lang.String" not-null="false" />
+        <property name="phoneReminder" column="PHONE_REMINDER_IND" type="java.lang.String" not-null="false" />
+        <property name="webSiteSource" column="WEB_SITE_SOURCE" type="java.lang.String"  not-null="false" />
+        <list name="choices" lazy="false">
+        	<key column="APPOINTMENT_ID" />
+        	<list-index column="CHOICE" />
+        	<one-to-many class="com.bfrc.pojo.appointment.AppointmentChoice" />
+        </list>
+        <set name="services" lazy="false">
+        	<key column="APPOINTMENT_ID" />
+    		<one-to-many class="com.bfrc.pojo.appointment.AppointmentService" />
+        </set>
+    </class>
+    
+</hibernate-mapping>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 18, 2007 10:31:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpStoreList" table="TP_STORE_LIST" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.pricing.TpStoreListId">
+            <key-property name="priceBookId" type="long">
+                <column name="PRICE_BOOK_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="10" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="disposalPrice" type="big_decimal">
+            <column name="DISPOSAL_PRICE" precision="15" not-null="true" />
+        </property>
+        <property name="exciseTaxArticle" type="long">
+            <column name="EXCISE_TAX_ARTICLE" precision="10" scale="0" not-null="true" />
+        </property>
+    </class>
+    <sql-query name="getStoreNumbersByPriceBookId">
+    	<return-scalar column="storeNumber" type="long"/>
+		select store_number as storeNumber from RTMS_WEBDB.TP_STORE_LIST where price_book_id=:priceBookId
+    </sql-query>
+    <sql-query name="getStoreNumbersByPriceBookIds">
+    	<return-scalar column="storeNumber" type="long"/>
+    	<return-scalar column="priceBookId" type="long"/>
+		select store_number as storeNumber, price_book_id as priceBookId from RTMS_WEBDB.TP_STORE_LIST where price_book_id in (:priceBookIds)
+    </sql-query>
+</hibernate-mapping>

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class  name="com.bfrc.dataaccess.model.myprofile.MyVehicle" table="MY_VEHICLES" schema="RTMS_WEBDB">
+        <id name="myVehicleId" type="long">
+            <column name="MY_VEHICLE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_VEHICLES_SEQ</param>
+            </generator>
+        </id>
+        <!--TODO: These two fields can be clubbed together as one combined MyVehicleConfiguration entity -->
+		<many-to-one name="fitment" class="com.bfrc.dataaccess.model.vehicle.Fitment" fetch="join">
+            <column name="ACES_VEHICLE_ID" precision="10" scale="0"  />
+        </many-to-one>
+        <!--<many-to-one name="vehicleConfiguration" class="com.bfrc.dataaccess.model.aces.VehicleConfiguration" fetch="join">
+        	<column name="VEHICLE_CONFIG_ID" precision="10" scale="0"  />
+        </many-to-one>-->
+        <property name="name" type="string">
+            <column name="NAME" length="150"/>
+        </property>
+        <property name="drivingCondition" type="string">
+            <column name="DRIVING_CONDITION" length="20"/>
+        </property>
+        <property name="odometer" type="integer">
+            <column name="ODOMETER" precision="7"/>
+        </property>  
+        <property name="mpgCity" type="integer">
+            <column name="MPG_CITY" precision="3"/>
+        </property>
+        <property name="mpgHighway" type="integer">
+            <column name="MPG_HIGHWAY" precision="3"/>
+        </property>
+        <property name="mpgTotal" type="integer">
+            <column name="MPG_TOTAL" precision="3"/>
+        </property>
+        <property name="mileageDefault" type="integer">
+            <column name="MILEAGE_DEFAULT" precision="10"/>
+        </property>
+        <property name="vinNumber" type="string">
+            <column name="VIN_NUMBER" length="17"/>
+        </property>
+        <property name="notes" type="string">
+            <column name="NOTES" length="200"/>
+        </property>
+        <property name="purchaseDate" type="date">
+            <column name="PURCHASE_DATE" length="7"/>
+        </property>
+        <property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE" length="7"/>
+        </property>
+        <property name="activeFlag" type="string">
+            <column name="ACTIVE_FLAG" length="1"/>
+        </property>
+        <property name="primaryVehicle" type="integer">
+            <column name="PRIMARY_VEHICLE" precision="3"/>
+        </property>
+        <set name="appointments" table="MY_APPOINTMENTS" inverse="false" lazy="true" fetch="select" cascade="all" >
+            <key>
+                <column name="MY_VEHICLE_ID" not-null="true" />
+            </key>
+            <many-to-many entity-name="com.bfrc.dataaccess.model.appointment.Appointment">
+                <column name="APPOINTMENT_ID" not-null="true" />
+            </many-to-many>
+        </set>
+       
+        <many-to-one name="driver" class="com.bfrc.dataaccess.model.myprofile.MyDriver" fetch="select">
+            <column name="USER_ID" precision="10" scale="0"  />
+        </many-to-one>
+        
+        <bag name="maintenanceServicePerformed" table="MY_MAINT_SVC_PERFORMED" inverse="true" lazy="true" cascade="all">
+            <key>
+                <column name="MY_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyMaintenanceServicePerformed" />
+        </bag>
+        <bag name="vehicleHistory" table="MY_SERVICE_HISTORY_VEHICLE" cascade="all" inverse="true" lazy="true" >
+            <key>
+                <column name="MY_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryVehicle" />
+        </bag>
+        <bag name="gasFillUps" table="MY_VEHICLE_GAS" cascade="all" inverse="true" lazy="true" >
+            <key>
+                <column name="MY_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyVehicleGas" />
+        </bag>
+
+    </class>
+
+</hibernate-mapping>

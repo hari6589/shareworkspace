@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 19, 2011 7:57:35 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.storeadmin.StoreAdminLibraryImage" table="STORE_ADMIN_LIBRARY_IMAGE" schema="RTMS_WEBDB">
+        <id name="imageId" type="long">
+            <column name="IMAGE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">STORE_ADMIN_IMAGE_SEQ</param>
+            </generator>
+        </id>
+        <property name="image" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="IMAGE" />
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="1" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CREATED_BY" length="130" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="modifiedBy" type="string">
+            <column name="MODIFIED_BY" length="130" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="300" />
+        </property>        
+    </class>
+</hibernate-mapping>

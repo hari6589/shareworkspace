@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 23, 2007 4:02:41 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.jda.Feature" table="FEATURE" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="id" type="long">
+            <column name="ID" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="value" type="string">
+            <column name="VALUE" length="1000" not-null="true" />
+        </property>
+        <property name="benefit" type="string">
+            <column name="BENEFIT" length="1000" />
+        </property>
+    </class>
+</hibernate-mapping>

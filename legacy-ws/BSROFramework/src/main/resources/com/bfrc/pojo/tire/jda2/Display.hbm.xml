@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 19, 2011 12:14:12 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class entity-name="Display2" name="com.bfrc.pojo.tire.jda2.Display" table="DISPLAY" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="id" type="long">
+            <column name="ID" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="value" type="string">
+            <column name="VALUE" length="100" not-null="true" />
+        </property>
+        <property name="brandId" type="long">
+            <column name="BRAND_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="warrantyId" type="long">
+            <column name="WARRANTY_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="tiregroupId" type="long">
+            <column name="TIREGROUP_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="categoryId" type="long">
+            <column name="CATEGORY_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="segmentId" type="long">
+            <column name="SEGMENT_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="classId" type="long">
+            <column name="CLASS_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="1000" />
+        </property>
+        <property name="generateCatalogPage" type="string">
+            <column name="GENERATE_CATALOG_PAGE" length="2" />
+        </property>
+    </class>
+    <sql-query name="getSiteTires">
+	    <return class="Display2" alias="tire" />
+	    <![CDATA[
+        select distinct tire.ID, tire.VALUE, tire.BRAND_ID, tire.WARRANTY_ID, tire.TIREGROUP_ID, tire.CATEGORY_ID, tire.SEGMENT_ID, 
+            tire.CLASS_ID, tire.DESCRIPTION, tire.GENERATE_CATALOG_PAGE
+		    from BFS_TIRE_CATALOG_JDA.DISPLAY tire, BFS_TIRE_CATALOG_JDA.CONFIGURATION sku, 
+		    BFS_TIRE_CATALOG_JDA.TIRE_WEBSOURCE ws
+		    where sku.DISPLAY_ID=tire.ID and sku.SKU = ws.SKU and ws.WEBSOURCE=?
+		order by tire.VALUE
+		]]>
+	</sql-query>
+</hibernate-mapping>

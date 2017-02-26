@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryJob" table="MY_SERVICE_HISTORY_JOB" schema="RTMS_WEBDB">
+        <id name="myServiceHistJobId" type="long">
+            <column name="MY_SERVICE_HIST_JOB_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_SERVICE_HISTORY_JOB_SEQ</param>
+            </generator>
+        </id>
+		<many-to-one name="serviceHistoryInvoice" class="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryInvoice" fetch="select">
+            <column name="MY_SERVICE_HIST_INVOICE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="authorized" type="string">
+            <column name="AUTHORIZED" length="1"/>
+        </property>
+        <property name="total" type="java.math.BigDecimal">
+            <column name="TOTAL" precision="8" scale="2"/>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="500"/>
+        </property>
+        <bag name="details" table="MY_SERVICE_HISTORY_JOB_DETAIL" inverse="true" cascade="all" lazy="false" >
+            <key>
+                <column name="MY_SERVICE_HIST_JOB_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryJobDetail" />
+        </bag>
+    </class>
+</hibernate-mapping>

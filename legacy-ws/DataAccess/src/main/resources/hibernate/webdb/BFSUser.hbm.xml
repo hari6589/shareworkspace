@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.BFSUser" table="BFS_USERS" schema="RTMS_WEBDB">
+        <id name="userId" type="long">
+            <column name="USER_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">BFS_USERS_SEQ</param>
+            </generator>
+        </id>
+        <property name="email" type="string">
+            <column name="EMAIL" length="255" />
+        </property>
+        <property name="previousEmail" type="string">
+            <column name="PREV_EMAIL" scale="255" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="128"/>
+        </property>
+		<property name="registerDate" type="java.util.Calendar">
+            <column name="REG_DATE" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="1"/>
+        </property>
+        <property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE"/>
+        </property>
+        <property name="unsuccessfulAttempts" type="java.lang.Integer">
+            <column name="UNSUCCESSFUL_ATTEMPTS" precision="1"/>
+        </property>
+        <one-to-one name="driver" class="com.bfrc.dataaccess.model.myprofile.MyDriver"
+			cascade="all"></one-to-one>
+			
+        <many-to-one name="userType" class="com.bfrc.dataaccess.model.contact.WebSite" fetch="select">
+            <column name="SITE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <set inverse="true" name="myBackupData" sort="unsorted" cascade="all">
+			<key>
+				<column name="USER_ID" not-null="true" precision="10" scale="0" />
+			</key>
+			<one-to-many class="com.bfrc.dataaccess.model.myprofile.MyBackupData" />
+		</set>
+
+        <set name="promotions" table="MY_PROMOTIONS" inverse="false" lazy="true" fetch="select" cascade="all" >
+            <key>
+                <column name="USER_ID" not-null="true" />
+            </key>
+            <many-to-many entity-name="com.bfrc.dataaccess.model.promotion.Promotion">
+                <column name="PROMOTION_ID" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="devices" table="MY_DEVICES" cascade="save-update,delete" inverse="true" lazy="true" >
+            <key>
+                <column name="USER_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyDevice" />
+        </set>
+        <bag name="productQuotes" table="MY_PRODUCT_QUOTES" cascade="save-update,delete" inverse="true" lazy="true" >
+            <key>
+                <column name="USER_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyProductQuote" />
+        </bag>
+    </class>
+</hibernate-mapping>

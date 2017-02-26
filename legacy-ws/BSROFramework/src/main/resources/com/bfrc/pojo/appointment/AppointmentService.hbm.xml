@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Fri Oct 28 09:57:01 CDT 2005                         -->
+<hibernate-mapping package="com.bfrc.pojo.appointment">
+
+    <class name="AppointmentService" table="APPOINTMENT_SERVICE" select-before-update="true">
+        <id name="appointmentServiceId" column="APPOINTMENT_SERVICE_ID" type="java.lang.Long">
+            <generator class="sequence">
+            	<param name="sequence">APPOINTMENT_SERVICE_SEQ</param>
+            </generator>
+        </id>
+ 
+        <property name="serviceId" column="SERVICE_ID" type="java.lang.Integer" not-null="true" />
+		<property name="appointmentId" column="APPOINTMENT_ID" type="java.lang.Long" not-null="true" />
+    </class>
+    
+</hibernate-mapping>

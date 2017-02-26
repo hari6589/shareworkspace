@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyMaintenanceServicePerformed" table="MY_MAINT_SVC_PERFORMED" schema="RTMS_WEBDB">
+        <id name="myMaintServicePerformedId" type="long">
+            <column name="MY_MAINT_SVC_PERFORMED_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_MAINT_SVC_PERFORMED_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="myVehicle" class="com.bfrc.dataaccess.model.myprofile.MyVehicle" fetch="select">
+            <column name="MY_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="complete" type="string">
+            <column name="COMPLETE" length="50"/>
+        </property>
+        <property name="mileage" type="long">
+            <column name="MILEAGE" precision="10" />
+        </property>
+        <property name="type" type="int">
+            <column name="TYPE" precision="3" />
+        </property>
+        <property name="condition" type="string">
+            <column name="CONDITION" length="20"/>
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="100"/>
+        </property>
+    </class>
+</hibernate-mapping>

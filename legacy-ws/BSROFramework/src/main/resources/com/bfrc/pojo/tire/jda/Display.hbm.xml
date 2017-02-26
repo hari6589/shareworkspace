@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 23, 2007 4:02:41 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.jda.Display" table="DISPLAY" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="id" type="long">
+            <column name="ID" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="brand" class="com.bfrc.pojo.tire.jda.Brand" fetch="select">
+            <column name="BRAND_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="segment" class="com.bfrc.pojo.tire.jda.Segment" fetch="select">
+            <column name="SEGMENT_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="category" class="com.bfrc.pojo.tire.jda.Category" fetch="select">
+            <column name="CATEGORY_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="warranty" class="com.bfrc.pojo.tire.jda.Warranty" fetch="select">
+            <column name="WARRANTY_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="theClass" class="com.bfrc.pojo.tire.jda.Class" fetch="select">
+            <column name="CLASS_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tiregroup" class="com.bfrc.pojo.tire.jda.Tiregroup" fetch="select">
+            <column name="TIREGROUP_ID" precision="11" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="value" type="string">
+            <column name="VALUE" length="100" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="1000" />
+        </property>
+        <property name="generateCatalogPage" type="string">
+            <column name="GENERATE_CATALOG_PAGE" length="2" />
+        </property>
+        <set name="configurations" inverse="true">
+            <key>
+                <column name="DISPLAY_ID" precision="11" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.pojo.tire.jda.Configuration" />
+        </set>
+        <set name="facts" table="FACT_JOIN" schema="BFS_TIRE_CATALOG_JDA" inverse="true">
+            <key>
+                <column name="DISPLAY_ID" precision="11" scale="0" not-null="true" />
+            </key>
+            <many-to-many column="FACT_ID" class="com.bfrc.pojo.tire.jda.Fact" />
+        </set>
+        <set name="features" table="FEATURE_JOIN" schema="BFS_TIRE_CATALOG_JDA" inverse="true">
+            <key>
+                <column name="DISPLAY_ID" precision="11" scale="0" not-null="true" />
+            </key>
+            <many-to-many column="FEATURE_ID" class="com.bfrc.pojo.tire.jda.Feature" />
+        </set>
+    </class>
+</hibernate-mapping>

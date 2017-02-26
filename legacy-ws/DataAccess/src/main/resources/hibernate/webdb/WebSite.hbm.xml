@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.contact.WebSite" schema="RTMS_WEBDB" table="BFRC_WEB_SITE">
+    <id name="siteId" type="int">
+      <column name="SITE_ID" precision="5" scale="0"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="name" type="string">
+      <column length="10" name="SITE_NAME"/>
+    </property>
+    <property name="url" type="string">
+      <column length="250" name="SITE_URL"/>
+    </property>
+    <property name="webmaster" type="string">
+      <column length="250" name="SITE_WEBMASTER"/>
+    </property>
+    <set inverse="true" name="feedbacks">
+      <key>
+        <column name="SITE_ID" precision="5" scale="0"/>
+      </key>
+      <one-to-many class="com.bfrc.dataaccess.model.contact.Feedback"/>
+    </set>
+  </class>
+  
+      <query name="com.bfrc.dataaccess.model.contact.WebSite.findBySiteName" cacheable="false">
+    	FROM WebSite
+    	WHERE name = ?
+    </query>
+</hibernate-mapping>

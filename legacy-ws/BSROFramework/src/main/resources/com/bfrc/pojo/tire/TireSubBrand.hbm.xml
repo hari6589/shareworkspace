@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.TireSubBrand" table="TIRE_SUB_BRAND" schema="RTMS_WEBDB">
+        <id name="tireSubBrandId" type="long">
+            <column name="TIRE_SUB_BRAND_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">TIRE_SUB_BRAND_SEQ</param>
+            </generator>
+        </id>
+        <!-- This should have been a foreign key in the db, but the brand table is in another schema to which we don't have the requisite access -->
+        <property name="brandId" type="long">
+            <column name="BRAND_ID" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="value" type="string">
+            <column name="VALUE" length="50" not-null="true" />
+        </property>   
+    </class>
+    
+   	<sql-query name="GetTireSubBrandsByBrandName">
+		<return-scalar column="tireSubBrandId" type="long"/>
+		<return-scalar column="brandId" type="long"/>
+		<return-scalar column="value" type="string"/> 
+		select tire_sub_brand.tire_sub_brand_id as tireSubBrandId, tire_sub_brand.brand_id as brandId, tire_sub_brand.value as value from tire_sub_brand, BFS_TIRE_CATALOG_JDA.brand b where b.value=? and b.id=tire_sub_brand.brand_id order by tire_sub_brand.value
+	</sql-query>    
+</hibernate-mapping>

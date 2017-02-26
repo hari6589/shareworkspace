@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryInvoice" table="MY_SERVICE_HISTORY_INVOICE" schema="RTMS_WEBDB">
+        <id name="myServiceHistInvoiceId" type="long">
+            <column name="MY_SERVICE_HIST_INVOICE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_SERVICE_HISTORY_INVOICE_SEQ</param>
+            </generator>
+        </id>
+		<many-to-one name="vehicleHistory" class="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryVehicle" fetch="select">
+            <column name="MY_SERVICE_HIST_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="store" class="com.bfrc.dataaccess.model.store.Store" fetch="select">
+            <column name="STORE_NUMBER" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="invoiceDate" type="date">
+            <column name="INVOICE_DATE" length="7"/>
+        </property>
+        <property name="company" type="string">
+            <column name="COMPANY" length="200"/>
+        </property>
+        <property name="total" type="java.math.BigDecimal">
+            <column name="TOTAL_PRICE" precision="8" scale="2"/>
+        </property>
+        <property name="mileage" type="long">
+            <column name="MILEAGE" length="7"/>
+        </property>
+        <property name="source" type="string">
+            <column name="SOURCE" length="100"/>
+        </property>
+        <property name="jobTitle" type="string">
+            <column name="JOB_TITLE" length="7"/>
+        </property>
+        <property name="jobDetail" type="string">
+            <column name="JOB_DETAIL" length="500"/>
+        </property>
+        <bag name="jobs" table="MY_SERVICE_HISTORY_JOB" inverse="true" cascade="all" lazy="false" >
+            <key>
+                <column name="MY_SERVICE_HIST_INVOICE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.myprofile.MyServiceHistoryJob" />
+        </bag>
+    </class>
+</hibernate-mapping>

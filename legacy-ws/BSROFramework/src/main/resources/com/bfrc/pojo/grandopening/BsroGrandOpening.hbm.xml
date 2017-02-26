@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 20, 2011 9:51:27 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.grandopening.BsroGrandOpening" table="BSRO_GRAND_OPENING" schema="RTMS_WEBDB">
+        <id name="eventId" type="long">
+            <column name="EVENT_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">BSRO_GRAND_OPENING_SEQ</param>
+            </generator>
+        </id>
+        <property name="friendlyId" type="string">
+            <column name="FRIENDLY_ID" length="100" not-null="true" />
+        </property>
+        <property name="backgroundImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="BACKGROUND_IMAGE" />
+        </property>
+        <property name="storeNumber" type="java.lang.Long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+        </property>
+        <property name="phone" type="string">
+            <column name="PHONE" length="15" />
+        </property>
+        <property name="fax" type="string">
+            <column name="FAX" length="15" />
+        </property>
+        <property name="managerName" type="string">
+            <column name="MANAGER_NAME" length="50" />
+        </property>
+        <property name="managerEmailAddress" type="string">
+            <column name="MANAGER_EMAIL_ADDRESS" length="250" />
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS" length="60" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" length="50" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" />
+        </property>
+        <property name="detailContent" type="org.springframework.orm.hibernate3.support.ClobStringType">
+            <column name="DETAIL_CONTENT" />
+        </property>
+        <property name="coupon1Title" type="string">
+            <column name="COUPON1_TITLE" length="50" />
+        </property>
+        <property name="coupon1Image" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="COUPON1_IMAGE" />
+        </property>
+        <property name="coupon2Title" type="string">
+            <column name="COUPON2_TITLE" length="50" />
+        </property>
+        <property name="coupon2Image" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="COUPON2_IMAGE" />
+        </property>
+        <property name="coupon3Title" type="string">
+            <column name="COUPON3_TITLE" length="50" />
+        </property>
+        <property name="coupon3Image" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="COUPON3_IMAGE" />
+        </property>
+        <property name="coupon4Title" type="string">
+            <column name="COUPON4_TITLE" length="50" />
+        </property>
+        <property name="coupon4Image" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="COUPON4_IMAGE" />
+        </property>
+        <property name="startDate" type="timestamp">
+            <column name="START_DATE" length="7" />
+        </property>
+        <property name="endDate" type="timestamp">
+            <column name="END_DATE" length="7" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="50" />
+        </property>
+        <property name="status" type="java.lang.Boolean">
+            <column name="STATUS" precision="1" scale="0" />
+        </property>
+        <property name="coupon5Title" type="string">
+            <column name="COUPON5_TITLE" length="50" />
+        </property>
+        <property name="coupon5Image" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="COUPON5_IMAGE" />
+        </property>
+        <property name="approved" type="java.lang.Boolean">
+        	<column name="APPROVED" precision="1" scale="0" />
+        </property>
+        <property name="offerStartDate" type="timestamp">
+            <column name="OFFER_START_DATE" length="7" />
+        </property>
+    </class>
+</hibernate-mapping>

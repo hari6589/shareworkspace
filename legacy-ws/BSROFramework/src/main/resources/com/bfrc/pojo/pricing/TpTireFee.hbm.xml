@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 18, 2007 10:31:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpTireFee" table="TP_TIRE_FEE" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.pricing.TpTireFeeId">
+            <key-property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="10" scale="0" />
+            </key-property>
+            <key-property name="feeTypeCode" type="long">
+                <column name="FEE_TYPE_CODE" precision="10" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="50" not-null="true" />
+        </property>
+        <property name="amount" type="big_decimal">
+            <column name="AMOUNT" precision="15" not-null="true" />
+        </property>
+        <property name="percent" type="big_decimal">
+            <column name="PERCENT" precision="15" not-null="true" />
+        </property>
+        <property name="article" type="long">
+            <column name="ARTICLE" precision="10" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

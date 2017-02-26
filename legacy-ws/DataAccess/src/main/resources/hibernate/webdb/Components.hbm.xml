@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.maintenance.Components" schema="RTMS_WEBDB" table="COMPONENTS">
+		<id name="componentId" type="long" column="COMPONENT_ID">
+			<generator class="assigned" />
+		</id>
+		<property generated="never" lazy="false" name="component" type="string" column="COMPONENT" />
+		<set inverse="true" name="intervals" sort="unsorted">
+			<key>
+				<column name="COMPONENT_ID" not-null="true" precision="10" scale="0" />
+			</key>
+			<one-to-many class="com.bfrc.dataaccess.model.maintenance.Intervals" />
+		</set>
+	</class>
+</hibernate-mapping>

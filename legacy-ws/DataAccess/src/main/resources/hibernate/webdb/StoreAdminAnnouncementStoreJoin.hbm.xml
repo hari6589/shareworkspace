@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncementStoreJoin" table="STORE_ADMIN_ANNOUNC_STORE_JOIN" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncementStoreJoinId">
+            <key-property name="announcementId" type="long">
+                <column name="ANNOUNCEMENT_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="6" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

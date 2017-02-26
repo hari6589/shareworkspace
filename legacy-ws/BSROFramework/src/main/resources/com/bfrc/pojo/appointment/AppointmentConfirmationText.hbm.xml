@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 14, 2007 11:50:22 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.appointment.AppointmentConfirmationText" table="APPOINTMENT_CONFIRMATION_TEXT" schema="RTMS_WEBDB">
+	    <id name="storeType" column="STORE_TYPE" type="java.lang.String" />
+		<property name="message" column="MESSAGE" type="java.lang.String" />
+    </class>
+</hibernate-mapping>

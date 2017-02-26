@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.store.StoreHoliday" table="STORE_HOLIDAY" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.store.StoreHolidayId">
+            <key-property name="year" type="short">
+                <column name="YEAR" precision="4" scale="0" />
+            </key-property>
+            <key-property name="month" type="byte">
+                <column name="MONTH" precision="2" scale="0" />
+            </key-property>
+            <key-property name="day" type="byte">
+                <column name="DAY" precision="2" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="holidayId" type="long">
+            <column name="HOLIDAY_ID" precision="10" scale="0"/>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="100" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="10" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 14, 2007 1:27:20 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.maintenance.MaintSignup" table="MAINT_SIGNUP" schema="RTMS_WEBDB">
+        <id name="maintSignupId" type="long">
+            <column name="MAINT_SIGNUP_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MAINT_SIGNUP_SEQ</param>
+            </generator>
+        </id>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="30" not-null="true" />
+        </property>
+        <property name="middleInitial" type="string">
+            <column name="MIDDLE_INITIAL" length="25" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="30" not-null="true" />
+        </property>
+        <property name="address1" type="string">
+            <column name="ADDRESS_1" length="50" not-null="true" />
+        </property>
+        <property name="address2" type="string">
+            <column name="ADDRESS_2" length="50" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" length="50" not-null="true" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" not-null="true" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" not-null="true" />
+        </property>
+        <property name="emailAddress" type="string">
+            <column name="EMAIL_ADDRESS" length="100" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="25" />
+        </property>
+        <property name="passwordHint" type="string">
+            <column name="PASSWORD_HINT" length="25" />
+        </property>
+        <property name="carTireId" type="long">
+            <column name="CAR_TIRE_ID" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="initMileage" type="long">
+            <column name="INIT_MILEAGE" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="annualMileage" type="java.lang.Long">
+            <column name="ANNUAL_MILEAGE" precision="10" scale="0" />
+        </property>
+        <property name="dutySchedule" type="java.lang.Character">
+            <column name="DUTY_SCHEDULE" length="1" />
+        </property>
+        <property name="originalTires" type="java.lang.Character">
+            <column name="ORIGINAL_TIRES" length="1" />
+        </property>
+        <property name="tiresReplaced" type="java.lang.Byte">
+            <column name="TIRES_REPLACED" precision="2" scale="0" />
+        </property>
+        <property name="emailReminder" type="char">
+            <column name="EMAIL_REMINDER" length="1" not-null="true" />
+        </property>
+        <property name="createdDate" type="date">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="source" type="string">
+            <column name="SOURCE" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

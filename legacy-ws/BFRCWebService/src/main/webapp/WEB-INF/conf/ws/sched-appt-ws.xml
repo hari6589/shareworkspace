@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                            http://www.springframework.org/schema/tx
+                            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+    
+    
+	<bean id="appointmentSchedulerConfig" class="com.bfrc.dataaccess.svc.webdb.appointment.AppointmentSchedulerConfig">
+		<property name="endpoint" value="${ssichicago.scheduler.endpoint}" />
+		<property name="uid" value="${ssichicago.scheduler.uid}" />
+		<property name="password" value="${ssichicago.scheduler.password}" />
+	</bean>
+	
+	<bean id="appointmentEmailSender" class="com.bfrc.dataaccess.svc.webdb.appointment.AppointmentEmailSenderImpl">
+     	<property name="masterId" value="${subscribe.and.send.api.messageId}"/>
+     	<property name="endpoint" value="${subscribe.and.send.api.endpoint}" />
+     	<property name="username" value="${subscribe.and.send.api.username}" />
+     	<property name="password" value="${subscribe.and.send.api.password}" />
+     	<property name="statusNoWaitURI" value="${subscribe.and.send.api.statusNoWaitURI}" />
+    </bean>
+    
+    <bean id="appointmentPlusScheduler" class="com.bfrc.dataaccess.svc.webdb.appointment.AppointmentPlusSchedulerImpl">
+    	<property name="baseEndpoint" value="${appointmentplus.api.baseurl}" />
+		<property name="siteId" value="${appointmentplus.api.siteid}" />
+		<property name="apiKey" value="${appointmentplus.api.key}" />
+		<property name="soTimeout" value="${appointmentplus.api.so.timeout}" />
+    </bean>
+
+</beans>

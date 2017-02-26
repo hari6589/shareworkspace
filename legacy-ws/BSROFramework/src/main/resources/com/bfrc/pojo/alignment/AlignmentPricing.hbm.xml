@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 5, 2011 2:46:52 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.alignment.AlignmentPricing" table="ALIGNMENT_PRICING" schema="RTMS_WEBDB">
+        <id name="alignmentPricingId" type="short">
+            <column name="ALIGNMENT_PRICING_ID" precision="3" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="standardPricing" type="big_decimal">
+            <column name="STANDARD_PRICING" precision="10" not-null="true" />
+        </property>
+        <property name="lifetimePricing" type="big_decimal">
+            <column name="LIFETIME_PRICING" precision="10" not-null="true" />
+        </property>
+        <property name="threeYearPricing" type="big_decimal">
+            <column name="THREE_YEAR_PRICING" precision="10" />
+        </property>
+        <property name="standardArticle" type="long">
+            <column name="STANDARD_ARTICLE" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="lifetimeArticle" type="long">
+            <column name="LIFETIME_ARTICLE" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="threeYearArticle" type="java.lang.Long">
+            <column name="THREE_YEAR_ARTICLE" precision="10" scale="0" />
+        </property>
+        <property name="storeType" type="string">
+            <column name="STORE_TYPE" length="4" />
+        </property>
+        <property name="district" type="string">
+            <column name="DISTRICT" length="10" />
+        </property>
+    </class>
+</hibernate-mapping>

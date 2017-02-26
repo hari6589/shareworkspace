@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.appointment.AppointmentServiceDesc" schema="RTMS_WEBDB" table="APPOINTMENT_SERVICE_DESC">
+    <id name="serviceId" type="integer">
+      <column name="SERVICE_ID"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="serviceDesc" type="string">
+      <column length="50" name="SERVICE_DESC"/>
+    </property>
+    <property name="serviceType" type="int">
+      <column name="SERVICE_TYPE" precision="1" scale="0"/>
+    </property>
+    <property name="sortOrder" type="int">
+      <column name="SORT_ORDER" precision="2" scale="0"/>
+    </property>
+    
+    <bag name="categories" table="APPOINTMENT_SERV_CAT_MAP" inverse="false" lazy="false" fetch="select" cascade="all" >
+    	<key>
+        	<column name="SERVICE_ID" not-null="true" />
+        </key>
+        <many-to-many entity-name="com.bfrc.dataaccess.model.appointment.AppointmentServiceCategory">
+         	<column name="CATEGORY_ID" not-null="true" />
+        </many-to-many>
+    </bag>
+    
+    <query name="AppointmentServiceDesc.getPrimaryServices">
+    	<![CDATA[
+    		 FROM AppointmentServiceDesc asd
+    	 	WHERE asd.serviceType = 1
+    	    ORDER BY asd.sortOrder
+    	]]>
+    </query>
+
+  </class>
+</hibernate-mapping>

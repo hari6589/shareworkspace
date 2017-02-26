@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.store.StoreHour" schema="RTMS_WEBDB" table="STORE_HOUR">
+    <composite-id class="com.bfrc.dataaccess.model.store.StoreHourId" name="id">
+      <key-property name="storeNumber" type="long">
+        <column name="STORE_NUMBER" precision="6" scale="0"/>
+      </key-property>
+      <key-property name="weekDay" type="string">
+        <column length="3" name="WEEK_DAY"/>
+      </key-property>
+    </composite-id>
+    <property name="openTime" type="string">
+      <column length="5" name="OPEN_TIME" not-null="true"/>
+    </property>
+    <property name="closeTime" type="string">
+      <column length="5" name="CLOSE_TIME" not-null="true"/>
+    </property>
+    <property name="timeZone" type="string">
+      <column length="3" name="TIME_ZONE"/>
+    </property>
+  </class>
+  <query name="com.bfrc.dataaccess.model.store.StoreHour.findByStoreNumber" cacheable="false">
+  	<![CDATA[
+  		FROM StoreHour sh
+  		WHERE sh.id.storeNumber = ?
+  	]]>
+  </query>
+  <sql-query name="com.bfrc.dataaccess.model.store.StoreHour.findStoreHourByStoreType" cacheable="false">
+	    <return class="com.bfrc.dataaccess.model.store.StoreHour" />
+ 		    select sh.* from RTMS_WEBDB.store_hour sh where sh.store_number in (select s.store_number from store s where trim(s.store_type) in (:storeType)) order by sh.store_number
+	</sql-query>
+
+</hibernate-mapping>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyBackupData" table="MY_BACKUP_DATA" schema="RTMS_WEBDB">
+        <id name="myBackupDataId" type="long">
+            <column name="MY_BACKUP_DATA_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_BACKUP_DATA_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="user" class="com.bfrc.dataaccess.model.myprofile.BFSUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="jsonData" type="java.sql.Clob">
+            <column name="JSON_DATA"  />
+        </property>
+		<property name="deleteFlag" type="string">
+            <column name="DELETE_FLAG" length="1"/>
+        </property>
+        <property name="descFlag" type="string">
+            <column name="DESC_FLAG" length="1"/>
+        </property>
+        <property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE" length="7"/>
+        </property>
+    </class>
+</hibernate-mapping>

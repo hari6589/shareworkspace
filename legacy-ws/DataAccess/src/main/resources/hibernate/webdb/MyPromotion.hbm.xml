@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyPromotion" table="MY_PROMOTIONS" schema="RTMS_WEBDB">
+        <id name="myPromotionId" type="long">
+            <column name="MY_PROMOTION_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_PROMOTIONS_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="promotion" class="com.bfrc.dataaccess.model.promotion.Promotion" fetch="select">
+            <column name="PROMOTION_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="user" class="com.bfrc.dataaccess.model.myprofile.BFSUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE" length="7"/>
+        </property>
+    </class>
+</hibernate-mapping>

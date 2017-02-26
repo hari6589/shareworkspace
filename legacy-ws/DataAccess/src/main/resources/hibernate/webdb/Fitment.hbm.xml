@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.vehicle.Fitment" schema="BFS_TIRE_SELECTOR" table="FITMENT">		
+		<id name="carTireId" type="long">
+      		<column name="CAR_TIRE_ID" precision="10" scale="0"/>
+      		<generator class="assigned"/>
+    	</id>
+		<property name="acesVehicleId" type="long" column="ACES_VEHICLE_ID" />
+		<property name="submodel" type="string" column="SUBMODEL" />
+		<property name="makeName" type="string" column="MAKE_NAME" />
+		<property name="modelYear" type="string" column="MODEL_YEAR" />
+		<property name="modelName" type="string" column="MODEL_NAME" />
+		<property name="makeId" type="long" column="MAKE_ID" />
+		<property name="modelId" type="long" column="MODEL_ID" />
+		<property name="submodelId" type="long" column="SUBMODEL_ID" />
+		<property name="standardInd" type="string" column="STANDARD_IND" />
+		<property name="frb" type="string" column="FRB" />
+		<property name="vehtype" type="string" column="VEHTYPE" />
+		<property name="speedRating" type="string" column="SPEED_RATING" />
+		<property name="crossSection" type="string" column="CROSS_SECTION" />
+		<property name="aspect" type="string" column="ASPECT" />
+		<property name="rimSize" type="string" column="RIM_SIZE" />
+		<property name="tireSize" type="string" column="TIRE_SIZE" />
+		<property name="loadIndex" type="string" column="LOAD_INDEX" />
+		<property name="loadRange" type="string" column="LOAD_RANGE" />
+		<property name="notes" type="string" column="NOTES" />
+		<property name="tpmsInd" type="boolean" column="TPMS_IND" />
+		<property name="frontInf" type="string" column="FRONT_INF" />
+		<property name="rearInf" type="string" column="REAR_INF" />
+	</class>
+
+	<query name="com.bfrc.dataaccess.model.vehicle.Fitment.findByCarTireId" cacheable="false">
+    	FROM Fitment
+    	WHERE CAR_TIRE_ID = ?
+    </query>
+    
+	<query name="com.bfrc.dataaccess.model.vehicle.Fitment.findByAcesVehicleId" cacheable="false">
+    	FROM Fitment
+    	WHERE ACES_VEHICLE_ID = ?
+    </query>
+
+    <query name="com.bfrc.dataaccess.model.vehicle.Fitment.findByAcesVehicleIdAndSubModel" cacheable="false">
+    	FROM Fitment
+    	WHERE ACES_VEHICLE_ID = ? and SUBMODEL = ?
+    </query>
+
+	<sql-query
+		name="com.bfrc.dataaccess.model.vehicle.Fitment.findDistinctYears"
+		cacheable="true">
+		<return-scalar column="year" type="string" />
+		SELECT DISTINCT MODEL_YEAR AS year
+		FROM BFS_TIRE_SELECTOR.FITMENT
+		ORDER BY MODEL_YEAR
+	</sql-query>
+
+	<sql-query
+		name="com.bfrc.dataaccess.model.vehicle.Fitment.findDistinctMakes"
+		cacheable="true">
+		<return-scalar column="text" type="string" />
+		<return-scalar column="value" type="string" />
+		SELECT DISTINCT MAKE_ID AS value, MAKE_NAME AS text
+		FROM BFS_TIRE_SELECTOR.FITMENT
+		WHERE MODEL_YEAR = ?
+		ORDER BY MAKE_NAME
+	</sql-query>
+
+	<sql-query
+		name="com.bfrc.dataaccess.model.vehicle.Fitment.findDistinctModels"
+		cacheable="true">
+		<return-scalar column="text" type="string" />
+		<return-scalar column="value" type="string" />
+		SELECT DISTINCT MODEL_ID AS value, MODEL_NAME AS text
+		FROM BFS_TIRE_SELECTOR.FITMENT
+		WHERE MODEL_YEAR = ?
+		AND MAKE_ID = ?
+		ORDER BY MODEL_NAME
+	</sql-query>
+
+	<sql-query
+		name="com.bfrc.dataaccess.model.vehicle.Fitment.findDistinctSubModels"
+		cacheable="true">
+		<return-scalar column="text" type="string" />
+		<return-scalar column="value" type="string" />
+		SELECT DISTINCT SUBMODEL_ID AS value, SUBMODEL AS text
+		FROM BFS_TIRE_SELECTOR.FITMENT
+		WHERE MODEL_YEAR = ?
+		AND MAKE_ID = ?
+		AND MODEL_ID = ?
+		ORDER BY SUBMODEL
+	</sql-query>
+	<query name="com.bfrc.dataaccess.model.vehicle.Fitment.findByYearMakeModelAndSubModel" cacheable="false">
+    	FROM Fitment
+    	WHERE modelYear = ?
+		AND makeName = ?
+		AND modelName = ?
+		AND submodel = ?
+    </query>
+    <query name="com.bfrc.dataaccess.model.vehicle.Fitment.findByYearMakeIdModelIdAndSubModelId" cacheable="false">
+    	FROM Fitment
+    	WHERE modelYear = ?
+		AND makeId = ?
+		AND modelId = ?
+		AND submodelId = ?
+    </query>
+
+</hibernate-mapping>

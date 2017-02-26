@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 19, 2007 2:46:33 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.maintenance.Intervals" table="INTERVALS" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.maintenance.IntervalsId">
+            <key-property name="acesVehicleId" type="long">
+                <column name="ACES_VEHICLE_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="serviceType" type="string">
+                <column name="SERVICE_TYPE" length="30" />
+            </key-property>
+            <key-property name="mileageInterval" type="java.lang.Long">
+                <column name="MILEAGE_INTERVAL" precision="10" scale="0" />
+            </key-property>
+            <key-property name="operationTypeId" type="long">
+                <column name="OPERATION_TYPE_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="componentId" type="long">
+                <column name="COMPONENT_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="footnoteTxt" type="string">
+                <column name="FOOTNOTE_TXT" length="4000" />
+            </key-property>
+            <key-property name="timeInterval" type="java.lang.Long">
+                <column name="TIME_INTERVAL" precision="10" scale="0" />
+            </key-property>
+            <key-property name="timeUnits" type="string">
+                <column name="TIME_UNITS" length="6" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="operationType" class="com.bfrc.pojo.maintenance.OperationTypes" update="false" insert="false" fetch="select">
+            <column name="OPERATION_TYPE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="component" class="com.bfrc.pojo.maintenance.Components" update="false" insert="false" fetch="select">
+            <column name="COMPONENT_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

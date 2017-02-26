@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.maintenance.MaintSignup" schema="RTMS_WEBDB" table="MAINT_SIGNUP">
+		<id name="maintSignupId" type="long" column="MAINT_SIGNUP_ID">
+			<generator class="sequence">
+				<param name="sequence">MAINT_SIGNUP_SEQ</param>
+			</generator>
+		</id>
+		<property name="firstName" type="string" column="FIRST_NAME"/>
+		<property name="middleInitial" type="string" column="MIDDLE_INITIAL" />
+		<property name="lastName" type="string" column="LAST_NAME" />
+		<property name="address1" type="string" column="ADDRESS_1" />
+		<property name="address2" type="string" column="ADDRESS_2" />
+		<property name="city" type="string" column="CITY" />
+		<property name="state" type="string" column="STATE" />
+		<property name="zip" type="string" column="ZIP" />
+		<property name="emailAddress" type="string" column="EMAIL_ADDRESS" />
+		<property name="password" type="string" column="PASSWORD" />
+		<property name="passwordHint" type="string" column="PASSWORD_HINT" />
+		<property name="acesVehicleId" type="long" column="CAR_TIRE_ID"/>
+		<property name="initMileage" type="long" column="INIT_MILEAGE"/>
+		<property name="annualMileage" type="java.lang.Long" column="ANNUAL_MILEAGE"/>
+		<property name="dutySchedule" type="java.lang.Character" column="DUTY_SCHEDULE" />
+		<property name="originalTires" type="java.lang.Character" column="ORIGINAL_TIRES" />
+		<property name="tiresReplaced" type="java.lang.Byte" column="TIRES_REPLACED"/>
+		<property name="emailReminder" type="char" column="EMAIL_REMINDER" />
+		<property name="createdDate" type="date" column="CREATED_DATE" />
+		<property name="source" type="string" column="SOURCE" />
+	</class>
+</hibernate-mapping>

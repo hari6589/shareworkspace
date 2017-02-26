@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 1, 2012 10:43:05 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.admin.AppCacheController" table="APP_CACHE_CONTROLLER" schema="RTMS_WEBDB">
+        <id name="appId" type="long">
+            <column name="APP_ID" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="appName" type="string">
+            <column name="APP_NAME" length="150" />
+        </property>
+        <property name="interval" type="java.lang.Long">
+            <column name="INTERVAL" precision="11" scale="0" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.bfrc.pojo.appointment">
+    <class name="AppointmentID" table="AppointmentID">
+        <id name="appointmentId" column="appointment_id" type="java.lang.Long">
+			<generator class="assigned"/>
+        </id>
+		<property name="webSite" column="web_site" type="java.lang.String"/>
+		<property name="storeNumber" column="store_number" type="java.lang.Long"/>
+    </class>
+
+	<sql-query name="ErrorAppointmentID">
+	    <return class="AppointmentID" alias="AppointmentID" >
+			<return-property name="appointmentId" column="appointment_id"/>
+			<return-property name="webSite" column="web_site"/>
+			<return-property name="storeNumber" column="store_number"/>
+		</return>
+        select a.appointment_id,
+               rpad(nvl(ws.site_full_name,a.web_site),19) web_site,
+               a.store_number
+        from appointment a,
+             appointment_sent_status ast,
+             bfrc_webservice ws
+        where a.APPOINTMENT_ID=ast.APPOINTMENT_ID
+        and trim(a.web_site)=ws.site_name(+)
+        and ast.STATUS='F'
+        and a.created_date > sysdate-3
+        order by ws.site_id,a.appointment_id
+	</sql-query>
+
+</hibernate-mapping>

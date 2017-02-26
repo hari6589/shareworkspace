@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 2, 2012 12:55:53 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.appointment.rules.AppointmentRuleTarget" table="APPOINTMENT_RULE_TARGET" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.appointment.rules.AppointmentRuleTargetId">
+            <key-property name="appointmentRuleId" type="int">
+                <column name="APPOINTMENT_RULE_ID" precision="6" scale="0" />
+            </key-property>
+            <key-property name="target" type="string">
+                <column name="TARGET" length="14" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="appointmentRule" class="com.bfrc.pojo.appointment.rules.AppointmentRule" update="false" insert="false" >
+            <column name="APPOINTMENT_RULE_ID" precision="6" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="appointmentRuleTargetId" type="java.lang.Integer">
+            <column name="APPOINTMENT_RULE_TARGET_ID" precision="6" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2012 3:49:10 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.promotion.PromotionBusinessRules" table="PROMOTION_BUSINESS_RULES">
+        <id name="productType" type="string">
+            <column name="PRODUCT_TYPE" length="80" not-null="true" />
+        </id>
+        <property name="productSubType" type="string">
+            <column name="PRODUCT_SUB_TYPE" length="100" />
+        </property>
+        <property name="priceModificationType" type="string">
+            <column name="PRICE_MODIFICATION_TYPE" length="80" />
+        </property>
+        <property name="specificPrice" type="big_decimal">
+            <column name="SPECIFIC_PRICE" precision="10" scale="0" />
+        </property>
+        <property name="percentDiscount" type="big_decimal">
+            <column name="PERCENT_DISCOUNT" precision="4" scale="0"/>
+        </property>
+        <property name="amountDiscount" type="big_decimal">
+            <column name="AMOUNT_DISCOUNT" precision="10" scale="0" />
+        </property>
+        <property name="isRebate" type="big_decimal">
+            <column name="IS_REBATE" precision="1" scale="0" />
+        </property>
+    </class>
+    <sql-query name="com.bfrc.dataaccess.model.promotion.PromotionBusinessRules.findOilPromotionByPriceType" cacheable="false">
+    	<return class="com.bfrc.dataaccess.model.promotion.PromotionBusinessRules" />
+    	SELECT PROMOTION_BUSINESS_RULES.*
+    	FROM PROMOTION_BUSINESS_RULES
+    	WHERE PROMOTION_BUSINESS_RULES.PRODUCT_SUB_TYPE=?
+    </sql-query>          
+    
+</hibernate-mapping>

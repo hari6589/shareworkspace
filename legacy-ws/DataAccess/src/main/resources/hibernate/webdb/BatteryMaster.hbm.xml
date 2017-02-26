@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="app.bsro.model.battery.BatteryMaster" table="INTERSTATE_BATTERY_MASTER" schema="RTMS_WEBDB">
+        <id name="productCode" type="string">
+            <column name="PRODUCT_CODE" length="10" />
+            <generator class="assigned" />
+        </id>
+        <property name="product" type="string">
+            <column name="PRODUCT" length="3" />
+        </property>
+        <property name="partNumber" type="java.lang.Long">
+            <column name="PART_NUMBER" precision="10" scale="0" />
+        </property>
+        <property name="totalWarranty" type="java.lang.Long">
+            <column name="TOTAL_WARRANTY" precision="10" scale="0" />
+        </property>
+        <property name="replacementWarranty" type="java.lang.Long">
+            <column name="REPLACEMENT_WARRANTY" precision="10" scale="0" />
+        </property>
+        <property name="cca" type="java.lang.Long">
+            <column name="CCA" precision="10" scale="0" />
+        </property>
+        <property name="rcMinutes" type="java.lang.Long">
+            <column name="RC_MINUTES" precision="10" scale="0" />
+        </property>
+    </class>
+    <sql-query name="BatteryMaster.getByProductCode" cacheable="true">
+		<return class="app.bsro.model.battery.BatteryMaster" />
+	  	<![CDATA[
+	   		SELECT product_code, product, part_number, total_warranty,
+	   		       replacement_warranty, cca, rc_minutes
+       		  FROM INTERSTATE_BATTERY_MASTER
+       		 WHERE product_code = :code
+     	]]>
+    </sql-query>
+</hibernate-mapping>

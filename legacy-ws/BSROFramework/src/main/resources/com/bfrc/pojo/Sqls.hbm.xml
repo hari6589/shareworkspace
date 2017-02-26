@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="FindTpStoreListByStoreNumber">
+	    <return class="com.bfrc.pojo.pricing.TpStoreList" alias="storeList" />
+ 		    select {storeList.*}
+		      from TP_STORE_LIST storeList
+		    where STORE_NUMBER=:storeNumber
+	  </sql-query>
+	  <sql-query name="FindTpHierarchyPriceByStoreNumberAndArticle">
+	    <return class="com.bfrc.pojo.pricing.TpHierarchyPrice" alias="d"/>
+ 		    SELECT   d.* 
+        FROM     TP_TIRE_PRICE a, TP_STORE_LIST b, TP_HIERARCHY_PRICE d, TP_TIRE_MASTER e
+        WHERE  a.PRICE_BOOK_ID = b.PRICE_BOOK_ID 
+        AND a.PRICE_BOOK_ID = d.PRICE_BOOK_ID 
+        AND a.ARTICLE = e.ARTICLE 
+        AND d.LINE = e.LINE AND (a.ARTICLE =:article) 
+        AND (b.STORE_NUMBER =:storeNumber)
+	 </sql-query>
+	 <sql-query name="GetTirePriceByStoreNumberAndArticle">
+	    <return-scalar column="Article" type="long"/>
+      <return-scalar column="Description" type="string"/>
+      <return-scalar column="Line" type="long"/>
+      <return-scalar column="Retail_Price" type="big_decimal"/>
+      <return-scalar column="OnSale" type="string"/>
+      <return-scalar column="End_Date" type="date"/>
+      <return-scalar column="Excise_Tax" type="big_decimal"/>
+      <return-scalar column="Excise_Tax_Article" type="long"/>
+      <return-scalar column="TireFee" type="big_decimal"/>
+      <return-scalar column="FeeDesc" type="string"/>
+      <return-scalar column="FeeArticle" type="long"/>
+      <return-scalar column="Wheel_Balance_Weight" type="big_decimal"/>
+      <return-scalar column="WheelWgtArticle" type="long"/>
+      <return-scalar column="Wheel_Balance_Labor" type="big_decimal"/>
+      <return-scalar column="WheelBalArticle" type="long"/>
+      <return-scalar column="Valve_Stem" type="big_decimal"/>
+      <return-scalar column="ValveStemArticle" type="long"/>
+      <return-scalar column="RoadHazard_Percent" type="big_decimal"/>
+      <return-scalar column="RoadHazard_Min_Amount" type="big_decimal"/>
+      <return-scalar column="Disposal_Price" type="big_decimal"/>
+      <return-scalar column="DisposalFeeArticle" type="long"/>
+      <return-scalar column="TireInstallPrice" type="big_decimal"/>
+      <return-scalar column="TireInstallArticle" type="long"/>
+        <![CDATA[
+        SELECT 
+tm_Article as Article,
+tm_Description as Description,
+tm_Line as Line,
+tp_Retail_Price as Retail_Price,
+tp_OnSale as OnSale,
+tp_End_Date as End_Date,
+tm_Excise_Tax as Excise_Tax,
+sl_Excise_Tax_Article as Excise_Tax_Article,
+CASE WHEN nvl(c.Percent,0) = 0 THEN nvl(c.Amount,0)  ELSE (CASE WHEN nvl(c.Amount,0) = 0 
+THEN (CASE WHEN nvl(c.Percent,0) * tp_Retail_Price / 100 < nvl(c.Amount,0) 
+THEN nvl(c.Percent,0) * tp_Retail_Price / 100 ELSE nvl(c.Amount,0) END) ELSE nvl(c.Percent,0) * tp_Retail_Price / 100 END) END as TireFee,
+nvl(c.Description,'') as FeeDesc,
+nvl(c.Article,0) as FeeArticle,
+hp_Wheel_Balance_Weight as Wheel_Balance_Weight,
+'7018708' as WheelWgtArticle,
+hp_Wheel_Balance_Labor as Wheel_Balance_Labor,
+'7018716' as WheelBalArticle,
+hp_Valve_Stem as Valve_Stem,
+'7015040' as ValveStemArticle,
+hp_RoadHazard_Percent as RoadHazard_Percent,
+hp_RoadHazard_Min_Amount as RoadHazard_Min_Amount,
+sl_Disposal_Price as Disposal_Price,
+'7075078' as DisposalFeeArticle,
+0 as TireInstallPrice,'7015016' as TireInstallArticle 
+FROM 
+  (SELECT e.Article as tm_article,e.Description as tm_description,e.Line as tm_line,
+  a.Retail_Price as tp_retail_price,a.OnSale as tp_onsale,a.End_Date as tp_end_date,
+  e.Excise_Tax as tm_excise_tax,b.Excise_Tax_Article as sl_excise_tax_article,d.Wheel_Balance_Weight as hp_wheel_balance_weight,
+  d.Wheel_Balance_Labor as hp_wheel_balance_labor,d.Valve_Stem as hp_valve_stem,
+  d.RoadHazard_Percent as hp_RoadHazard_Percent, d.RoadHazard_Min_Amount as hp_RoadHazard_Min_Amount, 
+  b.Disposal_Price as sl_disposal_price,
+  b.store_number as sl_store_number,e.fee_type_code as tm_fee_type_code 
+    FROM TP_Tire_Price a,
+    TP_Hierarchy_Price d,
+    TP_Tire_Master e, 
+    TP_Store_List b 
+      WHERE a.Price_Book_ID = b.Price_Book_ID AND a.Price_Book_ID = d.Price_Book_ID 
+        and e.article = a.article AND d.Line=e.Line AND a.Article=:article AND b.Store_Number=:storeNumber) 
+  derived_price 
+left outer join 
+ TP_Tire_Fee c on derived_price.sl_store_number = c.store_number 
+ and derived_price.tm_fee_type_code = c.fee_type_code and (nvl(c.amount,0) > 0 or nvl(c.percent,0) > 0)  
+        ]]>
+</sql-query>
+
+<sql-query name="GetUsersCountByUserTypeAndActive">
+	    <return-scalar column="UsersCount" type="long"/>
+ 		    SELECT count(*) as UsersCount 
+ 		    FROM  USERS u, PARTNER_COMPANY pc 
+ 		    WHERE u.PARTNER_COMPANY_ID=pc.ID and 
+ 		    (u.USER_TYPE_ID = :userTypeId) AND (u.ACTIVE = :active)
+	  </sql-query>
+	  
+<sql-query name="GetUsersByUserTypeAndActive">
+	    <return class="com.bfrc.pojo.User" alias="users" />
+ 		    SELECT u.*
+FROM  USERS u, PARTNER_COMPANY pc
+WHERE u.PARTNER_COMPANY_ID=pc.ID and
+(u.USER_TYPE_ID = :userTypeId) AND (u.ACTIVE = :active)
+	  </sql-query>
+	  
+<sql-query name="GetPartnerCompanies">
+      <return class="com.bfrc.pojo.partner.Company" alias="pc"/>
+ 		    SELECT {pc.*}
+FROM  PARTNER_COMPANY  pc
+        Order By pc.Name
+</sql-query> 
+	  
+</hibernate-mapping>

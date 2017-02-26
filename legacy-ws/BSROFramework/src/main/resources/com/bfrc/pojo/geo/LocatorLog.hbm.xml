@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.geo.LocatorLog" table="LOCATOR_LOG" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.geo.LocatorLogId">
+            <key-property name="requestId" type="long">
+                <column name="REQUEST_ID" length="11" />
+            </key-property>
+            <key-property name="requestType" type="string">
+                <column name="REQUEST_TYPE" length="25" />
+            </key-property>
+        </composite-id>
+            <property name="remoteIp" type="string">
+                <column name="REMOTE_IP" length="15" />
+            </property>
+            <property name="createdDate" type="timestamp">
+                <column name="CREATED_DATE" length="7" />
+            </property>
+            <property name="serverIp" type="string">
+                <column name="SERVER_IP" length="15" />
+            </property>
+            <property name="street" type="string">
+                <column name="STREET" length="50" />
+            </property>
+            <property name="city" type="string">
+                <column name="CITY" length="50" />
+            </property>
+            <property name="state" type="string">
+                <column name="STATE" length="2" />
+            </property>
+            <property name="zip" type="string">
+                <column name="ZIP" length="10" />
+            </property>
+            <property name="storeNumber" type="java.lang.Long">
+                <column name="STORE_NUMBER" precision="6" scale="0" />
+            </property>
+            <property name="appName" type="string">
+                <column name="APP_NAME" length="25" />
+            </property>
+    </class>
+</hibernate-mapping>

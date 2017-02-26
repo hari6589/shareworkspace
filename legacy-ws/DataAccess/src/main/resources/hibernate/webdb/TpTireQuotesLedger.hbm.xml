@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.quote.TpTireQuotesLedger" table="TP_TIRE_QUOTES_LEDGER">
+        <id name="quoteId" type="long">
+            <column name="QUOTE_ID" precision="10" scale="0" />            
+        </id>        
+        <property name="payload" type="org.springframework.orm.hibernate3.support.ClobStringType" column="PAYLOAD" />
+        <property name="updateDate" type="timestamp">
+            <column name="UPDATE_DATE" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

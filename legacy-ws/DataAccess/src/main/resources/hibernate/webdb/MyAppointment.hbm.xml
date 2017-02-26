@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyAppointment" table="MY_APPOINTMENTS" schema="RTMS_WEBDB">
+        <id name="myAppointmentId" type="long">
+            <column name="MY_APPOINTMENT_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_APPOINTMENTS_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="vehicle" class="com.bfrc.dataaccess.model.myprofile.MyVehicle" fetch="select">
+            <column name="MY_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="appointment" class="com.bfrc.dataaccess.model.appointment.Appointment" fetch="select">
+            <column name="APPOINTMENT_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="user" class="com.bfrc.dataaccess.model.myprofile.BFSUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE" length="7"/>
+        </property>
+    </class>
+</hibernate-mapping>

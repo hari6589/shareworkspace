@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.geo.ZoneList" table="ZONE_LIST" schema="RTMS_WEBDB">
+        <id name="zoneId" type="byte">
+            <column name="ZONE_ID" precision="2" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="zoneName" type="string">
+            <column name="ZONE_NAME" length="2" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

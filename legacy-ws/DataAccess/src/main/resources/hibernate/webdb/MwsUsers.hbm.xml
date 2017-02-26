@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.mws.MwsUsers" table="MWS_USERS" schema="RTMS_WEBDB">
+        <id name="userId" type="long">
+            <column name="USER_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MWS_USERS_SEQ</param>
+            </generator>
+        </id>
+        <property name="email" type="string">
+            <column name="EMAIL" length="255" />
+        </property>
+        <property name="previousEmail" type="string">
+            <column name="PREV_EMAIL" scale="255" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="128"/>
+        </property>
+		<property name="registerDate" type="date">
+            <column name="REG_DATE" length="7"/>
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="1"/>
+        </property>
+        <property name="unsuccessfulAttempts" type="java.lang.Integer">
+            <column name="UNSUCCESSFUL_ATTEMPTS" precision="1"/>
+        </property>
+        <many-to-one name="userType" class="com.bfrc.dataaccess.model.contact.WebSite" fetch="select">
+            <column name="SITE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <set inverse="true" name="mwsBackUpData" sort="unsorted">
+			<key>
+				<column name="USER_ID" not-null="true" precision="10" scale="0" />
+			</key>
+			<one-to-many class="com.bfrc.dataaccess.model.mws.MwsBackupData" />
+		</set>
+    </class>
+</hibernate-mapping>

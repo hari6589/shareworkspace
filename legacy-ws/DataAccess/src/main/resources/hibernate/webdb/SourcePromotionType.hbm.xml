@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 12, 2009 11:31:58 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.promotion.SourcePromotionType" schema="TIRE_PROMOTION" table="SOURCE_PROMOTION_TYPE">
+    <id name="promoType" type="string">
+      <column length="1" name="PROMO_TYPE"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="promoTypeDescription" type="string" length="50" column="PROMO_TYPE_DESCRIPTION" not-null="true"/>
+    <property name="reducePriceFlag" type="string" length="1" column="REDUCE_PRICE_FLAG" not-null="true"/>
+<!--     <set inverse="true" name="tirePromotionEvents"> -->
+<!--       <key> -->
+<!--         <column length="1" name="PROMO_TYPE" not-null="true"/> -->
+<!--       </key> -->
+<!--       <one-to-many class="com.bfrc.dataaccess.model.promotion.TirePromotionEvent"/> -->
+<!--     </set> -->
+    <set inverse="true" name="tirePromotionEventHistories">
+      <key>
+        <column length="1" name="PROMO_TYPE" not-null="true"/>
+      </key>
+      <one-to-many class="com.bfrc.dataaccess.model.promotion.TirePromotionEventHistory"/>
+    </set>
+  </class>
+</hibernate-mapping>

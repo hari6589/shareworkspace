@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.notification.DeviceMessage" table="DEVICE_MESSAGE" schema="RTMS_WEBDB">
+        <id name="deviceMessageId" type="long">
+            <column name="DEVICE_MESSAGE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">DEVICE_MESSAGE_SEQ</param>
+            </generator>
+        </id>
+        <property name="deviceUUID" type="string">
+            <column name="DEVICE_UUID" length="512"/>
+        </property> 
+        <property name="readFlag" type="string">
+            <column name="READ_FLAG" length="1"/>
+        </property> 
+        <property name="pinnedFlag" type="string">
+            <column name="PINNED_FLAG" length="1"/>
+        </property> 
+        <property name="deleteFlag" type="string">
+            <column name="DELETE_FLAG" length="1"/>
+        </property> 
+        <property name="lastReadDate" type="date">
+            <column name="LAST_READ_DATE" length="7"/>
+        </property>   
+        <property name="lastUpdateDate" type="date">
+            <column name="LAST_UPDATE_DATE" length="7"/>
+        </property>
+        <many-to-one name="serviceNotification" class="com.bfrc.dataaccess.model.notification.ServiceNotification" fetch="select">
+            <column name="NOTIFICATION_ID" precision="10" scale="0"  />
+        </many-to-one>
+    </class>
+    
+    <query  
+		name="com.bfrc.dataaccess.model.notification.DeviceMessage.getMessagesForDevice" cacheable="true">
+		<![CDATA[
+		  	FROM DeviceMessage 
+		   WHERE serviceNotification.startDate < sysdate()
+		     AND (serviceNotification.endDate > sysdate() OR serviceNotification.endDate IS NULL)
+		     AND (serviceNotification.userId  = ? OR serviceNotification.userId IS NULL)
+		     AND deviceUUID = ?
+		]]>
+	</query>
+
+</hibernate-mapping>

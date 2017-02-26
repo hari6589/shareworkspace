@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.geo.HrDistricts" table="HR_DISTRICTS" schema="RTMS_WEBDB">
+        <id name="districtId" type="string">
+            <column name="DISTRICT_ID" length="4" />
+            <generator class="assigned" />
+        </id>
+        <property name="districtZone" type="string">
+            <column name="DISTRICT_ZONE" length="2" />
+        </property>
+        <property name="districtName" type="string">
+            <column name="DISTRICT_NAME" length="50" />
+        </property>
+        <set name="stores">
+        	<key column="DISTRICT_ID" not-null="true" />
+        	<one-to-many class="com.bfrc.pojo.store.Store" />
+        </set>
+     </class>
+</hibernate-mapping>

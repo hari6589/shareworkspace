@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.aces.VehicleSubmodel" schema="BFS_TIRE_SELECTOR" table="ACES_SUBMODEL">
+  		<id name="submodelId" type="long">
+      		<column name="SUBMODELID"/>
+      		<generator class="assigned"/>
+    	</id>
+    	<property name="submodelName" type="string">
+      		<column length="50" name="SUBMODELNAME"/>
+	    </property>
+
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 5, 2007 12:38:02 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.store.BfrcStoreMap" table="BFRC_STORE_MAP" schema="RTMS_WEBDB">
+        <id name="mapId" type="integer">
+            <column name="MAP_ID" precision="5" scale="0" />
+            <generator class="assigned" />
+        </id>
+            <property name="siteName" type="string">
+                <column name="SITE_NAME" length="10" />
+            </property>
+            <property name="storeType" type="string">
+                <column name="STORE_TYPE" length="4" />
+            </property>
+        <property name="parentType" type="string">
+            <column name="PARENT_TYPE" length="4" />
+        </property>
+        <property name="disclaimerDescription" type="string">
+            <column name="DISCLAIMER_DESCRIPTION" length="1000" />
+        </property>
+    </class>
+</hibernate-mapping>

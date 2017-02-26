@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.pricing.TpTaxStatus" schema="RTMS_WEBDB" table="TP_TAXSTATUS">
+    <composite-id class="com.bfrc.dataaccess.model.pricing.TpTaxStatusId" name="id">
+      <key-property name="storeNumber" type="long">
+        <column name="STORE_NUMBER" precision="10" scale="0"/>
+      </key-property>
+      <key-property name="itaxCode" type="long">
+        <column name="ITAXCODE" precision="3" scale="0"/>
+      </key-property>
+    </composite-id>
+    <property name="description" type="string">
+      <column length="250" name="description"/>
+    </property>
+    <property name="ntaxable" type="long">
+      <column name="ntaxable" precision="1" scale="0"/>
+    </property>
+    <property name="geocode" type="long">
+      <column name="geocode" precision="10" scale="0"/>
+    </property>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 18, 2007 10:31:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpSuppressionBrand" table="TP_SUPPRESSION_BRAND" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.pricing.TpSuppressionBrandId">
+            <key-property name="suppressionId" type="long">
+                <column name="SUPPRESSION_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="brandId" type="long">
+                <column name="BRAND_ID" precision="10" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="userId" type="java.lang.Long">
+            <column name="USER_ID" precision="10" scale="0" />
+        </property>
+        <property name="createdDate" type="date">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+    </class>
+</hibernate-mapping>

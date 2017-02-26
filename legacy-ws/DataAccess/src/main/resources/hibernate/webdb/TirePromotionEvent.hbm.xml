@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.promotion.TirePromotionEvent" table="TIRE_PROMOTION_EVENT" schema="TIRE_PROMOTION" lazy="false">
+        <id name="promoId" type="long">
+            <column name="PROMO_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">tire_promotion.PROMO_ID_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="sourcePromotionType" class="com.bfrc.dataaccess.model.promotion.SourcePromotionType" fetch="select" lazy="false">
+            <column name="PROMO_TYPE" length="1" not-null="true" />
+        </many-to-one>
+        <property name="promoName" type="string" column="PROMO_NAME" length="50" not-null="true" />
+        <property name="promoValue" type="big_decimal" column="PROMO_VALUE" precision="15" not-null="true" />
+        <property name="minQualifierQty" type="byte" column="MIN_QUALIFIER_QTY" precision="2" scale="0" not-null="true" />
+        <property name="promoSmallImgText" type="string" column="PROMO_SMALL_IMG_TEXT" />
+        <property name="promoSmallImgTooltip" type="string" column="PROMO_SMALL_IMG_TOOLTIP" length="256" />
+        <property name="promoDisplayName" type="string" column="PROMO_DISPLAY_NAME"  not-null="true" />
+        <property name="promoTotalTag" type="string" column="PROMO_TOTAL_TAG" />
+        <property name="promoUrlName" type="string" column="PROMO_URL_NAME"  />
+        <property name="promoMainText" type="string" column="PROMO_MAIN_TEXT" length="4000" not-null="true" />
+        <property name="promoFooterText" type="string" column="PROMO_FOOTER_TEXT" length="2000" not-null="true" />
+        <property name="promoPdfText" type="string" column="PROMO_PDF_TEXT" length="256" />
+        <property name="statusFlag" type="string" column="STATUS_FLAG" length="1" not-null="true" />
+        <property name="lastChangedBy" type="string" column="LAST_CHANGED_BY" length="50" not-null="true" />
+        <property name="lastChangedDate" type="timestamp" column="LAST_CHANGED_DATE" length="7" not-null="true" />
+        <property name="FCACOffersFlag" type="string" column="FCAC_OFFERS_FLAG" length="1" />
+        <property name="ETOffersFlag" type="string" column="ET_OFFERS_FLAG" length="1" />
+<!--         <set name="tirePromotionEventHistories" inverse="true" lazy="false"> -->
+<!--             <key> -->
+<!--                 <column name="PROMO_ID" precision="10" scale="0" not-null="true" /> -->
+<!--             </key> -->
+<!--             <one-to-many class="com.bfrc.dataaccess.model.promotion.TirePromotionEventHistory" /> -->
+<!--         </set> -->
+<!--         <set name="tirePromotionSiteHistories" inverse="true" lazy="false"> -->
+<!--             <key> -->
+<!--                 <column name="PROMO_ID" precision="10" scale="0" not-null="true" /> -->
+<!--             </key> -->
+<!--             <one-to-many class="com.bfrc.dataaccess.model.promotion.TirePromotionSiteHistory" /> -->
+<!--         </set> -->
+    </class>
+    <sql-query name="com.bfrc.dataaccess.model.promotion.TirePromotionEvent.findTirePromotionsBySitesAndStoreNumber">
+	    <return class="com.bfrc.dataaccess.model.promotion.TirePromotionEvent" />
+ 		    SELECT f.*
+            FROM  tire_promotion.TIRE_PROMOTION_EVENT f, tire_promotion.TIRE_PROMOTION_LOCATION g, tire_promotion.TIRE_PROMOTION_SITE h
+            WHERE f.Promo_ID = g.Promo_ID 
+                AND f.Promo_ID = h.Promo_ID 
+                AND f.Status_Flag = 'P'
+                AND TRUNC(sysdate) BETWEEN TRUNC(g.Start_Date) AND TRUNC(g.End_Date)
+                AND h.SITE_NAME= ?
+                AND g.Store_Number = ?
+                AND f.promo_name LIKE (?)
+                ORDER BY f.Promo_Type
+	</sql-query>
+	
+	<sql-query name="com.bfrc.dataaccess.model.promotion.TirePromotionEvent.findDiscountAmountByStoreNumberMinQtyPromoId">
+	 <return-scalar column="Discount_Amount" type="big_decimal"/>
+	 <return-scalar column="Article" type="long"/>
+	  <![CDATA[
+	   SELECT CASE WHEN i.REDUCE_PRICE_FLAG = 'N' THEN 0 ELSE
+       CASE f.Promo_Type WHEN 'P' THEN a.Retail_Price * f.PROMO_VALUE / 100
+       WHEN 'D' THEN f.PROMO_VALUE END END as Discount_Amount, a.Article as Article
+       FROM rtms_webdb.TP_Tire_Price a, rtms_webdb.TP_Store_List b,
+           tire_promotion.TIRE_PROMOTION_EVENT f, tire_promotion.TIRE_PROMOTION_LOCATION g, tire_promotion.TIRE_PROMOTION_ARTICLE h,
+           tire_promotion.SOURCE_PROMOTION_TYPE i
+       WHERE a.Price_Book_ID = b.Price_Book_ID
+           AND a.article = h.article 
+           AND b.Store_Number = g.Store_Number
+           AND f.Promo_ID = g.Promo_ID 
+           AND f.Promo_ID = h.Promo_ID
+           AND f.Promo_Type = i.Promo_Type
+           AND f.Status_Flag = 'P'
+           AND TRUNC(sysdate) BETWEEN TRUNC(g.Start_Date) AND TRUNC(g.End_Date)
+           AND a.Article = ?
+           AND b.Store_Number = ?
+           AND f.MIN_QUALIFIER_QTY <= ?
+           AND f.Promo_ID= ?
+     ]]>
+    </sql-query>
+    
+    <sql-query name="com.bfrc.dataaccess.model.promotion.TirePromotionEvent.findTirePromotionsBySiteAndStatus">
+    	<return class="com.bfrc.dataaccess.model.promotion.TirePromotionEvent" />
+		SELECT
+			j.PROMO_ID, j.PROMO_NAME, j.PROMO_TYPE, j.PROMO_VALUE, j.MIN_QUALIFIER_QTY,
+			j.PROMO_SMALL_IMG_TEXT, j.PROMO_SMALL_IMG_TOOLTIP,
+			j.PROMO_DISPLAY_NAME, j.PROMO_TOTAL_TAG, j.PROMO_URL_NAME,
+			j.PROMO_MAIN_TEXT, j.PROMO_FOOTER_TEXT, j.PROMO_PDF_TEXT,
+			j.STATUS_FLAG, j.LAST_CHANGED_BY, j.LAST_CHANGED_DATE,
+			j.FCAC_OFFERS_FLAG, j.ET_OFFERS_FLAG
+		FROM tire_promotion.TIRE_PROMOTION_EVENT j,
+			(
+				SELECT DISTINCT g.Promo_ID
+				FROM tire_promotion.TIRE_PROMOTION_LOCATION g, tire_promotion.TIRE_PROMOTION_SITE h
+				WHERE g.Promo_ID = h.Promo_ID
+				AND h.SITE_NAME = ?
+				AND TRUNC (SYSDATE) BETWEEN TRUNC (g.Start_Date) AND TRUNC (g.End_Date)
+			) k
+		WHERE j.PROMO_ID = k.Promo_ID
+		AND j.STATUS_FLAG = ?
+		AND j.PROMO_NAME LIKE (?)
+	</sql-query>    
+	<sql-query name="com.bfrc.dataaccess.model.promotion.TirePromotionEvent.findTirePromotionsBySiteAndStatusORIG">
+    	<return class="com.bfrc.dataaccess.model.promotion.TirePromotionEvent" />
+ 		    SELECT 
+ 		      j.PROMO_ID, j.PROMO_NAME, j.PROMO_TYPE, j.PROMO_VALUE, j.MIN_QUALIFIER_QTY, 
+               j.PROMO_SMALL_IMG_TEXT, j.PROMO_SMALL_IMG_TOOLTIP, j.PROMO_DISPLAY_NAME, j.PROMO_TOTAL_TAG, j.PROMO_URL_NAME, 
+               j.PROMO_MAIN_TEXT, j.PROMO_FOOTER_TEXT, j.PROMO_PDF_TEXT, j.STATUS_FLAG, j.LAST_CHANGED_BY, j.LAST_CHANGED_DATE, 
+               j.FCAC_OFFERS_FLAG, j.ET_OFFERS_FLAG
+              from tire_promotion.TIRE_PROMOTION_EVENT j where j.Promo_ID in
+            (select distinct f.Promo_ID
+            FROM  tire_promotion.TIRE_PROMOTION_EVENT f, tire_promotion.TIRE_PROMOTION_LOCATION g, tire_promotion.TIRE_PROMOTION_SITE h
+            WHERE f.Promo_ID = g.Promo_ID 
+                AND f.Promo_ID = h.Promo_ID 
+                AND h.SITE_NAME= ?
+                AND f.Status_Flag = ?
+                AND TRUNC(sysdate) BETWEEN TRUNC(g.Start_Date) AND TRUNC(g.End_Date)
+                )
+	</sql-query>
+	
+</hibernate-mapping>

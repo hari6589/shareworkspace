@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 12, 2009 11:31:58 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tirepromotion.TirePromotionArticle" table="TIRE_PROMOTION_ARTICLE" schema="TIRE_PROMOTION">
+        <composite-id name="id" class="com.bfrc.pojo.tirepromotion.TirePromotionArticleId">
+            <key-property name="promoId" type="long">
+                <column name="PROMO_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="article" type="long">
+                <column name="ARTICLE" precision="10" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+    <sql-query name="getTirePromotionArticlesByPromoId">
+	    <return class="com.bfrc.pojo.tirepromotion.TirePromotionArticle" />
+ 		    SELECT * from tire_promotion.TIRE_PROMOTION_ARTICLE where PROMO_ID = :promoId
+	</sql-query>
+</hibernate-mapping>

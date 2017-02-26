@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.appointment.Appointment" schema="RTMS_WEBDB" table="APPOINTMENT">
+    <id column="APPOINTMENT_ID" name="appointmentId" type="java.lang.Long">
+      <generator class="sequence">
+        <param name="sequence">APPOINTMENT_SEQ</param>
+      </generator>
+    </id>
+    <property column="store_number" name="storeNumber" not-null="false" type="java.lang.Long"/>
+    <property column="vehicle_year" name="vehicleYear" not-null="false" type="java.lang.Long"/>
+    <property column="vehicle_make" name="vehicleMake" not-null="false" type="java.lang.String"/>
+    <property column="vehicle_model" name="vehicleModel" not-null="false" type="java.lang.String"/>
+    <property column="vehicle_submodel" name="vehicleSubmodel" not-null="false" type="java.lang.String"/>
+    <property column="mileage" name="mileage" not-null="false" type="java.lang.Integer"/>
+    <property column="comments" name="comments" not-null="false" type="java.lang.String"/>
+    <property column="FIRST_NAME" name="firstName" not-null="false" type="java.lang.String"/>
+    <property column="LAST_NAME" name="lastName" not-null="false" type="java.lang.String"/>
+    <property column="ADDRESS1" name="address1" not-null="false" type="java.lang.String"/>
+    <property column="ADDRESS2" name="address2" not-null="false" type="java.lang.String"/>
+    <property column="CITY" name="city" not-null="false" type="java.lang.String"/>
+    <property column="STATE" name="state" not-null="false" type="java.lang.String"/>
+    <property column="ZIP" name="zip" not-null="false" type="java.lang.String"/>
+    <property column="daytime_phone" name="daytimePhone" not-null="false" type="java.lang.String"/>
+    <property column="evening_phone" name="eveningPhone" not-null="false" type="java.lang.String"/>
+    <property column="cell_phone" name="cellPhone" not-null="false" type="java.lang.String"/>
+    <property column="email_address" name="emailAddress" not-null="false" type="java.lang.String"/>
+    <property column="email_signup" name="emailSignup" not-null="false" type="java.lang.String"/>
+    <property column="CREATED_DATE" name="createdDate" not-null="true" type="java.util.Date"/>
+    <property column="WEB_SITE" name="webSite" not-null="false" type="java.lang.String"/>
+    <property column="BATTERY_QUOTE_ID" name="batteryQuoteId" not-null="false" type="java.lang.Long"/>
+    <property column="EMAIL_REMINDER_IND" name="emailReminder" type="java.lang.String" not-null="false" />
+    <property column="PHONE_REMINDER_IND" name="phoneReminder" type="java.lang.String" not-null="false" />
+    <property column="WEB_SITE_SOURCE" name="webSiteSource" type="java.lang.String"  not-null="false" />   
+    <property column="ECOMM_REF_NUMBER" name="eCommRefNumber" type="java.lang.String" not-null="false" />    
+    <list lazy="false" name="choices">
+      <key column="APPOINTMENT_ID"/>
+      <list-index column="CHOICE"/>
+      <one-to-many class="com.bfrc.dataaccess.model.appointment.AppointmentChoice"/>
+    </list>
+    <set lazy="false" name="services">
+      <key column="APPOINTMENT_ID"/>
+      <one-to-many class="com.bfrc.dataaccess.model.appointment.AppointmentService"/>
+    </set>
+  </class>
+  
+	<sql-query name="com.bfrc.dataaccess.model.appointment.Appointment.findWebserviceInfoByWebSiteName" cacheable="true">
+		<return-scalar column="webSite" type="string"/>
+		<return-scalar column="maiIp" type="string"/>
+		<return-scalar column="appName" type="string"/>
+ 		SELECT mai_name webSite,
+			   mai_ip maiIp,
+			   site_name appName
+		FROM   bfrc_webservice ws
+		WHERE  site_name = ?
+	</sql-query>
+	
+	<sql-query name="com.bfrc.dataaccess.model.appointment.Appointment.findAppointmentsToRetry" cacheable="true">
+	    <return class="com.bfrc.dataaccess.model.appointment.Appointment" />
+		select app.* from appointment app where app.appointment_id in (
+			select ast.appointment_id from appointment_sent_status ast where ast.status='R'
+		) 
+		and app.created_date > to_date(sysdate-1)
+	</sql-query>
+</hibernate-mapping>

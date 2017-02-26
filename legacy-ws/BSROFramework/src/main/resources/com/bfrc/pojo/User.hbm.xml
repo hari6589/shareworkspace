@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!--
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.User" table="USERS">
+        <id name="id" type="long">
+            <column name="ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">USER_SEQ</param>
+            </generator>
+        </id>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="80" />
+        </property>
+        <property name="emailAddress" type="string">
+            <column name="EMAIL_ADDRESS" length="255" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="20" />
+        </property>
+        <property name="passwordHint" type="string">
+            <column name="PASSWORD_HINT" length="20" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="active" type="boolean">
+            <column name="ACTIVE" precision="1" scale="0" />
+        </property>
+        <property name="optIn" type="boolean">
+            <column name="OPT_IN" precision="1" scale="0" />
+        </property>
+        <property name="mailRemind" type="boolean">
+            <column name="MAIL_REMIND" precision="1" scale="0" />
+        </property>
+        <property name="emailRemind" type="boolean">
+            <column name="EMAIL_REMIND" precision="1" scale="0" />
+        </property>
+        <property name="smsRemind" type="boolean">
+            <column name="SMS_REMIND" precision="1" scale="0" />
+        </property>
+        <property name="mailOffers" type="boolean">
+            <column name="MAIL_OFFERS" precision="1" scale="0" />
+        </property>
+        <property name="emailOffers" type="boolean">
+            <column name="EMAIL_OFFERS" precision="1" scale="0" />
+        </property>
+        <property name="smsOffers" type="boolean">
+            <column name="SMS_OFFERS" precision="1" scale="0" />
+        </property>
+        <property name="alignment" type="boolean">
+            <column name="ALIGNMENT" precision="1" scale="0" />
+        </property>
+        <property name="battery" type="boolean">
+            <column name="BATTERY" precision="1" scale="0" />
+        </property>
+        <property name="inflation" type="boolean">
+            <column name="INFLATION" precision="1" scale="0" />
+        </property>
+        <property name="mfgr" type="boolean">
+            <column name="MFGR" precision="1" scale="0" />
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS" length="50" />
+        </property>
+        <property name="address2" type="string">
+            <column name="ADDRESS2" length="50" />
+        </property>
+        <property name="userTypeId" type="int">
+            <column name="USER_TYPE_ID" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" length="50" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" />
+        </property>
+        <property name="phone" type="string">
+            <column name="PHONE_NUMBER" length="25" />
+        </property>
+        <property name="eveningPhone" type="string">
+            <column name="EVENING_PHONE" length="25" />
+        </property>
+        <property name="cellPhone" type="string">
+            <column name="CELL_PHONE" length="25" />
+        </property>
+        <property name="otherYear" type="int">
+            <column name="OTHER_YEAR" length="4" />
+        </property>
+        <property name="otherMake" type="string">
+            <column name="OTHER_MAKE" length="30" />
+        </property>
+        <property name="otherModel" type="string">
+            <column name="OTHER_MODEL" length="40" />
+        </property>
+        <property name="otherSubmodel" type="string">
+            <column name="OTHER_SUBMODEL" length="80" />
+        </property>
+        <property name="otherMileage" type="int">
+            <column name="OTHER_MILEAGE" length="6" />
+        </property>
+        <property name="optinCode" type="string">
+            <column name="OPTIN_CODE" length="10" />
+        </property>
+        <property name="optinConfirm" type="string">
+            <column name="OPTIN_CONFIRM" length="10" />
+        </property>
+        <many-to-one name="appointment" column="APPOINTMENT_ID" class="com.bfrc.pojo.appointment.Appointment" />
+        <many-to-one name="company" column="PARTNER_COMPANY_ID" class="com.bfrc.pojo.partner.Company" />
+        <many-to-one name="store" column="STORE_ID" class="com.bfrc.pojo.store.Store" />
+        <many-to-one name="vehicle" column="USER_VEHICLE_ID" class="com.bfrc.pojo.UserVehicle" />
+    </class>
+</hibernate-mapping>

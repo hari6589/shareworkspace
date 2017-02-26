@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 14, 2007 11:50:22 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.promotion.Promotion" table="PROMOTION" schema="RTMS_WEBDB">
+        <id name="promotionId" type="long">
+            <column name="PROMOTION_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">NATIONAL_PROMOTION_SEQ</param>
+            </generator>
+        </id>
+        <property name="startDate" type="timestamp">
+            <column name="START_DATE" length="7" />
+        </property>
+        <property name="expirationDate" type="timestamp">
+            <column name="EXPIRATION_DATE" length="7" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="200" not-null="true" />
+        </property>
+        <property name="tireId" type="string">
+            <column name="TIRE_ID" length="10" />
+        </property>
+        <property name="tireId2" type="string">
+            <column name="TIRE_ID_2" length="10" />
+        </property>
+        <property name="suvDisplay" type="int">
+            <column name="SUV_DISPLAY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="200" />
+        </property>
+        <property name="defaultSize" type="java.lang.Boolean">
+            <column name="DEFAULT_SIZE" precision="1" scale="0" />
+        </property>
+        <property name="newWindow" type="java.lang.Boolean">
+            <column name="NEW_WINDOW" precision="1" scale="0" />
+        </property>
+        <property name="maintOffer" type="java.lang.Boolean">
+            <column name="MAINT_OFFER" precision="1" scale="0" />
+        </property>
+        <property name="repairOffer" type="java.lang.Boolean">
+            <column name="REPAIR_OFFER" precision="1" scale="0" />
+        </property>
+        <property name="tireOffer" type="java.lang.Boolean">
+            <column name="TIRE_OFFER" precision="1" scale="0" />
+        </property>
+        <property name="homePageOffer" type="java.lang.Boolean">
+        	<column name="HOME_PAGE_OFFER" precision="1" scale="0" />
+        </property>
+        <property name="width" type="java.lang.Long">
+            <column name="WIDTH" precision="10" scale="0" />
+        </property>
+        <property name="height" type="java.lang.Long">
+            <column name="HEIGHT" precision="10" scale="0" />
+        </property>
+        <property name="orderId" type="long">
+            <column name="ORDER_ID" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="target" type="string">
+            <column name="TARGET" length="10" />
+        </property>
+        <property name="createdDate" type="date">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="promoType" type="char">
+            <column name="PROMO_TYPE" length="1" not-null="true" />
+        </property>
+        <property name="imageBlob" type="blob">
+            <column name="IMAGE" />
+        </property>
+        <property name="thumbBlob" type="blob">
+            <column name="THUMBNAIL" />
+        </property>
+        <property name="flashIconBlob" type="blob">
+            <column name="FLASH_ICON" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="10" />
+        </property>
+        <property name="landingPageId" type="string">
+            <column name="LANDING_PAGE_ID" length="200" />
+        </property>
+        <property name="landingPageIcon"  type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="LANDING_PAGE_ICON" />
+        </property>
+        <property name="priceInfo" type="string">
+            <column name="PRICE_INFO" length="1000" />
+        </property>
+        <property name="t5Title" type="string">
+            <column name="T5_TITLE" length="1000" />
+        </property>
+        <property name="t5Price" type="string">
+            <column name="T5_PRICE" length="30" />
+        </property>
+        <property name="t5Desc" type="string">
+            <column name="T5_DESCRIPTION" length="100" />
+        </property>
+        <property name="friendlyId" type="string">
+          <column name="FRIENDLY_ID" length="150"  unique="true" />
+        </property>
+        <property name="disclaimer" type="string">
+            <column name="DISCLAIMER" length="1000" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="offerStart" type="timestamp">
+            <column name="OFFER_START" length="7" />
+        </property>
+        <property name="offerEnd" type="timestamp">
+            <column name="OFFER_END" length="7" />
+        </property>
+        <property name="offerDescription" type="string">
+            <column name="OFFER_DESCRIPTION" length="4000" />
+        </property>
+        <property name="approved" type="java.lang.Boolean">
+        	<column name="APPROVED" precision="1" scale="0" />
+        </property>   
+        <property name="imageFileId" type="string">
+            <column name="IMAGE_FILE_ID" length="100" />
+        </property>
+        <property name="urlText" type="string">
+            <column name="URL_TEXT" length="100" />
+        </property>
+         <property name="offerWithoutPrice" type="java.lang.Boolean">
+        	<column name="OFFER_WITHOUT_PRICE" precision="1" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

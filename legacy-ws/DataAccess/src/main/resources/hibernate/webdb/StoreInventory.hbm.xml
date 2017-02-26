@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.bfrc.dataaccess.model.inventory.StoreInventory" table="TP_PRODUCT_INVENTORY" schema="RTMS_WEBDB">
+        <id name="inventoryId" type="long">
+            <column name="INVENTORY_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="storeNumber" type="long">
+            <column name="STORE_NUMBER" precision="6" not-null="true" />
+        </property>
+        <property name="articleNumber" type="long">
+            <column name="SKU" precision="10" not-null="true" />
+        </property>
+        <property name="quantityOnHand" type="int">
+            <column name="ONHAND_QUANTITY" precision="6"  />
+        </property>
+        <property name="quantityOnOrder" type="int">
+            <column name="ORDERED_QUANTITY" precision="6" />
+        </property>
+   	</class>
+   	<query name="StoreInventory.getInventoryByStore">
+     	<![CDATA[
+			 FROM StoreInventory 
+		    WHERE storeNumber = ?
+    	]]>
+    </query>
+    
+    <query name="StoreInventory.getInventoryByStoreAndArticle">
+     	<![CDATA[
+			 FROM StoreInventory 
+		    WHERE storeNumber = ?
+		    AND SKU = ?
+    	]]>
+    </query>
+    
+</hibernate-mapping>

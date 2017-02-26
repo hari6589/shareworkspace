@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 3, 2010 11:47:09 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.customer.CustomerContactUsEmailLog" table="CUSTOMER_CONTACTUSEMAIL_LOG" schema="RTMS_WEBDB">
+        <id name="contactusId" type="long">
+            <column name="CONTACTUS_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">CUSTOMER_CONTACTUSEMAILLOG_SEQ</param>
+            </generator>
+        </id>
+        <property name="emailFrom" type="string">
+            <column name="EMAIL_FROM" length="200" />
+        </property>
+        <property name="emailTo" type="string">
+            <column name="EMAIL_TO" length="1000" />
+        </property>
+        <property name="emailCc" type="string">
+            <column name="EMAIL_CC" length="1000" />
+        </property>
+        <property name="emailBcc" type="string">
+            <column name="EMAIL_BCC" length="1000" />
+        </property>
+        <property name="feedbackId" type="java.lang.Integer">
+            <column name="FEEDBACK_ID" precision="5" scale="0" />
+        </property>
+        <property name="companyName" type="string">
+            <column name="COMPANY_NAME" length="250" />
+        </property>
+        <property name="emailAddress" type="string">
+            <column name="EMAIL_ADDRESS" length="100" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="50" />
+        </property>
+        <property name="streetAddress1" type="string">
+            <column name="STREET_ADDRESS1" length="100" />
+        </property>
+        <property name="streetAddress2" type="string">
+            <column name="STREET_ADDRESS2" length="100" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" length="50" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" />
+        </property>
+        <property name="zipCode" type="string">
+            <column name="ZIP_CODE" length="10" />
+        </property>
+        <property name="daytimePhone" type="string">
+            <column name="DAYTIME_PHONE" length="20" />
+        </property>
+        <property name="eveningPhone" type="string">
+            <column name="EVENING_PHONE" length="20" />
+        </property>
+        <property name="mobilePhone" type="string">
+            <column name="MOBILE_PHONE" length="20" />
+        </property>
+        <property name="vehicleYear" type="java.lang.Short">
+            <column name="VEHICLE_YEAR" precision="4" scale="0" />
+        </property>
+        <property name="vehicleMake" type="string">
+            <column name="VEHICLE_MAKE" length="30" />
+        </property>
+        <property name="vehicleModel" type="string">
+            <column name="VEHICLE_MODEL" length="40" />
+        </property>
+        <property name="vehicleSubmodel" type="string">
+            <column name="VEHICLE_SUBMODEL" length="80" />
+        </property>
+        <property name="storeNumber" type="java.lang.Long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+        </property>
+        <property name="storeName" type="string">
+            <column name="STORE_NAME" length="50" />
+        </property>
+        <property name="storeAddress" type="string">
+            <column name="STORE_ADDRESS" length="60" />
+        </property>
+        <property name="storeCity" type="string">
+            <column name="STORE_CITY" length="50" />
+        </property>
+        <property name="storeState" type="string">
+            <column name="STORE_STATE" length="2" />
+        </property>
+        <property name="storeZip" type="string">
+            <column name="STORE_ZIP" length="10" />
+        </property>
+        <property name="comments" type="string">
+            <column name="COMMENTS" length="4000" />
+        </property>
+        <property name="siteId" type="java.lang.Integer">
+            <column name="SITE_ID" precision="5" scale="0" />
+        </property>
+        <property name="userAgentInfo" type="string">
+            <column name="USER_AGENT_INFO" length="1000" />
+        </property>
+        <property name="creationDate" type="timestamp">
+            <column name="CREATION_DATE" length="7" />
+        </property>
+    </class>
+</hibernate-mapping>

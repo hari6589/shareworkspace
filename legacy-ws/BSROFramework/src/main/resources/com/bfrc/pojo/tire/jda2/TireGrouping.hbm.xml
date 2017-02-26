@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 21, 2011 10:08:15 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.jda2.TireGrouping" table="TIRE_GROUPING" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="groupingId" type="long">
+            <column name="GROUPING_ID" precision="11" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">TIRE_GROUPING_SEQ</param>
+            </generator>
+        </id>
+        <property name="displayId" type="java.lang.Long">
+            <column name="DISPLAY_ID" precision="11" scale="0" />
+        </property>
+        <property name="category" type="string">
+            <column name="CATEGORY" length="70" />
+        </property>
+        <property name="segment" type="string">
+            <column name="SEGMENT" length="70" />
+        </property>
+        <property name="class_" type="string">
+            <column name="CLASS" length="70" />
+        </property>
+        <property name="tireVehicle" type="string">
+            <column name="TIRE_VEHICLE" length="70" />
+        </property>
+        <property name="tireClass" type="string">
+            <column name="TIRE_CLASS" length="70" />
+        </property>
+        <property name="tireType" type="string">
+            <column name="TIRE_TYPE" length="70" />
+        </property>
+    </class>
+</hibernate-mapping>

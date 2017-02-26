@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 7, 2012 5:06:59 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.quote.Quote" table="QUOTE">
+        <id name="quoteId" type="long">
+            <column name="QUOTE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">QUOTE_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="quoteType" class="com.bfrc.dataaccess.model.quote.QuoteType" fetch="select">
+            <column name="QUOTE_TYPE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="storeNumber" type="long">
+            <column name="STORE_NUMBER" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="vehicleId" type="string">
+            <column name="VEHICLE_ID" length="80" />
+        </property>
+        <property name="vehicleYear" type="integer">
+            <column name="VEHICLE_YEAR" precision="4" scale="0" />
+        </property>
+        <property name="vehicleMake" type="string">
+            <column name="VEHICLE_MAKE" length="30" />
+        </property>
+        <property name="vehicleModel" type="string">
+            <column name="VEHICLE_MODEL" length="40" />
+        </property>
+        <property name="vehicleSubmodel" type="string">
+            <column name="VEHICLE_SUBMODEL" length="80" />
+        </property>
+        <property name="vehicleEngine" type="string">
+            <column name="VEHICLE_ENGINE" length="40" />
+        </property>
+        <property name="vehicleModelSubmodelEngine" type="string">
+            <column name="VEHICLE_MODEL_SUBMODEL_ENGINE" length="200" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="50" not-null="true" />
+        </property>
+        <property name="createdDate" type="calendar">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="80" />
+        </property>
+        <property name="promotionType" type="string">
+            <column name="PROMOTION_TYPE" length="100" />
+        </property>
+        <property name="promotionId" type="java.lang.Long">
+            <column name="PROMOTION_ID" precision="10" scale="0" />
+        </property>
+        <set name="quoteItems" inverse="true" cascade="save-update,delete">
+            <key>
+                <column name="QUOTE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.quote.QuoteItem" />
+        </set>
+    </class>
+</hibernate-mapping>

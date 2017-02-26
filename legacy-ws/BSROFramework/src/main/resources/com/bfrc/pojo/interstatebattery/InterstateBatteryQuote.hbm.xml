@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 20, 2010 11:12:57 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.interstatebattery.InterstateBatteryQuote" table="INTERSTATE_BATTERY_QUOTE" schema="RTMS_WEBDB">
+        <id name="batteryQuoteId" type="long">
+            <column name="BATTERY_QUOTE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">INTERSTATE_BATTERY_QUOTE_SEQ</param>
+            </generator>
+        </id>
+        <property name="storeNumber" type="java.lang.Long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+        </property>
+        <property name="vehicleYear" type="java.lang.Short">
+            <column name="VEHICLE_YEAR" precision="4" scale="0" />
+        </property>
+        <property name="vehicleMake" type="string">
+            <column name="VEHICLE_MAKE" length="30" />
+        </property>
+        <property name="vehicleModel" type="string">
+            <column name="VEHICLE_MODEL" length="40" />
+        </property>
+        <property name="vehicleSubmodel" type="string">
+            <column name="VEHICLE_SUBMODEL" length="80" />
+        </property>
+        <property name="vehicleEngine" type="string">
+            <column name="VEHICLE_ENGINE" length="40" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" />
+        </property>
+        <property name="productCode" type="string">
+            <column name="PRODUCT_CODE" length="10" />
+        </property>
+        <property name="partNumber" type="java.lang.Long">
+            <column name="PART_NUMBER" precision="10" scale="0" />
+        </property>
+        <property name="totalWarranty" type="java.lang.Long">
+            <column name="TOTAL_WARRANTY" precision="10" scale="0" />
+        </property>
+        <property name="replacementWarranty" type="java.lang.Long">
+            <column name="REPLACEMENT_WARRANTY" precision="10" scale="0" />
+        </property>
+        <property name="cca" type="java.lang.Long">
+            <column name="CCA" precision="10" scale="0" />
+        </property>
+        <property name="rcMinutes" type="java.lang.Long">
+            <column name="RC_MINUTES" precision="10" scale="0" />
+        </property>
+        <property name="product" type="string">
+            <column name="PRODUCT" length="3" />
+        </property>
+        <property name="webPrice" type="big_decimal">
+            <column name="WEB_PRICE" precision="10" />
+        </property>
+        <property name="tradeinCredit" type="big_decimal">
+            <column name="TRADEIN_CREDIT" precision="10" />
+        </property>
+        <property name="installationAmt" type="big_decimal">
+            <column name="INSTALLATION_AMT" precision="10" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="50" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="mowaaAmount" type="big_decimal">
+            <column name="Mowaa_Amount" precision="5"  />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="80" />
+        </property>
+        <property name="donationName" type="string">
+            <column name="DONATION_NAME" length="150" />
+        </property>
+        <property name="donationAmount" type="big_decimal">
+            <column name="DONATION_AMOUNT" precision="8" />
+        </property>
+        <property name="donationArticle" type="java.lang.Long">
+            <column name="DONATION_ARTICLE" precision="10" scale="0" />
+        </property>
+        <property name="regularPrice" type="big_decimal">
+            <column name="REGULAR_PRICE" precision="10" />
+        </property>
+        <property name="discountArticle" type="java.lang.Long">
+            <column name="DISCOUNT_ARTICLE" precision="10" scale="0" />
+        </property>
+        <property name="discountAmount" type="big_decimal">
+            <column name="DISCOUNT_AMOUNT" precision="8" />
+        </property>
+        <property name="emailAddress" type="string">
+                <column name="EMAIL_ADDRESS" />
+        </property>
+        <property name="quantity" type="java.lang.Short">
+            <column name="QUANTITY" precision="2" />
+        </property>
+        <property name="totalPrice" type="big_decimal">
+            <column name="TOTAL_PRICE" precision="10" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

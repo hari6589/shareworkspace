@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 18, 2012 12:40:10 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.donation.DonationProgram" table="DONATION_PROGRAM">
+        <id name="donationProgramId" type="long">
+            <column name="DONATION_PROGRAM_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">DONATION_PROGRAM_SEQ</param>
+            </generator>
+        </id>
+        <property name="articleNumber" type="long">
+            <column name="ARTICLE_NUMBER" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="200" not-null="true" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="50" not-null="true" />
+        </property>
+        <property name="startDate" type="calendar">
+            <column name="START_DATE" length="7" not-null="true" />
+        </property>
+        <property name="endDate" type="calendar">
+            <column name="END_DATE" length="7" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

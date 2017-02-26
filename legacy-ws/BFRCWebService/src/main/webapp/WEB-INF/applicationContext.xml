@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+                        
+	<context:annotation-config/>
+	<context:component-scan base-package="com.bsro.api.rest"/>
+	<context:component-scan base-package="com.bfrc.dataaccess.svc"/>
+	
+	<context:component-scan base-package="com.bsro.service">
+		<context:exclude-filter expression="com.bsro.service.vehicle.*tire.*" type="regex"/>
+	</context:component-scan>
+
+	<context:component-scan base-package="com.bsro.core.exception.handler">
+         <context:include-filter expression="javax.ws.rs.ext.Provider" type="annotation"/>
+	</context:component-scan>
+
+<!-- 	<bean id="propertyConfigurer" class="com.bfrc.dataaccess.properties.DBPropertyPlaceholderConfigurer"> -->
+<!-- 	    <property name="dataSource" ref="bfrcDataSource"/> -->
+<!-- 	    <property name="siteTypes"> -->
+<!-- 			<util:list id="types" list-class="java.util.ArrayList"> -->
+<!-- 				<value>GLOBAL</value> -->
+<!-- 				<value>WS2</value> -->
+<!-- 			</util:list> -->
+<!-- 	    </property> -->
+<!-- 	</bean> -->
+     <bean id="resourceLoader" class="org.springframework.core.io.DefaultResourceLoader" />
+     <bean id="propertyConfigurer" class="com.bfrc.framework.util.PropertyConfigUtil">
+         <constructor-arg type="org.springframework.core.io.ResourceLoader" ref="resourceLoader"/>
+         <constructor-arg type="java.lang.String" value="web-config"/>
+         <property name="defaultLocation" value="/WEB-INF/serverconfig/" />
+         <!-- <property name="defaultLocation" value="classpath:web-config/" /> -->
+     </bean>
+		
+	<bean id="environmentPropertiesMap" name="environmentPropertiesMap" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="targetMapClass" value="java.util.HashMap" />
+		<property name="sourceMap">
+			<map key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="specialOffersCouponUrl" value="${special_offers_coupon_url}" />
+				<entry key="specialOffersBannerUrl" value="${special_offers_banner_url}" />
+				<entry key="specialOffersTirePromoUrl" value="${special_offers_tire_promo_url}" />
+				<entry key="specialOffersImageHandlerUrl" value="${special_offers_image_handler_url}" />
+				<entry key="specialOffersLibraryImageHandlerUrl" value="${special_offers_library_image_handler_url}" />
+				<entry key="webServiceVersion" value="2.14"/>
+				<entry key="gasDefaultSearchRadius" value="10"/>
+			</map>
+		</property>
+	</bean>
+	<bean id="propertyAccessor" class="com.bfrc.dataaccess.core.beans.PropertyAccessorImpl" p:propertyMap-ref="environmentPropertiesMap"/>
+	
+	<!-- Import basic SpringMVC Resteasy integration -->
+    <import resource="classpath:springmvc-resteasy.xml"/>
+	
+	<!-- DataAccess imports for DAO and Service layer -->
+	<import resource="classpath:spring/dataaccess-dao-generic.cfg.xml"/>
+	<import resource="classpath:spring/dataaccess-dao.cfg.xml"/>
+	<import resource="classpath:spring/dataaccess-data.cfg.xml"/>
+	
+	<!-- Frameworks imports for DAO and Service layer -->
+	<import resource="conf/spring/siteContext.xml" />
+	<import resource="conf/spring/daoBeans.xml" />
+	
+	<!-- Spring-configured servlet filters -->
+    <import resource="conf/filters/filters.xml"/>
+	
+	<!-- Configures mail-sending related resources -->
+    <import resource="conf/mail/mail.xml"/>
+	
+	<!-- Imports for the DataSource - Switch between Tomcat and Websphere via comments xxxxxxx-->
+<!--     <import resource="conf/ds/tomcat-ds.xml"/> -->
+    <import resource="conf/ds/websphere-ds.xml"/>
+
+	<!-- Initializing the persistence layer -->
+    <import resource="conf/ds/persistence.xml"/>
+    
+    <!-- Local service configuration -->
+    <import resource="conf/svc/bsro-svc.xml"/>
+    
+    <!-- The aspects configuration controls which web services MUST be authenticated before being called -->
+    <import resource="conf/aspects.xml"/>
+    
+    <!-- The quartz job scheduler -->
+	<!--     Uncomment this to turn on the cron job for appointment retry -->
+	<import resource="conf/svc/job.xml"/>
+    
+    <!-- NCD Web Services Configuration -->
+	<!-- <import resource="conf/ws/ncd-ws.xml"/> -->
+	
+	<!-- Schedule Appt Web Service Configuration -->
+    <import resource="conf/ws/sched-appt-ws.xml"/>
+    
+    <!-- IP Info Web Service Configuration -->
+    <import resource="conf/ws/ip-ws.xml"/>
+    	
+</beans>

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+       <!-- HibernateGenericDAO setup -->
+        <!-- Entity related dao -->
+    <bean id="hedao" class="com.hibernate.dao.extend.HibernateEntityDao" singleton="false" lazy-init="true">
+        <property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+        <property name="txManager" ref="txManager"/>
+    </bean>
+        <!-- Generic, all daos share -->
+    <bean id="hgdao" class="com.hibernate.dao.generic.HibernateGenericDao">
+        <property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+    </bean>
+        <!-- BaseDao -->
+    <bean id="baseDao" class="com.hibernate.dao.base.BaseDao" abstract="true" depends-on="hedao,hgdao">
+        <property name="hedao" ref="hedao" />
+		<property name="hgdao" ref="hgdao" />
+	</bean>
+	<!-- end HibernateGenericDAO setup -->
+
+	<bean id="abstractDAO" abstract="true" class="com.bfrc.framework.spring.HibernateDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+                <property name="config" ref="config"/>
+	</bean>
+	
+	<bean id="bsroWebserviceConfig" class="com.bsro.webservice.BSROWebserviceConfig">
+		<property name="baseURL" value="" />
+		<property name="tokenId" value="" />
+		<property name="appName" value="" />
+		<property name="appSource" value="" />
+	</bean>
+
+	<!-- DataOp config -->
+    <bean id="adminDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.AdminDAOImpl" />
+
+    <bean id="appointmentDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.AppointmentDAOImpl">
+        <property name="txManager" ref="txManager" />
+    </bean>
+
+    <bean id="catalogDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.CatalogDAOImpl" />
+
+    <bean id="contactDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.ContactDAOImpl" />
+
+    <bean id="creditCardDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.CreditCardDAOImpl" />
+
+    <bean id="districtDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.DistrictDAOImpl">
+        <property name="storeDAO">
+            <ref local="frameworkStoreDAO" />
+        </property>
+    </bean>
+
+    <bean id="emailSignupDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.EmailSignupDAOImpl" />
+    
+    <bean id="zoneDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.ZoneDAOImpl"/>
+    
+    <bean id="ipAccessDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.IpAccessDAOImpl"/>
+    
+    <bean id="bsroCorpUsersDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.BsroCorpUsersDAOImpl"/>
+    
+    <bean id="eventDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.EventDAOImpl" />
+
+    <bean id="locatorDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.LocatorDAOImpl">
+        <property name="storeDAO">
+            <ref local="frameworkStoreDAO" />
+        </property>
+    </bean>
+    
+    <bean id="baseStoreMilitaryDAO" parent="baseDao">
+        <constructor-arg>
+            <value>com.bfrc.pojo.store.StoreMilitary</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="baseAlignmentPricingQuoteDAO" parent="baseDao">
+    	<constructor-arg>
+        	<value>com.bfrc.pojo.alignment.AlignmentPricingQuote</value>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="maintenanceDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.MaintenanceDAOImpl" />
+
+    <bean id="partnerDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.PartnerDAOImpl">
+            <property name="txManager" ref="txManager" />
+            <property name="storeDAO">
+             <ref local="frameworkStoreDAO" />
+            </property>
+    </bean>
+        
+    <bean id="pricingDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.PricingDAOImpl" />
+
+    <bean id="promotionDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.PromotionDAOImpl">
+        <property name="txManager" ref="txManager" />
+    </bean>
+
+    <bean id="userDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.UserDAOImpl">
+        <property name="txManager" ref="txManager" />
+        <property name="storeDAO">
+            <ref local="frameworkStoreDAO" />
+        </property>
+    </bean>
+    
+    <bean id="frameworkStoreDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.StoreDAOImpl" />
+
+    <bean id="storeScheduleDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.StoreScheduleDAOImpl" />
+
+    <bean id="seoVehicleDataDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.SeoVehicleDataDAOImpl"/>
+
+    <bean id="vehicleDAO" class="com.bfrc.framework.dao.hibernate3.VehicleDAOImpl" >
+    	<property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+    </bean>
+
+		
+	<bean id="listEvents" class="com.bfrc.framework.dao.district.ListEventsOperator">
+  		<property name="eventDAO">
+   			<ref local="eventDAO" />
+  		</property>
+ 	</bean>
+    
+    <bean id="listStores" class="com.bfrc.framework.dao.store.ListStoresOperator">
+    	<property name="storeService" ref="storeSearchService"/>
+        <property name="storeDAO">
+            <ref local="frameworkStoreDAO" />
+        </property>
+    </bean>
+
+    <bean id="listVehicles" class="com.bfrc.framework.dao.vehicle.ListVehiclesOperator">
+        <property name="vehicleDAO">
+            <ref local="vehicleDAO" />
+        </property>
+    </bean>
+
+    <bean id="listAppointmentTimes"	class="com.bfrc.framework.dao.appointment.ListAppointmentTimesOperator">
+    	<property name="config" ref="config" />
+        <property name="storeScheduleDAO">
+            <ref local="storeScheduleDAO" />
+        </property>
+    </bean>
+	
+	<bean id="appointmentMonths" class="com.bfrc.framework.data.AppointmentMonths" singleton="true">
+		<property name="listAppointmentTimes">
+		 <ref local="listAppointmentTimes" />
+		</property>
+	</bean>
+
+	<!-- Store Locator -->
+    <bean id="heartbeat" class="com.bfrc.storelocator.util.Heartbeat">
+        <property name="geocodeOperator">
+            <ref local="geocodeOperator" />
+        </property>
+    </bean>
+  <!-- Geo Data DAO -->
+    <bean id="geoDataDAO"  parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.GeoDataDAOImpl">
+        <property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+        <property name="config" ref="config" />
+        <property name="txManager" ref="txManager" />
+    </bean>
+
+    <bean id="geocodeOperator" class="com.bfrc.framework.dao.store.GeocodeOperator">
+        <property name="locatorDAO">
+            <ref local="locatorDAO" />
+        </property>
+        <property name="mailManager" ref="mailManager" />
+        <property name="geocodingQuotaExceededNotificationEmailAddresses" value="${geocodingQuotaExceededNotificationEmailAddresses}"/>
+        <property name="bingmapsApiKey" value="${bing.maps.geolocation.api-key}"/>
+        <property name="bingmapsGeoLocationApiUrl" value="${bing.maps.geolocation.url}"/>
+        <property name="bingmapsGeoLocationApiVersion" value="${bing.maps.geolocation.api-version}"/>
+        <property name="bingmapsGeoLocationOutputType" value="${bing.maps.geolocation.output}"/>
+        <property name="geoDataDAO" ref="geoDataDAO" />
+        <property name="config" ref="config" />
+        <property name="heartbeat">
+            <ref local="heartbeat" />
+        </property>
+        <property name="states">
+            <ref local="states" />
+        </property>
+    </bean>
+
+    <bean id="mapOperator" class="com.bfrc.framework.dao.store.MapOperator">
+        <property name="geocodeOperator">
+            <ref local="geocodeOperator" />
+        </property>
+        <property name="config" ref="config" />
+    </bean>
+
+
+    <bean id="locator" class="com.bfrc.framework.dao.store.LocatorOperator">
+        <property name="locatorDAO">
+            <ref local="locatorDAO" />
+        </property>
+        <property name="config" ref="config" />
+        <property name="geocodeOperator">
+            <ref local="geocodeOperator" />
+        </property>
+        <property name="mapOperator">
+            <ref local="mapOperator" />
+        </property>
+
+    </bean>
+
+	<!-- Tire Pricing -->
+    <bean id="vehicleYears" class="list.Years">
+        <property name="vehicleDAO">
+            <ref local="vehicleDAO" />
+        </property>
+    </bean>
+
+    <bean id="otherVehicleYears" class="list.OtherYears">
+        <property name="vehicleDAO">
+         <ref local="vehicleDAO" />
+        </property>
+    </bean>
+
+    <bean id="pricing" class="com.bfrc.framework.dao.pricing.PricingOperator">
+        <property name="catalogDAO">
+            <ref local="catalogDAO" />
+        </property>
+        <property name="pricingDAO">
+            <ref local="pricingDAO" />
+        </property>
+    </bean>
+
+    <bean id="pricingLocator" class="com.bfrc.framework.dao.pricing.PricingLocatorOperator">
+        <property name="config" ref="config" />
+        <property name="bizOp">
+            <ref local="locator" />
+        </property>
+        <property name="locatorDAO">
+            <ref local="locatorDAO" />
+        </property>
+        <property name="storeDAO">
+            <ref local="frameworkStoreDAO" />
+        </property>
+        <property name="storeService" ref="storeSearchService"/>
+    </bean>
+
+    <bean id="productList" class="com.bfrc.framework.dao.pricing.ProductListOperator">
+        <property name="catalogDAO">
+            <ref local="catalogDAO" />
+        </property>
+        <property name="pricingDAO">
+            <ref local="pricingDAO" />
+        </property>
+    </bean>
+
+    <bean id="segmentList" class="com.bfrc.framework.dao.pricing.SegmentListOperator">
+        <property name="catalogDAO">
+            <ref local="catalogDAO" />
+        </property>
+        <property name="pricingDAO">
+            <ref local="pricingDAO" />
+        </property>
+    </bean>
+
+ <!-- Tire Catalog -->
+    <bean id="viewProduct" class="com.bfrc.framework.dao.catalog.ViewProductOperator">
+        <property name="catalogDAO">
+            <ref local="catalogDAO" />
+        </property>
+    </bean>
+
+    <bean id="states" class="map.States" />
+    
+    <!-- Special Offers  -->
+
+    <bean id="customerDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.CustomerDAOImpl" />
+    
+    <bean id="baseTpTpmsPriceDAO" parent="baseDao">
+        <constructor-arg>
+            <value>com.bfrc.pojo.pricing.TpTpmsPrice</value>
+        </constructor-arg>
+    </bean>
+    <bean id="jda2CatalogDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.JDA2CatalogDAOImpl" />
+    <bean id="surveyDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.SurveyDAOImpl" >
+         <property name="txManager" ref="txManager" />
+    </bean>
+    <bean id="storeAdminDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.StoreAdminDAOImpl" >
+         <property name="txManager" ref="txManager" />
+    </bean>
+    <bean id="tirePromotionDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.TirePromotionDAOImpl">
+        <property name="txManager" ref="txManager" />
+    </bean>
+<!-- Intertstate Battery DAO -->
+    <bean id="batteryDAO" class="com.bfrc.framework.dao.hibernate3.InterstateBatteryDAOImpl">
+    	<property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+        <property name="txManager" ref="txManager" />
+    </bean>
+<!-- Real Estate DAO -->
+    <bean id="realEstateDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.RealEstateDAOImpl">
+        <property name="txManager" ref="txManager" />
+    </bean>
+    
+    <bean id="tireSearchDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.TireSearchDAOImpl">
+    	<property name="storeService" ref="storeSearchService"/>
+    	<property name="storeDAO" ref="frameworkStoreDAO"/>
+    	<property name="pricingDAO" ref="pricingDAO"/>
+    	<property name="vehicleDAO" ref="vehicleDAO"/>
+    	<property name="pricingLocator" ref="pricingLocator"/>
+    	<property name="locator" ref="locator"/>
+    </bean>
+
+	 <bean id="keyValueDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.KeyValueDAOImpl" >
+         <property name="txManager" ref="txManager" />
+     </bean>
+     
+     <bean id="DSTDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.DSTDAOImpl" >
+         <property name="txManager" ref="txManager" />
+     </bean>
+     <bean id="ZipCodeDataDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.ZipCodeDataDAOImpl" >
+         <property name="txManager" ref="txManager" />
+     </bean>
+     
+     
+     <bean id="tagDAO" class="com.bfrc.framework.dao.hibernate3.TagDAOImpl" parent="abstractDAO" />
+     
+     <bean id="appointmentRulesDAO" class="com.bfrc.framework.dao.appointment.AppointmentRulesDAOImpl" parent="abstractDAO" />
+     <bean id="appointmentRulesAdminDAO" class="com.bfrc.framework.dao.appointment.AppointmentRuleAdminDAOImpl" >
+     	<property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" /> 
+        <property name="txManager" ref="txManager" />
+     </bean>
+     
+    <bean id="basePromotionDAO" parent="baseDao">
+    	<constructor-arg>
+        	<value>com.bfrc.pojo.promotion.PromotionImages</value>
+    	</constructor-arg>
+    </bean>
+    
+ 	<bean id="baseBsroEpaMpgLookupDAO" parent="baseDao">
+	    <constructor-arg>
+	        <value>com.bfrc.pojo.gas.BsroEpaMpgLookup</value>
+	    </constructor-arg>
+	</bean>
+
+ 	<bean id="baseUserDAO" parent="baseDao">
+    	<constructor-arg><value>com.bfrc.pojo.User</value></constructor-arg>
+ 	</bean>
+
+	<!-- Local Store Information -->
+ 	<bean id="districtInfo" class="com.bfrc.framework.dao.district.DistrictInfoOperator">
+  		<property name="districtDAO">
+   			<ref local="districtDAO" />
+  		</property>
+ 	</bean>
+    
+</beans>

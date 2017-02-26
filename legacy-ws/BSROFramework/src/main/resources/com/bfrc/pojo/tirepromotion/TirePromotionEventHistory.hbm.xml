@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 12, 2009 11:31:58 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tirepromotion.TirePromotionEventHistory" table="TIRE_PROMOTION_EVENT_HISTORY" schema="TIRE_PROMOTION">
+        <id name="eventHistoryId" type="long">
+            <column name="EVENT_HISTORY_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">tire_promotion.EVENT_HISTORY_ID_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="tirePromotionEvent" class="com.bfrc.pojo.tirepromotion.TirePromotionEvent" fetch="select">
+            <column name="PROMO_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="sourcePromotionType" class="com.bfrc.pojo.tirepromotion.SourcePromotionType" fetch="select">
+            <column name="PROMO_TYPE" length="1" not-null="true" />
+        </many-to-one>
+        <property name="promoName" type="string">
+            <column name="PROMO_NAME" length="50" not-null="true" />
+        </property>
+        <property name="promoValue" type="big_decimal">
+            <column name="PROMO_VALUE" precision="15" not-null="true" />
+        </property>
+        <property name="minQualifierQty" type="byte">
+            <column name="MIN_QUALIFIER_QTY" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="promoLargeImg" type="blob">
+            <column name="PROMO_LARGE_IMG" not-null="true" />
+        </property>
+        <property name="promoSmallImg" type="blob">
+            <column name="PROMO_SMALL_IMG" />
+        </property>
+        <property name="promoSmallImgText" type="string">
+            <column name="PROMO_SMALL_IMG_TEXT" length="85" />
+        </property>
+        <property name="promoSmallImgTooltip" type="string">
+            <column name="PROMO_SMALL_IMG_TOOLTIP" length="256" />
+        </property>
+        <property name="promoDisplayName" type="string">
+            <column name="PROMO_DISPLAY_NAME" length="50" not-null="true" />
+        </property>
+        <property name="promoTotalTag" type="string">
+            <column name="PROMO_TOTAL_TAG" length="25" />
+        </property>
+        <property name="promoUrlName" type="string">
+            <column name="PROMO_URL_NAME" length="50" />
+        </property>
+        <property name="promoMainText" type="string">
+            <column name="PROMO_MAIN_TEXT" length="4000" not-null="true" />
+        </property>
+        <property name="promoFooterText" type="string">
+            <column name="PROMO_FOOTER_TEXT" length="2000" not-null="true" />
+        </property>
+        <property name="promoPdf" type="blob">
+            <column name="PROMO_PDF" />
+        </property>
+        <property name="promoPdfText" type="string">
+            <column name="PROMO_PDF_TEXT" length="256" />
+        </property>
+        <property name="statusFlag" type="char">
+            <column name="STATUS_FLAG" length="1" not-null="true" />
+        </property>
+        <property name="lastChangedBy" type="string">
+            <column name="LAST_CHANGED_BY" length="50" not-null="true" />
+        </property>
+        <property name="lastChangedDate" type="date">
+            <column name="LAST_CHANGED_DATE" length="7" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

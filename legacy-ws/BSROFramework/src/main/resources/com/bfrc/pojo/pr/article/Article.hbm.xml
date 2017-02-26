@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.pr.article">
+
+    <class name="Article" table="PR_ARTICLE">
+        <id name="articleId" column="PR_ARTICLE_ID" type="java.lang.String">
+            <generator class="uuid.hex" />
+        </id>
+ 
+        <property name="articleCreatorId" column="ARTICLE_CREATOR_ID" type="java.lang.Long" />
+        <property name="articleTitle" column="ARTICLE_TITLE" type="java.lang.String" />
+        <property name="articleSubtitle" column="ARTICLE_SUBTITLE" type="java.lang.String" />
+        <property name="articleAuthor" column="ARTICLE_AUTHOR" type="java.lang.String" />
+        <property name="articleSource" column="ARTICLE_SOURCE" type="java.lang.String" />
+        <property name="articleAuthorCredentials" column="ARTICLE_AUTHORCREDENTIALS" type="java.lang.String" />
+        <property name="articlePublication" column="ARTICLE_PUBLICATION" type="java.lang.String" />
+        <property name="articlePublicationDate" column="ARTICLE_PUBLICATIONDATE" type="java.lang.String" />
+        <property name="articlePublicationDateSearch" column="ARTICLE_PUBLICATIONDATESEARCH" type="java.util.Date" />
+        <property name="articleCopy" column="ARTICLE_COPY" type="text" />
+        <property name="articleFilename" column="ARTICLE_FILENAME" type="java.lang.String" not-null="false" />
+        <property name="articleFileSize" column="ARTICLE_FILESIZE" type="int" not-null="false" />
+        <property name="articleFileType" column="ARTICLE_FILETYPE" type="java.lang.String" not-null="false" />
+        <property name="articleFile" column="ARTICLE_FILE" type="org.springframework.orm.hibernate3.support.BlobByteArrayType" />
+    </class>
+    
+</hibernate-mapping>

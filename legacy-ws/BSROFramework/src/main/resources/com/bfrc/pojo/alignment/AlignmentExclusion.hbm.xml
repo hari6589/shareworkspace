@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 5, 2011 2:46:52 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.alignment.AlignmentExclusion" table="ALIGNMENT_EXCLUSION" schema="RTMS_WEBDB">
+        <id name="alignmentExclusionId" type="long">
+            <column name="ALIGNMENT_EXCLUSION_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">ALIGNMENT_EXCLUSION_SEQ</param>
+            </generator>
+        </id>
+        <property name="vehicleMake" type="string">
+            <column name="VEHICLE_MAKE" length="30" />
+        </property>
+        <property name="vehicleModel" type="string">
+            <column name="VEHICLE_MODEL" length="40" />
+        </property>
+        <property name="vehicleYear" type="java.lang.Short">
+            <column name="VEHICLE_YEAR" precision="4" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

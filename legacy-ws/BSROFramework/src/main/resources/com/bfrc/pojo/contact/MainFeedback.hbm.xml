@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 9, 2007 10:55:22 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping package="com.bfrc.pojo.contact">
+    <class name="MainFeedback" table="BFRC_WEB_SITE_MAIN_FEEDBACK" schema="RTMS_WEBDB">
+        <id name="mainFeedbackId" type="int">
+            <column name="MAIN_FEEDBACK_ID" precision="5" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="feedbackSubject" type="string">
+            <column name="FEEDBACK_SUBJECT" length="250" />
+        </property>
+    </class>
+	<sql-query name="BFRCWebSiteMainFeedback">
+	    <return class="MainFeedback" alias="m" />
+ 		select distinct m.MAIN_FEEDBACK_ID,m.FEEDBACK_SUBJECT
+		from BFRC_WEB_SITE s,BFRC_WEB_SITE_FEEDBACK f,BFRC_WEB_SITE_MAIN_FEEDBACK m
+		where f.MAIN_FEEDBACK_ID=m.MAIN_FEEDBACK_ID 
+		and f.SITE_ID=s.SITE_ID
+		and s.SITE_NAME=:siteName
+		order by m.MAIN_FEEDBACK_ID
+	</sql-query>
+</hibernate-mapping>

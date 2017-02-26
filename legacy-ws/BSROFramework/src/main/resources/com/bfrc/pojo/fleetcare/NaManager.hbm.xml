@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bfrc.pojo.fleetcare">
+    <class name="NaManager" table="NA_MANAGERS" schema="RTMS_WEBDB">
+        <id name="id" type="java.lang.Long">
+            <column name="ID" precision="13" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="accountManagerName" type="java.lang.String">
+            <column name="ACCOUNT_MANAGER_NAME" length="30" not-null="true" />
+        </property>
+        <property name="accountManagerEmailAddress" type="java.lang.String">
+            <column name="ACCOUNT_MANAGER_EMAIL_ADDRESS" length="60" not-null="true" />
+        </property>
+        <property name="accountManagerPhoneNumber" type="java.lang.String">
+            <column name="ACCOUNT_MANAGER_PHONE_NUMBER" length="25"  />
+        </property>
+        <set name="naManagerStateLookups" inverse="true">
+            <key>
+                <column name="ACCOUNT_MANAGER_ID" precision="13" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="NaManagerStateLookup" />
+        </set>
+    </class>
+    <sql-query name="FindNaManagersByState">
+    	<return class="NaManager" alias="naManager"/>
+    		SELECT distinct {naManager.*} from NA_MAnagers naManager, NA_MANAGER_STATE_LOOKUP l where naManager.ID = l.account_manager_id AND (l.STATE =:State)
+    </sql-query>
+</hibernate-mapping>

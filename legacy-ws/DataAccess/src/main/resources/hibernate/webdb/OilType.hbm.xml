@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2012 3:49:09 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.oil.OilType" table="OIL_TYPE">
+        <id name="oilTypeId" type="long">
+            <column name="OIL_TYPE_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="oilTypeFriendlyId" type="string">
+            <column name="OIL_TYPE_FRIENDLY_ID" length="100" not-null="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="100" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="4000" not-null="true" />
+        </property>
+        <property name="sequence" type="java.lang.Integer">
+            <column name="SEQUENCE" precision="8" scale="0" />
+        </property>        
+        <set name="oilChanges" inverse="true">
+            <key>
+                <column name="OIL_TYPE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.oil.OilChange" />
+        </set>
+        <set name="oils" inverse="true">
+            <key>
+                <column name="OIL_TYPE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.dataaccess.model.oil.Oil" />
+        </set>
+    </class>
+</hibernate-mapping>

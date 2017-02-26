@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 29, 2010 11:51:09 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.realestate.RealestatePage" table="REALESTATE_PAGE" schema="RTMS_WEBDB">
+        <id name="pageId" type="string">
+            <column name="PAGE_ID" length="100" />
+            <generator class="assigned" />
+        </id>
+        <property name="content" type="org.springframework.orm.hibernate3.support.ClobStringType">
+            <column name="CONTENT" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

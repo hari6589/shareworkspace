@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 9, 2007 10:55:22 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping package="com.bfrc.pojo.contact">
+    <class name="WebSite" table="BFRC_WEB_SITE" schema="RTMS_WEBDB">
+        <id name="siteId" type="int">
+            <column name="SITE_ID" precision="5" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="SITE_NAME" length="10" />
+        </property>
+        <property name="url" type="string">
+            <column name="SITE_URL" length="250" />
+        </property>
+        <property name="webmaster" type="string">
+            <column name="SITE_WEBMASTER" length="250" />
+        </property>
+        <set name="feedbacks" inverse="true">
+            <key>
+                <column name="SITE_ID" precision="5" scale="0" />
+            </key>
+            <one-to-many class="Feedback" />
+        </set>
+    </class>
+</hibernate-mapping>

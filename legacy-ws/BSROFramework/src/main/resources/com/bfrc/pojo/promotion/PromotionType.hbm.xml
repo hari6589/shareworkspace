@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.promotion.PromotionType" table="PROMOTION_TYPE">
+        <id name="promoTypeId" type="long">
+            <column name="PROMO_TYPE_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="promoName" type="string">
+            <column name="PROMO_NAME" length="50" unique="true" />
+        </property>
+        <property name="promoType" type="string">
+            <column name="PROMO_TYPE" length="1" />
+        </property>
+        <property name="offerPageTitle" type="string">
+            <column name="OFFER_PAGE_TITLE" length="50" />
+        </property>
+        <property name="offerMetaDescription" type="string">
+            <column name="OFFER_META_DESCRIPTION" length="500" />
+        </property>
+        <property name="offerMetaKeywords" type="string">
+            <column name="OFFER_META_KEYWORDS" length="500" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="4000" />
+        </property>                
+    </class>  
+</hibernate-mapping>

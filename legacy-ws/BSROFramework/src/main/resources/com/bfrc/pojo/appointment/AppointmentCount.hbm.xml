@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.bfrc.pojo.appointment">
+    <class name="AppointmentCount" table="AppointmentCount">
+        <id name="webSite" column="web_site" type="java.lang.String">
+			<generator class="assigned"/>
+        </id>
+		<property name="count" column="count" type="java.lang.Integer"/>
+    </class>
+
+	<sql-query name="ErrorAppointmentCount">
+	    <return class="AppointmentCount" alias="AppointmentCount" >
+			<return-property name="webSite" column="web_site"/>
+			<return-property name="count" column="count"/>
+		</return>
+        select rpad(nvl(ws.site_full_name,ac.web_site),19) web_site,
+               nvl(ac.count,0) count
+        from 
+            (select distinct 
+                    nvl(trim(a.web_site),'NA') web_site,
+                    ws.site_full_name,
+                    ws.site_id
+            from appointment a,
+                 bfrc_webservice ws
+            where trim(a.web_site)=ws.site_name(+)
+            and trim(a.web_site) is not null
+            ) ws,
+            (select nvl(trim(a.web_site),'NA') web_site,
+                    count(*) count               
+            from appointment a,
+                 appointment_sent_status ast
+            where a.APPOINTMENT_ID=ast.APPOINTMENT_ID
+            and ast.STATUS='F'
+            and a.created_date > sysdate-3
+            group by a.web_site
+            ) ac        
+        where ws.web_site=ac.web_site(+)
+	</sql-query>
+</hibernate-mapping>

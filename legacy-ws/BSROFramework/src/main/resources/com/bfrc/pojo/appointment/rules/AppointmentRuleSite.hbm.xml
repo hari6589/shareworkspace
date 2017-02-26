@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 2, 2012 12:55:53 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.appointment.rules.AppointmentRuleSite" table="APPOINTMENT_RULE_SITE" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.appointment.rules.AppointmentRuleSiteId">
+            <key-property name="appointmentRuleId" type="int">
+                <column name="APPOINTMENT_RULE_ID" precision="6" scale="0" />
+            </key-property>
+            <key-property name="siteId" type="int">
+                <column name="SITE_ID" precision="5" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="appointmentRule" class="com.bfrc.pojo.appointment.rules.AppointmentRule" lazy="false" update="false" insert="false" >
+            <column name="APPOINTMENT_RULE_ID" precision="6" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="appointmentRuleValue" type="java.lang.Integer">
+            <column name="APPOINTMENT_RULE_VALUE" precision="5" scale="0" />
+        </property>
+        <property name="updatedDate" type="date">
+            <column name="UPDATED_DATE" length="7" />
+        </property>
+        <property name="updatedBy" type="string">
+            <column name="UPDATED_BY" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

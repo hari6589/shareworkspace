@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2012 3:49:10 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.oil.OilStorePrice" table="OIL_STORE_PRICE">
+        <composite-id name="id" class="com.bfrc.dataaccess.model.oil.OilStorePriceId">
+            <key-property name="oilArticleNumber" type="long">
+                <column name="OIL_ARTICLE_NUMBER" precision="10" scale="0" />
+            </key-property>
+            <key-property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="6" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="price" type="big_decimal">
+            <column name="PRICE" precision="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

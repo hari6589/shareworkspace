@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 22, 2010 12:22:41 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tagging.TagVariable" table="TAG_VARIABLE" schema="RTMS_WEBDB">
+        <id name="tagVariableId" type="long">
+            <column name="TAG_VARIABLE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+               <param name="sequence">TAG_VARIABLE_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="tagKey" class="com.bfrc.pojo.tagging.TagKey" update="false" >
+            <column name="TAG_KEY_ID" length="10" not-null="true" />
+        </many-to-one>
+        <property name="type" type="string">
+            <column name="TYPE" length="50" not-null="true"/>
+        </property>
+        <property name="requestAttributeName" type="string">
+            <column name="REQUEST_ATTRIBUTE_NAME" length="50" />
+        </property>
+        <property name="variableValueName" type="string">
+            <column name="VARIABLE_VALUE_NAME" length="255"/>
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7"/>
+        </property>
+        <property name="updatedDate" type="timestamp">
+            <column name="UPDATED_DATE" length="7"/>
+        </property>
+    </class>
+</hibernate-mapping>

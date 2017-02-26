@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        				http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+        	
+	<bean 
+		id="dataAccess.core.webdb.HibernateUtil"
+		class="com.bfrc.dataaccess.core.util.hibernate.HibernateUtil">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>
+	
+	<bean 
+		id="dataAccess.core.webdb.AbstractHibernateDaoTarget"
+		class="com.bfrc.dataaccess.core.orm.impl.HibernateDAO" 
+		abstract="true">
+		<property name="hibernateUtils" ref="dataAccess.core.webdb.HibernateUtil" />
+	</bean>
+	
+	<!-- This bean intercepts calls to named queries -->
+	<bean 
+		id="dataAccess.core.FinderIntroductionAdvisor" 
+		class="com.bfrc.dataaccess.core.aop.spring.FinderIntroductionInterceptor" />
+
+	<bean 
+		id="dataAccess.core.AbstractHibernateDao"
+		class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true">
+		
+		<property name="interceptorNames">
+			<list>
+				<value>dataAccess.core.FinderIntroductionAdvisor</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="componentsDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.ComponentsDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.maintenance.Components</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="intervalsDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.IntervalsDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.maintenance.Intervals</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="maintSignupDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.MaintSignupDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.maintenance.MaintSignup</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="operationTypesDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.OperationTypesDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.maintenance.OperationTypes</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="userVehicleDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.UserVehicleDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.vehicle.UserVehicle</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="fitmentDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.FitmentDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.vehicle.Fitment</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="appointmentDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.AppointmentDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.appointment.Appointment</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="appointmentMetadataDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.AppointmentMetadataDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.appointment.AppointmentMetadata</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="appointmentServiceDescDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.AppointmentServiceDescDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.appointment.AppointmentServiceDesc</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="appointmentServiceDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.AppointmentServiceDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.appointment.AppointmentService</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="appointmentChoiceDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.AppointmentChoiceDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.appointment.AppointmentChoice</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="appointmentCustomerDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.AppointmentCustomerDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.appointment.AppointmentCustomer</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="emailSignupDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.EmailSignupDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.email.EmailSignup</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="contactDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.ContactDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.contact.Contact</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="contactTypeDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.ContactTypeDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.contact.ContactType</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="feedbackDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.FeedbackDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.contact.Feedback</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="feedbackContactDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.FeedbackContactDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.contact.FeedbackContact</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="feedbackTypeDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.FeedbackTypeDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.contact.FeedbackType</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="websiteDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.WebsiteDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.contact.WebSite</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.store.Store</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeHourDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreHourDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.store.StoreHour</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="appointmentSentStatusDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.AppointmentSentStatusDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.appointment.AppointmentSentStatus</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="promotionDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.PromotionDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.promotion.Promotion</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="tirePromotionEventDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.TirePromotionEventDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.promotion.TirePromotionEvent</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="bsroUidsDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.BsroUidsDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.uid.BsroUids</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="bsroUidLoginsDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.BsroUidLoginsDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.uid.BsroUidLogins</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="webServiceRequestsDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.WebServiceRequestsDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.system.BsroWebServiceRequests</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="bsroEpaMpgLookupDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.BsroEpaMpgLookupDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.gas.BsroEpaMpgLookup</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="bfrcAppAttributeDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.BfrcAppAttributeDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.attribute.BfrcAppAttribute</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+		
+	<bean id="customerContactUsEmailLogDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.CustomerContactUsEmailLogDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.customer.CustomerContactUsEmailLog</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeInventoryDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreInventoryDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.inventory.StoreInventory</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="districtDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.DistrictDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.store.HrDistricts</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeMilitaryDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreMilitaryDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.store.StoreMilitary</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeHolidayDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreHolidayDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.store.StoreHoliday</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeHolidayHourDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreHolidayHourDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.store.StoreHolidayHour</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeAdminAnnouncementDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreAdminAnnouncementDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.storeadmin.StoreAdminAnnouncement</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="storeAdminPromotionDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.generic.StoreAdminPromotionDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="emailCollectionDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.emailcollection.EmailCollectionDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.reward.EmailCollection</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="rewardsLogDAO" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.rewards.RewardsLogDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.reward.RewardsLog</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>		
+</beans>

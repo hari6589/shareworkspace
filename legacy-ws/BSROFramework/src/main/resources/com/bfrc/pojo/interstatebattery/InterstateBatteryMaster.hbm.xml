@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 1, 2009 2:08:01 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.interstatebattery.InterstateBatteryMaster" table="INTERSTATE_BATTERY_MASTER" schema="RTMS_WEBDB">
+        <id name="productCode" type="string">
+            <column name="PRODUCT_CODE" length="10" />
+            <generator class="assigned" />
+        </id>
+        <property name="product" type="string">
+            <column name="PRODUCT" length="3" />
+        </property>
+        <property name="partNumber" type="java.lang.Long">
+            <column name="PART_NUMBER" precision="10" scale="0" />
+        </property>
+        <property name="totalWarranty" type="java.lang.Long">
+            <column name="TOTAL_WARRANTY" precision="10" scale="0" />
+        </property>
+        <property name="replacementWarranty" type="java.lang.Long">
+            <column name="REPLACEMENT_WARRANTY" precision="10" scale="0" />
+        </property>
+        <property name="cca" type="java.lang.Long">
+            <column name="CCA" precision="10" scale="0" />
+        </property>
+        <property name="rcMinutes" type="java.lang.Long">
+            <column name="RC_MINUTES" precision="10" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

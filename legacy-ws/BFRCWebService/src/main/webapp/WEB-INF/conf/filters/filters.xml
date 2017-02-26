@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+<bean id="webserviceHibernateSessionMonitoringFilter" class="com.bsro.servlet.filter.HibernateSessionMonitoringFilter">
+  <property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+  <property name="sessionFactoryName" value="Webservice Session Factory" />
+  <property name="enabled" value="${monitorHibernateSessions}"/>
+</bean>
+
+<bean id="frameworkHibernateSessionMonitoringFilter" class="com.bsro.servlet.filter.HibernateSessionMonitoringFilter">
+  <property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+  <property name="sessionFactoryName" value="Framework Session Factory" />
+  <property name="enabled" value="${monitorHibernateSessions}"/>
+</bean>
+</beans>

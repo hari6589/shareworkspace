@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bfrc.pojo.fleetcare">
+    <class name="NaApplication" table="NA_APPLICATIONS" schema="RTMS_WEBDB">
+        <id name="id" type="java.lang.Long">
+            <column name="ID" precision="13" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">NA_APP_ID</param>
+            </generator>
+        </id>
+        <property name="companyName" type="java.lang.String">
+            <column name="COMPANY_NAME" length="30" not-null="true" />
+        </property>
+        <property name="parentCompanyName" type="java.lang.String">
+            <column name="PARENT_COMPANY_NAME" length="30" />
+        </property>
+        <property name="companyAddress1" type="java.lang.String">
+            <column name="COMPANY_ADDRESS_1" length="30" not-null="true" />
+        </property>
+        <property name="companyAddress2" type="java.lang.String">
+            <column name="COMPANY_ADDRESS_2" length="30" />
+        </property>
+        <property name="companyCity" type="java.lang.String">
+            <column name="COMPANY_CITY" length="50" not-null="true" />
+        </property>
+        <property name="companyState" type="java.lang.String">
+            <column name="COMPANY_STATE" length="2" not-null="true" />
+        </property>
+        <property name="companyZipCode" type="java.lang.String">
+            <column name="COMPANY_ZIP_CODE" length="10" not-null="true" />
+        </property>
+        <property name="companyPhoneNumber" type="java.lang.String">
+            <column name="COMPANY_PHONE_NUMBER" length="12" not-null="true" />
+        </property>
+        <property name="companyFaxNumber" type="java.lang.String">
+            <column name="COMPANY_FAX_NUMBER" length="12" />
+        </property>
+        <property name="natureOfBusiness" type="java.lang.String">
+            <column name="NATURE_OF_BUSINESS" not-null="true" />
+        </property>
+        <property name="applcntFirstName" type="java.lang.String">
+            <column name="APPLCNT_FIRST_NAME" length="30" not-null="true" />
+        </property>
+        <property name="applcntLastName" type="java.lang.String">
+            <column name="APPLCNT_LAST_NAME" length="30" not-null="true" />
+        </property>
+        <property name="applcntMiddleInitial" type="java.lang.String">
+            <column name="APPLCNT_MIDDLE_INITIAL" length="1" />
+        </property>
+        <property name="applcntPhoneNumber" type="java.lang.String">
+            <column name="APPLCNT_PHONE_NUMBER" length="22" not-null="true" />
+        </property>
+        <property name="applcntFaxNumber" type="java.lang.String">
+            <column name="APPLCNT_FAX_NUMBER" length="12" />
+        </property>
+        <property name="applcntEmail" type="java.lang.String">
+            <column name="APPLCNT_EMAIL" length="60" not-null="true" />
+        </property>
+        <property name="numVehiclesPassenger" type="java.lang.Long">
+            <column name="NUM_VEHICLES_PASSENGER" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="numVehiclesLighttruck" type="java.lang.Long">
+            <column name="NUM_VEHICLES_LIGHTTRUCK" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="numVehiclesOther" type="java.lang.Long">
+            <column name="NUM_VEHICLES_OTHER" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="vehiclesOtherDesc" type="java.lang.String">
+            <column name="VEHICLES_OTHER_DESC" length="500" />
+        </property>
+        <property name="estAnnualPurchasesTires" type="java.lang.Double">
+            <column name="EST_ANNUAL_PURCHASES_TIRES" precision="10" not-null="true" />
+        </property>
+        <property name="estAnnualPurchasesServices" type="java.lang.Double">
+            <column name="EST_ANNUAL_PURCHASES_SERVICES" precision="10" not-null="true" />
+        </property>
+        <property name="purchasingMngmntType" type="java.lang.String">
+            <column name="PURCHASING_MNGMNT_TYPE" length="1" not-null="true" />
+        </property>
+        <property name="purchasingContactIsApplcnt" type="java.lang.String">
+            <column name="PURCHASING_CONTACT_IS_APPLCNT" length="1" not-null="true" />
+        </property>
+        <property name="purchasingContactName" type="java.lang.String">
+            <column name="PURCHASING_CONTACT_NAME" length="30" />
+        </property>
+        <property name="purchasingContactPhone" type="java.lang.String">
+            <column name="PURCHASING_CONTACT_PHONE" length="22" />
+        </property>
+        <property name="otherNationalAccntDesc" type="java.lang.String">
+            <column name="OTHER_NATIONAL_ACCNT_DESC" length="500" />
+        </property>
+        <property name="createdDate" type="java.util.Date">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

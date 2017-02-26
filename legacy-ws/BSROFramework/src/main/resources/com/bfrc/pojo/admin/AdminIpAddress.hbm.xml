@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 19, 2012 11:45:06 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.admin.AdminIpAddress" table="ADMIN_IP_ADDRESS" schema="RTMS_WEBDB">
+        <id name="ipAddress" type="string">
+            <column name="IP_ADDRESS" length="30" />
+            <generator class="assigned" />
+        </id>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="150" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CREATED_BY" length="130" />
+        </property>
+        <property name="createdDate" type="date">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="modifiedBy" type="string">
+            <column name="MODIFIED_BY" length="130" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="isDeleted" type="java.lang.Boolean">
+            <column name="IS_DELETED" precision="1" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

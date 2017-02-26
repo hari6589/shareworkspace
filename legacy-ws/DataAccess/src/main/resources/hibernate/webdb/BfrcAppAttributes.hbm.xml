@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.attribute.BfrcAppAttribute" schema="RTMS_WEBDB" table="BFRC_APP_ATTRIBUTES">
+    <id column="ATRRIBUTE_ID" name="id" type="java.lang.Long">
+      <generator class="sequence">
+        <param name="sequence">BFRC_APP_ATTRIBUTES_SEQ</param>
+      </generator>
+    </id>
+    <property column="site_type" name="type" not-null="true" type="java.lang.String"/>
+    <property column="group_code" name="group" not-null="false" type="java.lang.String"/>
+    <property column="attribute_name" name="name" not-null="true" type="java.lang.String"/>
+    <property column="attribute_value" name="value" not-null="false" type="java.lang.String"/>
+    <property column="status_code" name="status" not-null="false" type="java.lang.String"/>
+    <property column="sort_code" name="sort" not-null="false" type="java.lang.Integer"/>
+  </class>
+  
+	<query name="com.bfrc.dataaccess.model.attribute.BfrcAppAttribute.findBySiteType" cacheable="true">
+		FROM BfrcAppAttribute
+		WHERE type = ?
+		AND status = ?
+		ORDER BY sort
+	</query>  
+	
+	<query name="com.bfrc.dataaccess.model.attribute.BfrcAppAttribute.findBySiteAndGroup" cacheable="true">
+		FROM BfrcAppAttribute
+		WHERE type = ?
+		AND group = ?
+		AND status = ?
+		ORDER BY sort
+	</query>
+
+</hibernate-mapping>

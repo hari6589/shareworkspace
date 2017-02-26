@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.pr.alert">
+
+    <class name="Alert" table="PR_ALERT">
+        <id name="AlertId" column="PR_ALERT_ID" type="java.lang.String">
+            <generator class="uuid.hex" />
+        </id>
+ 
+        <property name="alertTitle" column="ALERT_TITLE" type="java.lang.String" />
+        <property name="alertLink" column="ALERT_LINK" type="java.lang.String" />
+        <property name="alertDescription" column="ALERT_DESCRIPTION" type="java.lang.String" />
+        <property name="alertExpiration" column="ALERT_EXPIRATION" type="java.lang.String" />
+        <property name="alertExpirationDateSearch" column="ALERT_EXPIRATIONDATESEARCH" type="java.util.Date" />
+        <property name="alertActive" column="ALERT_ACTIVE" type="java.lang.String" />
+        <property name="alertCreatorId" column="ALERT_CREATOR_ID" type="java.lang.Long" />
+
+		<set name="sites" table="PR_ALERT_SITE_JOIN" inverse="true">
+			<key column="PR_ALERT_ID"/>
+				<many-to-many 
+				column="PR_SITE_ID"
+				class="com.bfrc.pojo.pradmin.site.Site"/>
+		</set>
+
+
+
+
+    </class>
+    
+</hibernate-mapping>

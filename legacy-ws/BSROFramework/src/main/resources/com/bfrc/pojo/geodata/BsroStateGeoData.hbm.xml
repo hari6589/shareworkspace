@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 25, 2010 2:24:46 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.geodata.BsroStateGeoData" table="BSRO_STATE_GEO_DATA" schema="RTMS_WEBDB">
+        <id name="state" type="string">
+            <column name="STATE" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="latitude" type="float">
+            <column name="LATITUDE" />
+        </property>
+        <property name="longitude" type="float">
+            <column name="LONGITUDE" />
+        </property>
+        <property name="checkDate" type="timestamp">
+            <column name="CHECK_DATE" length="7" />
+        </property>
+    </class>
+</hibernate-mapping>

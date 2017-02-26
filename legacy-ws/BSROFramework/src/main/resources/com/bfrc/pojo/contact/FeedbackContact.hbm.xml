@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 9, 2007 10:55:22 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.contact.FeedbackContact" table="BFRC_WEB_SITE_FEEDBACK_CONTACT" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.contact.FeedbackContactId">
+            <key-property name="feedbackId" type="java.lang.Integer">
+                <column name="FEEDBACK_ID" precision="5" scale="0" />
+            </key-property>
+            <key-property name="contactId" type="java.lang.Integer">
+                <column name="CONTACT_ID" precision="5" scale="0" />
+            </key-property>
+            <key-property name="contactTypeId" type="java.lang.Integer">
+                <column name="CONTACT_TYPE_ID" precision="5" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="contact" class="com.bfrc.pojo.contact.Contact" update="false" insert="false" fetch="select">
+            <column name="CONTACT_ID" precision="5" scale="0" />
+        </many-to-one>
+        <many-to-one name="feedback" class="com.bfrc.pojo.contact.Feedback" update="false" insert="false" fetch="select">
+            <column name="FEEDBACK_ID" precision="5" scale="0" />
+        </many-to-one>
+        <many-to-one name="contactType" class="com.bfrc.pojo.contact.ContactType" update="false" insert="false" fetch="select">
+            <column name="CONTACT_TYPE_ID" precision="5" scale="0" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

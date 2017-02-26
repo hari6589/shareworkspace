@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="locatorConfig" class="com.bfrc.LocatorConfig">
+        <property name="mapWidth" value="650" />
+		<property name="firstlogicHostname" value="mktfl-ak-bfr" /><!-- production: "mktfl-ak-bfr" / development: "mktdev1-ch-bfr" -->
+    </bean>
+    <bean id="config" class="com.bfrc.Config">
+    	<property name="locator">
+            <ref local="locatorConfig" />
+        </property>
+		<property name="siteName" value="BFRC" />
+		<property name="siteFullName" value="Bridgestone Retail Operations, LLC" />
+	</bean>
+</beans>

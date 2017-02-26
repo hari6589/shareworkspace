@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 5, 2010 10:58:27 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class name="com.bfrc.pojo.appointment.AppointmentServiceDesc" schema="RTMS_WEBDB" table="APPOINTMENT_SERVICE_DESC">
+    <id name="serviceId" type="int">
+      <column name="SERVICE_ID" precision="4" scale="0"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="serviceDesc" type="string">
+      <column length="50" name="SERVICE_DESC"/>
+    </property>
+    <property name="serviceType" type="int">
+      <column name="SERVICE_TYPE" precision="1" scale="0"/>
+    </property>
+    <property name="sortOrder" type="int">
+      <column name="SORT_ORDER" precision="2" scale="0"/>
+    </property>
+  </class>
+</hibernate-mapping>

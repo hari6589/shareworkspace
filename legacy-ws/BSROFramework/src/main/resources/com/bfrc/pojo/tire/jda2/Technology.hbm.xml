@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 19, 2011 12:21:46 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class entity-name="Technology2" name="com.bfrc.pojo.tire.jda2.Technology" table="TECHNOLOGY" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="id" type="long">
+            <column name="ID" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="value" type="string">
+            <column name="VALUE" length="50" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="2000" />
+        </property>
+    </class>
+</hibernate-mapping>

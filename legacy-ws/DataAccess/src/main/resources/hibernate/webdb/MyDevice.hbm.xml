@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyDevice" table="MY_DEVICES" schema="RTMS_WEBDB">
+        <id name="myDeviceId" type="long">
+            <column name="MY_DEVICE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_DEVICES_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="user" class="com.bfrc.dataaccess.model.myprofile.BFSUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="backupData" class="com.bfrc.dataaccess.model.myprofile.MyBackupData" fetch="select">
+            <column name="MY_BACKUP_ID" precision="10" scale="0"/>
+        </many-to-one>
+        <property name="mfgName" type="string">
+            <column name="MFG_NAME" length="50"/>
+        </property>
+        <property name="deviceModel" type="string">
+            <column name="DEVICE_MODEL" length="50"/>
+        </property>
+        <property name="deviceType" type="string">
+            <column name="DEVICE_TYPE" length="50"/>
+        </property>
+        <property name="syncFlag" type="string">
+            <column name="SYNC_FLAG" length="1"/>
+        </property>
+        <property name="lastBackupDate" type="date">
+            <column name="LAST_BACKUP_DATE" length="7"/>
+        </property>
+        <property name="lastSyncDate" type="date">
+            <column name="LAST_SYNC_DATE" length="7"/>
+        </property>
+        <property name="activeFlag" column="ACTIVE_FLAG" not-null="true">     	
+         	<type name="com.bfrc.dataaccess.util.CustomEnumType">
+         		<param name="enumClass">com.bfrc.dataaccess.model.myprofile.StatusType</param>
+         		<param name="identifierMethod">getValue</param>
+         		<param name="valueOfMethod">getEnum</param>
+         	</type>
+        </property>  
+        <property name="identifier" type="string">
+            <column name="DEVICE_IDENTIFIER" length="10" not-null="true"/>
+        </property>
+	</class>
+</hibernate-mapping>

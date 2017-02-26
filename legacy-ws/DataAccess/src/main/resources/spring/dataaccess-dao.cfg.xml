@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        				http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+ 	<bean id="webSiteUserDao" class="com.bfrc.dataaccess.dao.hibernate.WebSiteUserDAOImpl">
+ 		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+ 	</bean>
+	
+ 	<bean id="webSiteUserVehicleDao" class="com.bfrc.dataaccess.dao.hibernate.WebSiteUserVehicleDAOImpl">
+ 		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+ 	</bean>
+ 	
+ 	<bean id="mwsUserDataDAO" class="com.bfrc.dataaccess.dao.hibernate.MWSUserDataDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>
+	<bean id="bfsUserDataDAO" class="com.bfrc.dataaccess.dao.hibernate.BFSUserDataDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>
+	<bean id="bfsUserProfileDAO" class="com.bfrc.dataaccess.dao.hibernate.BFSUserProfileDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>
+	<bean id="deviceMessageDAO" class="com.bfrc.dataaccess.dao.hibernate.DeviceMessageDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>
+	<bean id="storeBusinessRulesDAO" class="com.bfrc.dataaccess.dao.hibernate.StoreBusinessRulesDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>
+			
+	<!--  BEGIN framework DAOs -->	
+    <bean id="vehicleDAO" class="com.bfrc.framework.dao.hibernate3.VehicleDAOImpl">
+	    <property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+    </bean>			
+    
+    <bean id="batteryDAO" class="com.bfrc.framework.dao.hibernate3.InterstateBatteryDAOImpl">
+   	    <property name="sessionFactory" ref="dataAccess.core.webdb.FrameworkSessionFactoryBean" />
+        <property name="txManager" ref="txManager" />
+    </bean>    	
+    
+    <!--  END framework DAOS -->
+    <!--  Begin OIL related DAOS -->
+    <bean id="oilDao" class="com.bfrc.dataaccess.dao.hibernate.OilDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>	
+		
+	<bean id="promotionBusinessRulesDao" class="com.bfrc.dataaccess.dao.hibernate.PromotionBusinessRulesDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>	
+	<bean id="oilStorePriceDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.oil.OilStorePriceDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.oil.OilStorePrice</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="oilChangeStorePriceDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.oil.OilChangeStorePriceDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.oil.OilChangeStorePrice</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="oilFilterPriceDao" parent="dataAccess.core.AbstractHibernateDao">
+		<property name="proxyInterfaces" value="com.bfrc.dataaccess.dao.oil.OilFilterPriceDAO"/>
+		<property name="target">
+			<bean parent="dataAccess.core.webdb.AbstractHibernateDaoTarget">
+				<constructor-arg>
+					<value>com.bfrc.dataaccess.model.oil.OilFilterPrice</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>	
+	
+	
+	<bean id="quoteDao" class="com.bfrc.dataaccess.dao.hibernate.QuoteDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>
+	
+	<bean id="quoteTypeDao" class="com.bfrc.dataaccess.dao.hibernate.QuoteTypeDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>	
+	
+	<bean id="quoteItemTypeDao" class="com.bfrc.dataaccess.dao.hibernate.QuoteItemTypeDAOImpl">
+		<property name="sessionFactory" ref="dataAccess.core.webdb.SessionFactoryBean" />
+	</bean>	
+    
+    <!--  End OIL related DAOS -->
+    
+    <!-- jackson object mapper -->
+    <bean id="jsonObjectMapper" class="com.bfrc.dataaccess.util.JsonObjectMapper" />
+    
+    <bean id="convertResponseToJson" class="com.bfrc.dataaccess.util.ConvertResponseToJson" />
+
+	<bean id="jacksonSerializationConfig" class="org.codehaus.jackson.map.SerializationConfig"
+    	factory-bean="jsonObjectMapper" factory-method="getSerializationConfig" >
+	</bean>
+	
+	<bean id="bingMapsAPI" class="com.bfrc.dataaccess.svc.bing.BingMapsAPIServiceImpl" />
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 19, 2007 2:46:33 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.maintenance.OperationTypes" table="OPERATION_TYPES" schema="RTMS_WEBDB">
+        <id name="operationTypeId" type="long">
+            <column name="OPERATION_TYPE_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="operationType" type="string">
+            <column name="OPERATION_TYPE" length="60" />
+        </property>
+        <set name="intervalses" inverse="true">
+            <key>
+                <column name="OPERATION_TYPE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.bfrc.pojo.maintenance.Intervals" />
+        </set>
+    </class>
+</hibernate-mapping>

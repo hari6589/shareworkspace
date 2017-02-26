@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 10, 2015 12:30:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.MobileTireInstallFee" table="MOBILE_TIRE_INSTALL_FEE" schema="RTMS_WEBDB">
+        <id name="storeNumber" type="java.lang.Long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+        </id>
+        <property name="tireInstallFee" type="big_decimal">
+            <column name="TIRE_INSTALL_FEE" precision="15" not-null="true" />
+        </property>
+        <property name="feeDisclaimer" type="java.lang.String">
+            <column name="FEE_DISCLAIMER" not-null="false" />
+        </property>
+    </class>
+</hibernate-mapping>

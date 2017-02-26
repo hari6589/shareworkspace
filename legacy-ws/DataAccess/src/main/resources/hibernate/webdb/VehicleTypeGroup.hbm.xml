@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.aces.VehicleTypeGroup" schema="BFS_TIRE_SELECTOR" table="ACES_VEHICLETYPEGROUP">
+  		<id name="vehicleTypeGroupId" type="long">
+      		<column name="VEHICLETYPEGROUPID"/>
+      		<generator class="assigned"/>
+    	</id>
+    	<property name="vehicleTypeGroup" type="string">
+      		<column length="50" name="VEHICLETYPEGROUPNAME"/>
+	    </property>
+
+  </class>
+</hibernate-mapping>

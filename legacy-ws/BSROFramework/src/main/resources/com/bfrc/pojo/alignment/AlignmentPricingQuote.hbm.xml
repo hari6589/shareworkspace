@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 5, 2011 2:46:52 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.alignment.AlignmentPricingQuote" table="ALIGNMENT_PRICING_QUOTE" schema="RTMS_WEBDB">
+        <id name="alignmentQuoteId" type="long">
+            <column name="ALIGNMENT_QUOTE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">ALIGNMENT_PRICING_QUOTE_SEQ</param>
+            </generator>
+        </id>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="80" />
+        </property>
+        <property name="storeNumber" type="java.lang.Long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+        </property>
+        <property name="vehicleYear" type="java.lang.Short">
+            <column name="VEHICLE_YEAR" precision="4" scale="0" />
+        </property>
+        <property name="vehicleMake" type="string">
+            <column name="VEHICLE_MAKE" length="30" />
+        </property>
+        <property name="vehicleModel" type="string">
+            <column name="VEHICLE_MODEL" length="40" />
+        </property>
+        <property name="vehicleSubmodel" type="string">
+            <column name="VEHICLE_SUBMODEL" length="80" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" />
+        </property>
+        <property name="alignmentPricingId" type="java.lang.Short">
+            <column name="ALIGNMENT_PRICING_ID" precision="3" scale="0" />
+        </property>
+        <property name="pricingName" type="string">
+            <column name="PRICING_NAME" length="30" />
+        </property>
+        <property name="article" type="java.lang.Long">
+            <column name="ARTICLE" precision="10" scale="0" />
+        </property>
+        <property name="price" type="big_decimal">
+            <column name="PRICE" precision="10" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="50" />
+        </property>
+        <property name="mowaaAmount" type="big_decimal">
+            <column name="MOWAA_AMOUNT" precision="5" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="donationName" type="string">
+            <column name="DONATION_NAME" length="150" />
+        </property>
+        <property name="donationAmount" type="big_decimal">
+            <column name="DONATION_AMOUNT" precision="8" />
+        </property>
+        <property name="donationArticle" type="java.lang.Long">
+            <column name="DONATION_ARTICLE" precision="10" scale="0" />
+        </property>
+        <property name="emailAddress" type="string">
+                <column name="EMAIL_ADDRESS" />
+        </property>
+    </class>
+</hibernate-mapping>

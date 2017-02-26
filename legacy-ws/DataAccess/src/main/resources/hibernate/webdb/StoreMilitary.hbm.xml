@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 8, 2011 2:46:51 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.store.StoreMilitary" table="STORE_MILITARY" schema="RTMS_WEBDB">
+        <id name="storeNumber" type="long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+            <generator class="assigned" />
+        </id>
+    </class>
+    <query name="com.bfrc.dataaccess.model.store.StoreMilitary.findMilitaryStore">
+     	<![CDATA[
+			 FROM StoreMilitary 
+		    WHERE storeNumber = ?
+    	]]>
+    </query>
+</hibernate-mapping>

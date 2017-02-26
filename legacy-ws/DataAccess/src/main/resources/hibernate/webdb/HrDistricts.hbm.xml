@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+  <class name="com.bfrc.dataaccess.model.store.HrDistricts" schema="RTMS_WEBDB" table="HR_DISTRICTS">
+    <id name="districtId" type="string">
+      <column length="4" name="DISTRICT_ID"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="districtZone" type="string">
+      <column length="2" name="DISTRICT_ZONE"/>
+    </property>
+    <property name="districtName" type="string">
+      <column length="50" name="DISTRICT_NAME"/>
+    </property>
+    <set name="stores">
+      <key column="DISTRICT_ID" not-null="true"/>
+      <one-to-many class="com.bfrc.dataaccess.model.store.Store"/>
+    </set>
+  </class>
+  <sql-query name="com.bfrc.dataaccess.model.store.HrDistricts.findDistrictByStoreNumber">
+    	<return class="com.bfrc.dataaccess.model.store.HrDistricts" />
+    	select distinct d.DISTRICT_ID, d.DISTRICT_ZONE, d.DISTRICT_NAME 
+    	from RTMS_WEBDB.HR_DISTRICTS d, RTMS_WEBDB.STORE s 
+    	where d.DISTRICT_ID = s.DISTRICT_ID and s.STORE_NUMBER=?
+  </sql-query>
+</hibernate-mapping>

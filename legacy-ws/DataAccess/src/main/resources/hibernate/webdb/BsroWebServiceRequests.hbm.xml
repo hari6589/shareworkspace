@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.bfrc.dataaccess.model.system.BsroWebServiceRequests" table="BSRO_WEB_SERVICE_REQUESTS" schema="RTMS_WEBDB">
+        <id name="webServiceId" type="integer">
+            <column name="WEB_SERVICE_ID" precision="5" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="webServiceCode" type="string" length="1">
+            <column name="WEB_SERVICE_CODE" />
+        </property>
+        <property name="webServiceMessage" type="string" length="150">
+            <column name="WEB_SERVICE_MESSAGE" />
+        </property>
+    </class>
+</hibernate-mapping>

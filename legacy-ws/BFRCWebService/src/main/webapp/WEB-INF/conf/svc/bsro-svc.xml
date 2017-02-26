@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/jee 
+                            http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+	<!-- TODO: The service classes here are very unusual because they reside in the webservice project instead of in dataaaccess. Is this okay? They're also not annotation-driven yet. - MEH 20121120-->
+
+	<!-- Services -->
+	<bean id="securityRequired" class="java.lang.Boolean">
+		<constructor-arg value="true"/>
+	</bean>	
+
+	<bean id="authenticateService" class="com.bsro.core.svc.impl.AuthenticateServiceImpl" 
+		p:required-ref="securityRequired"
+	/>
+	
+	<bean id="intervalTransformerService" class="com.bsro.api.rest.svc.impl.IntervalTransformerServiceImpl"/>
+	
+<!-- 	This mock service bean is commented out as if it is instantiated then it creates and stores data in memory  -->
+<!-- 	<bean id="mockMaintenanceHistoryService" class="com.bsro.api.rest.svc.impl.mock.MockMaintenanceHistoryService"  -->
+<!-- 		p:dataSource-ref="bfrcDataSource"/> -->
+
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+		p:maxPoolSize="5" p:corePoolSize="1"/>
+
+	<bean id="maintenanceHistoryService" class="com.bsro.api.rest.svc.impl.MaintenanceHistoryServiceImpl" 
+		init-method="setupMessage" 
+		p:storeDao-ref="storeDao"
+		p:ncdUri="${ncd_web_svc_uri}" 
+		p:ncdSoapPass="${ncd_soap_pass}"
+		p:evValue="${e_val}"
+		p:taskExecutor-ref="taskExecutor"
+		p:dataSource-ref="bfrcDataSource"/>
+		
+</beans>

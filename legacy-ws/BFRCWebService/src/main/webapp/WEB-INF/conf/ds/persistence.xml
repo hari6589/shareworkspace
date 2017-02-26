@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                            http://www.springframework.org/schema/tx
+                            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+                            
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler" >
+	<property name="nativeJdbcExtractor">
+			<ref local="nativeJdbcExtractor" />
+		</property>
+	</bean>
+	
+	<bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.WebSphereNativeJdbcExtractor" />
+	
+	
+	
+	<bean id="dataAccess.core.webdb.SessionFactoryBean" 
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
+		p:configLocation="classpath:/dataaccess/webdb-hibernate.cfg.xml"
+		p:dataSource-ref="bfrcDataSource"
+		p:useTransactionAwareDataSource="true"
+		p:mappingLocations="classpath*:/hibernate/webdb/*.hbm.xml"
+		p:lobHandler-ref="lobHandler">
+		<property name="hibernateProperties">
+		<value>
+		hibernate.show_sql=${hibernate.show_sql}
+		</value>
+		</property>
+	</bean>
+
+	<!-- For use with calls to the framework daos, which don't work well in conjunction with the webservice ones -->
+	<bean id="dataAccess.core.webdb.FrameworkSessionFactoryBean" 
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
+		p:configLocation="classpath:/com/bfrc/framework/dao/hibernate3/hibernate.cfg.xml"
+		p:dataSource-ref="bfrcDataSource"
+		p:useTransactionAwareDataSource="true"
+		p:mappingLocations="classpath*:/hibernate3/hibernate.cfg.xml"
+		p:lobHandler-ref="lobHandler">
+		<property name="hibernateProperties">
+		<value>
+		hibernate.show_sql=${hibernate.show_sql}
+		</value>
+		</property>
+	</bean>
+	
+    <!-- JTA Transactions - for framework daos that use it -->
+	<bean id="jtaTransactionManager" class="org.springframework.transaction.jta.WebSphereUowTransactionManager" />
+	<bean id="jtaTransactionManagerTransactionManager" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="jtaTransactionManager"/>
+        <property name="targetMethod" value="getTransactionManager"/>
+    </bean>
+	<bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager" />
+	<!--  end JTA Transactions -->
+
+	<bean id="webDbTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+		p:sessionFactory-ref="dataAccess.core.webdb.SessionFactoryBean"/>
+	
+	<tx:advice id="webDbTxAdvice" transaction-manager="webDbTransactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:advisor pointcut="execution(* com.bfrc.dataaccess.svc..*.*(..))" advice-ref="webDbTxAdvice" />
+		<aop:advisor pointcut="execution(* com.bfrc.dataaccess.dao.hibernate..*.*(..))" advice-ref="webDbTxAdvice" />
+		<aop:advisor pointcut="execution(* com.bfrc.dataaccess.core.orm.impl.HibernateDAO.*(..))" advice-ref="webDbTxAdvice" />
+		<aop:advisor pointcut="execution(* com.bsro.api.rest.ws..*.*(..))" advice-ref="webDbTxAdvice" />
+	</aop:config>
+
+</beans>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.pradmin.site">
+
+    <class name="Site" table="PR_WEBSITE">
+        <id name="siteId" column="PR_SITE_ID" type="java.lang.String">
+            <generator class="uuid.hex" />
+        </id>
+ 
+        <property name="siteName" column="SITE_NAME" type="java.lang.String" />
+        <property name="siteUrl" column="SITE_URL" type="java.lang.String" />
+
+		<set name="alerts" table="PR_ALERT_SITE_JOIN">
+			<key column="PR_SITE_ID"/>
+				<many-to-many 
+				column="PR_ALERT_ID"
+				class="com.bfrc.pojo.pr.alert.Alert"/>
+		</set>
+
+
+    </class>
+    
+</hibernate-mapping>

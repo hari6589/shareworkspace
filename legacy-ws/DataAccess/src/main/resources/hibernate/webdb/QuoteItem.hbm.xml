@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 7, 2012 5:06:59 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.quote.QuoteItem" table="QUOTE_ITEM">
+        <id name="quoteItemId" type="long">
+            <column name="QUOTE_ITEM_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">QUOTE_ITEM_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="quoteItemType" class="com.bfrc.dataaccess.model.quote.QuoteItemType" fetch="select">
+            <column name="QUOTE_ITEM_TYPE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="quote" class="com.bfrc.dataaccess.model.quote.Quote" fetch="select">
+            <column name="QUOTE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>    
+        <property name="articleNumber" type="java.lang.Long">
+            <column name="ARTICLE_NUMBER" precision="10" scale="0" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="200" />
+        </property>
+        <property name="sequence" type="java.lang.Integer">
+            <column name="SEQUENCE" precision="8" scale="0" />
+        </property>
+        <property name="pricePerUnit" type="big_decimal">
+            <column name="PRICE_PER_UNIT" precision="8" />
+        </property>
+        <property name="quantity" type="integer">
+            <column name="QUANTITY" precision="10" scale="0" />
+        </property>          
+    </class>
+</hibernate-mapping>

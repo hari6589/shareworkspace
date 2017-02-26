@@ -1,0 +1,448 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 19, 2011 7:57:35 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" table="STORE_ADMIN_PROMO" schema="RTMS_WEBDB">
+        <id name="promotionId" type="java.lang.Long">
+            <column name="PROMO_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">STORE_ADMIN_PROMO_SEQ</param>
+            </generator>
+        </id>
+        <property name="friendlyId" type="string">
+            <column name="FRIENDLY_ID" length="100" />
+        </property>
+          <property name="brand" type="string">
+            <column name="BRAND" length="50" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="100" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="1000" />
+        </property>
+         <property name="imageId" type="java.lang.Long">
+            <column name="IMAGE_ID" precision="10" scale="0" />
+        </property>
+        <property name="onlineStartDate" type="java.util.Date">
+            <column name="ONLINE_START_DATE" />
+        </property>
+        <property name="onlineEndDate" type="java.util.Date">
+            <column name="ONLINE_END_DATE" />
+        </property>
+        <property name="startDate" type="java.util.Date">
+            <column name="START_DATE" />
+        </property>
+        <property name="endDate" type="java.util.Date">
+            <column name="END_DATE" />
+        </property>
+        <property name="denyReason" type="string">
+            <column name="DENY_REASON" length="1000" />
+        </property>
+        <property name="requestReason" type="string">
+            <column name="REQUEST_REASON" length="1000" />
+        </property>
+        <property name="articleNumber" type="java.lang.Long">
+            <column name="ARTICLE_NUMBER" precision="10" scale="0" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="CREATED_BY" length="130" />
+        </property>
+        <property name="createdByEmail" type="string">
+            <column name="CREATED_BY_EMAIL" length="80" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" not-null="true" />
+        </property>
+        <property name="modifiedBy" type="string">
+            <column name="MODIFIED_BY" length="130" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="20" />
+        </property>
+        <property name="promotionType" type="string">
+            <column name="PROMOTION_TYPE" length="10" />
+        </property>
+          <set name="offers" table="STORE_ADMIN_OFFER" fetch="join" lazy="false" inverse="true">
+        	<key column="PROMO_ID"/>
+        	<one-to-many class="com.bfrc.dataaccess.model.storeadmin.StoreAdminOffer" />
+        </set>
+    </class>
+      <!-- action items -->
+    <sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findZoneManagerActionItemsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+            and 
+            lower(promotion.STATUS)='pending_zon_approval'
+            and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+								and  lower(email_address)=lower(?))
+            )
+		)
+        order by promotion.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findZoneManagerActionItemsByZoneId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+            and 
+            lower(promotion.STATUS)='pending_zon_approval'
+            and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+                                and  hd.DISTRICT_ZONE=?)
+            )
+		)
+        order by promotion.CREATED_DATE desc
+            ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findNationalActionItems">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion
+            where
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+            and 
+            lower(promotion.STATUS) in ('pending_zon_approval','pending_nat_approval')
+        order by promotion.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<!-- current promotions -->
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findZoneManagerCurrentPromotionsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[ 
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+    	      and (lower(promotion.STATUS) not in ('inactive','pre_pending'))
+              and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+								and  lower(email_address)=lower(?))
+				)
+			)
+        order by promotion.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findZoneManagerCurrentPromotionsByZoneId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+    	      and (lower(promotion.STATUS) not in ('inactive','pre_pending'))
+              and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+                        and  hd.DISTRICT_ZONE = ?
+				)
+			)
+		)
+        order by promotion.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findDistrictManagerCurrentPromotionsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+             ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+    	      and (lower(promotion.STATUS) not in ('inactive','pre_pending'))
+              and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  lower(email_address)=lower(?))
+				)
+			)
+        order by promotion.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findDistrictManagerCurrentPromotionsByDistrictId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[  
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+    	      and (lower(promotion.STATUS) not in ('inactive','pre_pending'))
+              and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  DISTRICT_ID = ?)
+ 				)
+			)
+        order by promotion.CREATED_DATE desc
+          ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findNationalCurrentPromotions">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+        select promotion.* 
+            from STORE_ADMIN_PROMO promotion
+            where  
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+            and (lower(promotion.STATUS) not in ('inactive','pre_pending'))
+        order by promotion.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findNationalCurrentPromotionsByBrand">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+        select promotion.* 
+            from STORE_ADMIN_PROMO promotion
+            where  
+            ((sysdate < promotion.END_DATE) or (promotion.END_DATE is null)) 
+            and (lower(promotion.STATUS) not in ('inactive','pre_pending'))
+            and trim(promotion.BRAND) in (:brand)
+        order by promotion.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<!-- Expired and inactive promotions -->
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findNationalExpiredPromotions">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+        select promotion.* 
+            from STORE_ADMIN_PROMO promotion
+            where  ((sysdate > promotion.END_DATE) or (lower(promotion.STATUS) = 'inactive')) and lower(promotion.STATUS) <> 'pre_pending'
+        order by promotion.CREATED_DATE desc
+        ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findZoneManagerExpiredPromotionsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[ 
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+       		((sysdate > promotion.END_DATE) or (lower(promotion.STATUS) = 'inactive')) and lower(promotion.STATUS) <> 'pre_pending'
+            and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+								and  lower(email_address)=lower(?))
+				)
+			)
+        order by promotion.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findZoneManagerExpiredPromotionsByZoneId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+            ((sysdate > promotion.END_DATE) or (lower(promotion.STATUS) = 'inactive')) and lower(promotion.STATUS) <> 'pre_pending'
+            and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+						(select DISTRICT_ID 
+							from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                            where 
+								hd.DISTRICT_ZONE=zm.ZONE_ID 
+                        		and  hd.DISTRICT_ZONE = ?
+				)
+			)
+		)
+        order by promotion.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findDistrictManagerExpiredPromotionsByEmail">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+          	((sysdate > promotion.END_DATE) or (lower(promotion.STATUS) = 'inactive')) and lower(promotion.STATUS) <> 'pre_pending'
+            and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  lower(email_address)=lower(?))
+ 				)
+			)
+        order by promotion.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findDistrictManagerExpiredPromotionsByDistrictId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[  
+ 		select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+          	((sysdate > promotion.END_DATE) or (lower(promotion.STATUS) = 'inactive')) and lower(promotion.STATUS) <> 'pre_pending'
+            and promotion.promo_id in (
+				select promo_id from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number in (
+					select store.store_number from STORE store 
+						where 
+						district_id in
+                   (select DISTRICT_ID from DISTRICT_MANAGER where  DISTRICT_ID = ?)
+ 				)
+			)
+        order by promotion.CREATED_DATE desc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findDistrictManagerPromotionStoresByPromoId">
+	    <return class="com.bfrc.dataaccess.model.store.Store" alias="store" />
+	    <![CDATA[  
+        select distinct store.* 
+			from STORE store
+			INNER JOIN STORE_ADMIN_PROMO_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.promo_id = ?
+			and store.DISTRICT_ID in (select DISTRICT_ID from DISTRICT_MANAGER where lower(email_address)=lower(?)) 
+         order by store.store_number asc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findZoneManagerPromotionStoresByPromoId">
+	    <return class="com.bfrc.dataaccess.model.store.Store" alias="store" />
+	    <![CDATA[
+        select distinct store.* 
+			from STORE store
+			INNER JOIN STORE_ADMIN_PROMO_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.promo_Id = ?
+            and store.DISTRICT_ID in  
+                   (select DISTRICT_ID 
+                    from HR_DISTRICTS hd, ZONE_MANAGER zm  
+                        where 
+                        hd.DISTRICT_ZONE=zm.ZONE_ID 
+                        and  lower(email_address)=lower(?)
+                   )
+         order by store.district_id, store.store_number asc
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findNationalPromotionStoresByPromoId">
+	    <return class="com.bfrc.dataaccess.model.store.Store" alias="store" />
+	    <![CDATA[
+        select distinct store.* 
+			from STORE store
+			INNER JOIN STORE_ADMIN_PROMO_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.promo_id = ?
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findNationalPromotionStoresByPromoIdAndStoreType">
+	    <return-scalar column="storeNumber" type="java.lang.Long"/>
+	    <![CDATA[
+        select distinct store.store_number as storeNumber 
+			from STORE store
+			INNER JOIN STORE_ADMIN_PROMO_STORE_JOIN osjoin
+			on store.store_number = osjoin.store_number
+			where osjoin.promo_id = ? and 
+			trim(store.store_type) = ?
+         ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findPromotionsByStoreId">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+        select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+			TO_CHAR (promotion.online_start_date, 'YYYY-MM-DD') <= TO_CHAR(sysdate, 'YYYY-MM-DD')
+			and TO_CHAR (promotion.online_end_date , 'YYYY-MM-DD') >= TO_CHAR(sysdate, 'YYYY-MM-DD')
+            and lower(promotion.STATUS)='approved'
+            and promotion.PROMO_ID in (
+				select PROMO_ID from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number = ?
+			)
+            order by promotion.CREATED_DATE desc
+            ]]>
+	</sql-query>
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findPromotionsByStoreIdAndBrand">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+        select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+			TO_CHAR (promotion.online_start_date, 'YYYY-MM-DD') <= TO_CHAR(sysdate, 'YYYY-MM-DD')
+			and TO_CHAR (promotion.online_end_date , 'YYYY-MM-DD') >= TO_CHAR(sysdate, 'YYYY-MM-DD')
+            and lower(promotion.STATUS)='approved'
+            and promotion.PROMO_ID in (
+				select PROMO_ID from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number = ?
+			)
+			and promotion.BRAND = ?
+            order by promotion.CREATED_DATE desc
+            ]]>
+	</sql-query>
+
+	<sql-query name="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion.findPromotionsByStoreIdAndDate">
+	    <return class="com.bfrc.dataaccess.model.storeadmin.StoreAdminPromotion" alias="promotion" />
+	    <![CDATA[
+        select promotion.* 
+ 		    from STORE_ADMIN_PROMO promotion 
+            where 
+			TO_CHAR (promotion.online_start_date, 'YYYY-MM-DD') <= TO_CHAR(?, 'YYYY-MM-DD')
+			and TO_CHAR (promotion.online_end_date , 'YYYY-MM-DD') >= TO_CHAR(?, 'YYYY-MM-DD')
+            and lower(promotion.STATUS)='approved'
+            and promotion.PROMO_ID in (
+				select PROMO_ID from STORE_ADMIN_PROMO_STORE_JOIN psjoin
+				where psjoin.store_number = ?
+			)
+            order by promotion.CREATED_DATE desc
+            ]]>
+	</sql-query>
+	
+</hibernate-mapping>

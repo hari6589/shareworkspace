@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.store">
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="StoreHour" table="STORE_HOUR" schema="RTMS_WEBDB">
+        <composite-id name="id" class="StoreHourId">
+            <key-property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="6" scale="0" />
+            </key-property>
+            <key-property name="weekDay" type="string">
+                <column name="WEEK_DAY" length="3" />
+            </key-property>
+        </composite-id>
+        <property name="openTime" type="string">
+            <column name="OPEN_TIME" length="5" not-null="true" />
+        </property>
+        <property name="closeTime" type="string">
+            <column name="CLOSE_TIME" length="5" not-null="true" />
+        </property>
+        <property name="timeZone" type="string">
+            <column name="TIME_ZONE" length="3" />
+        </property>        
+    </class>
+	<sql-query name="StoreHours">
+	    <return class="StoreHour" alias="hours" />
+ 		select {hours.*} 
+		from store_hour hours
+		where store_number=:storeNumber
+	</sql-query>
+</hibernate-mapping>

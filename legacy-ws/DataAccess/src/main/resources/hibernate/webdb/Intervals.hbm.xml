@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.bfrc.dataaccess.model.maintenance.Intervals" schema="RTMS_WEBDB" table="INTERVALS">
+	
+		<composite-id class="com.bfrc.dataaccess.model.maintenance.IntervalsId" name="id">
+			<key-property name="acesVehicleId" type="long" column="ACES_VEHICLE_ID"/>
+			<key-property name="serviceType" type="string" column="SERVICE_TYPE" />
+			<key-property name="mileageInterval" type="java.lang.Long" column="MILEAGE_INTERVAL"/>
+			<key-property name="operationTypeId" type="long" column="OPERATION_TYPE_ID"/>
+			<key-property name="componentId" type="long" column="COMPONENT_ID"/>
+		</composite-id>
+		<property name="footnoteTxt" type="string" column="FOOTNOTE_TXT" />
+		<property name="timeInterval" type="java.lang.Long" column="TIME_INTERVAL"/>
+		<property name="timeUnits" type="string" column="TIME_UNITS" />
+		
+		<many-to-one class="com.bfrc.dataaccess.model.maintenance.OperationTypes"
+			fetch="select" insert="false" name="operationTypes" update="false" column="OPERATION_TYPE_ID" not-null="true" />
+		<many-to-one class="com.bfrc.dataaccess.model.maintenance.Components"
+			fetch="select" insert="false" name="components" update="false" column="COMPONENT_ID" not-null="true"/>
+	</class>
+	
+	<query name="com.bfrc.dataaccess.model.maintenance.Intervals.findByVehicleAndServiceType" cacheable="false">
+		FROM Intervals 
+		WHERE id.acesVehicleId = ? AND lower(id.serviceType) = lower(?)
+		ORDER BY id.mileageInterval, id.operationTypeId
+	</query>
+	
+	<query name="com.bfrc.dataaccess.model.maintenance.Intervals.findByVehicleWithMileage" cacheable="false">
+		FROM Intervals 
+	   WHERE id.acesVehicleId = ? 
+		 AND id.mileageInterval > 0
+		ORDER BY id.mileageInterval, id.operationTypeId
+	</query>
+		
+	<query name="com.bfrc.dataaccess.model.maintenance.Intervals.findByVehicleAndServiceTypeWithMileage" cacheable="false">
+		 FROM Intervals 
+		WHERE id.acesVehicleId = ? AND lower(id.serviceType) = lower(?) 
+		  AND id.mileageInterval > 0
+		ORDER BY id.mileageInterval, id.operationTypeId
+	</query>
+	
+	<sql-query name="com.bfrc.dataaccess.model.maintenance.Intervals.findDistinctServiceTypesByVehicle" cacheable="false">
+		<return-scalar column="svcType" type="string"/>
+		SELECT DISTINCT SERVICE_TYPE AS svcType 
+		FROM INTERVALS 
+		WHERE ACES_VEHICLE_ID = ?
+		ORDER BY SERVICE_TYPE
+	</sql-query>	
+	<sql-query name="com.bfrc.dataaccess.model.maintenance.Intervals.findDistinctMileageByVehicle" cacheable="false">
+		<return-scalar column="svcType" type="string"/>
+		SELECT DISTINCT MILEAGE_INTERVAL AS svcType 
+		FROM INTERVALS 
+		WHERE ACES_VEHICLE_ID = ?
+		AND lower(SERVICE_TYPE) = lower(?)
+		ORDER BY MILEAGE_INTERVAL
+	</sql-query>
+	
+	
+	
+</hibernate-mapping>

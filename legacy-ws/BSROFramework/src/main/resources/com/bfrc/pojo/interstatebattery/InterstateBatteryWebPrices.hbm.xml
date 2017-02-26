@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 1, 2009 2:08:01 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.interstatebattery.InterstateBatteryWebPrices" table="INTERSTATE_BATTERY_WEB_PRICES" schema="RTMS_WEBDB">
+        <id name="product" type="string">
+            <column name="PRODUCT" length="3" />
+            <generator class="assigned" />
+        </id>
+        <property name="webPrice" type="big_decimal">
+            <column name="WEB_PRICE" precision="10" />
+        </property>
+        <property name="tradeinCredit" type="big_decimal">
+            <column name="TRADEIN_CREDIT" precision="10" />
+        </property>
+        <property name="installationAmt" type="big_decimal">
+            <column name="INSTALLATION_AMT" precision="10" />
+        </property>
+        <property name="salesText" type="string">
+            <column name="SALES_TEXT" length="256" />
+        </property>
+        <property name="batteryImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="BATTERY_IMAGE" />
+        </property>
+        <property name="regularPrice" type="big_decimal">
+            <column name="REGULAR_PRICE" precision="10" />
+        </property>
+        <property name="discountArticle" type="java.lang.Long">
+            <column name="DISCOUNT_ARTICLE" precision="10" scale="0" />
+        </property>
+        <property name="discountAmount" type="big_decimal">
+            <column name="DISCOUNT_AMOUNT" precision="8" />
+        </property>
+    </class>
+</hibernate-mapping>

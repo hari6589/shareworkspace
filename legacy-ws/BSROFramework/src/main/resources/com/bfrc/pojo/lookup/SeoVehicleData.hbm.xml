@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.lookup">
+	<class name="SeoVehicleData" table="SEO_VEHICLE_DATA" schema="RTMS_WEBDB">
+        <id name="globalId" type="long">
+            <column name="GLOBAL_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="fileId" type="string" update="false">
+            <column name="FILE_ID" length="50" />
+        </property>
+        <property name="recordId" type="string" update="false">
+            <column name="RECORD_ID" length="50" />
+        </property>
+        <property name="title" type="string" update="false">
+            <column name="TITLE" length="256" />
+        </property>
+        <property name="description" type="string" update="false">
+            <column name="DESCRIPTION" length="256" />
+        </property>
+        <property name="hero" type="string" update="false">
+            <column name="HERO" length="256" />
+        </property>
+        <property name="cta" type="string" update="false">
+            <column name="CTA" length="256" />
+        </property>
+        <property name="header1" type="string" update="false">
+            <column name="HEADER_1" length="256" />
+        </property>
+        <property name="content1" type="org.springframework.orm.hibernate3.support.ClobStringType" update="false">
+            <column name="CONTENT_1" />
+        </property>
+        <property name="header2" type="string" update="false">
+            <column name="HEADER_2" length="256" />
+        </property>
+        <property name="content2" type="org.springframework.orm.hibernate3.support.ClobStringType" update="false">
+            <column name="CONTENT_2" />
+        </property>
+        <property name="header3" type="string" update="false">
+            <column name="HEADER_3" length="256" />
+        </property>
+        <property name="content3" type="org.springframework.orm.hibernate3.support.ClobStringType" update="false">
+            <column name="CONTENT_3" />
+        </property>
+        <property name="webSite" type="string" update="false">
+            <column name="WEB_SITE" length="10" />
+        </property>
+    </class>
+</hibernate-mapping>

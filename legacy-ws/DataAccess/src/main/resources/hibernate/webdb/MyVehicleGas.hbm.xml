@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.myprofile.MyVehicleGas" table="MY_VEHICLE_GAS" schema="RTMS_WEBDB">
+        <id name="myVehicleGasId" type="long">
+            <column name="MY_VEHICLE_GAS_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">MY_VEHICLES_GAS_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="myVehicle" class="com.bfrc.dataaccess.model.myprofile.MyVehicle" fetch="select">
+            <column name="MY_VEHICLE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="fillupDate" type="java.util.Calendar">
+            <column name="FILL_UP_DATE" length="14"/>
+        </property>
+        <property name="price" type="java.math.BigDecimal">
+            <column name="PRICE" precision="6" scale="2"/>
+        </property>
+         <property name="gallons" type="java.math.BigDecimal">
+            <column name="GALLONS" precision="5" scale="2"/>
+        </property>
+         <property name="odometer" type="int">
+            <column name="ODOMETER" length="7"/>
+        </property>
+        <property name="fuelType" column="FUEL_TYPE" not-null="true">     	
+         	<type name="com.bfrc.dataaccess.util.CustomEnumType">
+         		<param name="enumClass">com.bfrc.dataaccess.model.myprofile.FuelType</param>
+         		<param name="identifierMethod">getType</param>
+         		<param name="valueOfMethod">getEnum</param>
+         	</type>
+        </property>  
+        <property name="notes" type="string">
+            <column name="NOTES" length="200"/>
+        </property>
+        <property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE" length="7"/>
+        </property>
+    </class>
+</hibernate-mapping>

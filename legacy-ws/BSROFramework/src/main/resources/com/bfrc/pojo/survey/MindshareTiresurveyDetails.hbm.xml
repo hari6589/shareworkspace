@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 23, 2012 11:49:47 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.survey.MindshareTiresurveyDetails" table="MINDSHARE_TIRESURVEY_DETAILS" schema="RTMS_WEBDB">
+        <id name="salesLine" type="string">
+            <column name="SALES_LINE" length="50" />
+            <generator class="assigned" />
+        </id>
+        <property name="brandName" type="string">
+            <column name="BRAND_NAME" length="50" />
+        </property>
+        <property name="percentWillPurchaseAgain" type="big_decimal">
+            <column name="PERCENT_WILL_PURCHASE_AGAIN" precision="5" />
+        </property>
+        <property name="dryTraction" type="big_decimal">
+            <column name="DRY_TRACTION" precision="5" />
+        </property>
+        <property name="wetTraction" type="big_decimal">
+            <column name="WET_TRACTION" precision="5" />
+        </property>
+        <property name="tractionInSnowIce" type="big_decimal">
+            <column name="TRACTION_IN_SNOW_ICE" precision="5" />
+        </property>
+        <property name="tireStability" type="big_decimal">
+            <column name="TIRE_STABILITY" precision="5" />
+        </property>
+        <property name="noiseLevel" type="big_decimal">
+            <column name="NOISE_LEVEL" precision="5" />
+        </property>
+        <property name="rideComfort" type="big_decimal">
+            <column name="RIDE_COMFORT" precision="5" />
+        </property>
+        <property name="tireWear" type="big_decimal">
+            <column name="TIRE_WEAR" precision="5" />
+        </property>
+        <property name="numberOfComments" type="java.lang.Integer">
+            <column name="NUMBER_OF_COMMENTS" precision="6" scale="0" />
+        </property>
+        <property name="numberOfSurveys" type="java.lang.Integer">
+            <column name="NUMBER_OF_SURVEYS" precision="6" scale="0" />
+        </property>
+        <property name="id" type="java.lang.Long" />
+    </class>
+    <sql-query name="getMindshareTiresurveyDetailsData">
+        <return class="com.bfrc.pojo.survey.MindshareTiresurveyDetails" alias="detail" />
+           select tire.ID, detail.SALES_LINE, detail.BRAND_NAME,detail.PERCENT_WILL_PURCHASE_AGAIN,detail.DRY_TRACTION,detail.WET_TRACTION,
+               detail.TRACTION_IN_SNOW_ICE,detail.TIRE_STABILITY, detail.NOISE_LEVEL, detail.RIDE_COMFORT, detail.TIRE_WEAR,
+               detail.NUMBER_OF_COMMENTS, detail.NUMBER_OF_SURVEYS
+            from BFS_TIRE_CATALOG_JDA.DISPLAY tire, RTMS_WEBDB.MINDSHARE_TIRESURVEY_DETAILS detail
+            where lower(trim(tire.value)) = lower(trim(detail.SALES_LINE))
+            and ID not
+			    in
+			    (select ID from BFS_TIRE_CATALOG_JDA.DISPLAY
+			        where ID in (
+			                     select DISPLAY_ID from BFS_TIRE_CATALOG_JDA.CONFIGURATION where (OEM_FLAG='Y'  or DD='Y')
+			                     )
+			     )
+    </sql-query>
+    <sql-query name="getAllMindshareTiresurveyDetailsData">
+        <return class="com.bfrc.pojo.survey.MindshareTiresurveyDetails" alias="detail" />
+           select tire.ID, detail.SALES_LINE, detail.BRAND_NAME,detail.PERCENT_WILL_PURCHASE_AGAIN,detail.DRY_TRACTION,detail.WET_TRACTION,
+               detail.TRACTION_IN_SNOW_ICE,detail.TIRE_STABILITY, detail.NOISE_LEVEL, detail.RIDE_COMFORT, detail.TIRE_WEAR,
+               detail.NUMBER_OF_COMMENTS, detail.NUMBER_OF_SURVEYS
+            from BFS_TIRE_CATALOG_JDA.DISPLAY tire, RTMS_WEBDB.MINDSHARE_TIRESURVEY_DETAILS detail
+            where lower(trim(tire.value)) = lower(trim(detail.SALES_LINE))
+    </sql-query>
+</hibernate-mapping>

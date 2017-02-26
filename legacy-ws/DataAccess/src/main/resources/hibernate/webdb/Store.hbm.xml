@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.bfrc.dataaccess.model.store.Store" table="STORE" schema="RTMS_WEBDB">
+        <id name="storeNumber" type="long">
+            <column name="STORE_NUMBER" precision="6" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="address" type="string">
+            <column name="ADDRESS" length="60" not-null="true" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" length="50" not-null="true" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" not-null="true" />
+        </property>
+        <property name="zip" type="string">
+            <column name="ZIP" length="10" not-null="true" />
+        </property>
+        <property name="phone" type="string" update="false">
+            <column name="PHONE" length="15" not-null="true" />
+        </property>
+        <property name="trackingPhone" type="string">
+            <column name="TRACKING_PHONE" length="15" not-null="true" />
+        </property>
+        <property name="managerName" type="string">
+            <column name="MANAGER_NAME" length="50" />
+        </property>
+        <property name="managerEmailAddress" type="string">
+            <column name="MANAGER_EMAIL_ADDRESS" length="50" />
+        </property>
+        <property name="storeType" type="string">
+            <column name="STORE_TYPE" length="4" />
+        </property>
+        <property name="activeFlag" type="big_decimal">
+            <column name="ACTIVE_FLAG" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="geoMatch" type="string">
+            <column name="GEO_MATCH" length="1" />
+        </property>
+        <property name="latitude" type="float">
+            <column name="LATITUDE" />
+        </property>
+        <property name="longitude" type="float">
+            <column name="LONGITUDE" />
+        </property>
+        <property name="postalStatusCode" type="string">
+            <column name="POSTAL_STATUS_CODE" length="10" />
+        </property>
+        <property name="storeName" type="string">
+            <column name="STORE_NAME" length="50" />
+        </property>
+        <property name="onlineAppointmentActiveFlag" type="big_decimal">
+            <column name="ONLINE_APPOINTMENT_ACTIVE_FLAG" precision="22" scale="0" />
+        </property>
+        <property name="tirePricingActiveFlag" type="big_decimal">
+            <column name="TIRE_PRICING_ACTIVE_FLAG" precision="22" scale="0" />
+        </property>
+        <property name="fax" type="string">
+            <column name="FAX" length="15" />
+        </property>
+        <property name="localPageURL" type="string">
+            <column name="LOCAL_PAGE_URL" length="255" />
+        </property>
+        <property name="eCommActiveFlag" type="big_decimal">
+            <column name="ECOMM_ACTIVE_FLAG" precision="22" scale="0" />
+        </property>
+		<many-to-one name="district" column="DISTRICT_ID" insert="false" update="false" lazy="false" />
+
+        <set name="hours" inverse="false" lazy="false">
+        	<key column="store_number" update="false" not-null="true" />        	
+        	<one-to-many class="com.bfrc.dataaccess.model.store.StoreHour" />
+        </set>
+        <list name="taxRates" lazy="false">
+        	<key column="store_number" />
+        	<list-index column="COUNTER" />
+        	<one-to-many class="com.bfrc.dataaccess.model.pricing.TpTaxDesc" />
+        </list>
+        <list name="taxStatus" lazy="false">
+        	<key column="store_number" />
+        	<list-index column="ITAXCODE" />
+        	<one-to-many class="com.bfrc.dataaccess.model.pricing.TpTaxStatus" />
+        </list>
+        
+    </class>
+
+    <query name="com.bfrc.dataaccess.model.store.Store.findByStateCityAndSiteName" cacheable="false">
+    	<![CDATA[
+	    	FROM Store
+	    	WHERE state = ? AND city = ? and storeType = ?
+			ORDER BY storeNumber
+		]]>
+    </query>
+    
+    <sql-query name="com.bfrc.dataaccess.model.store.Store.findStoresByStateCityAndStoreTypes" cacheable="false">
+    	<return class="com.bfrc.dataaccess.model.store.Store" />
+    		select s.* from RTMS_WEBDB.STORE s
+    		where s.STATE = :state and 
+    		upper(s.CITY) = upper(:city) and 
+    		trim(s.store_type) in (:storeType) and 
+    		active_flag=1 and 
+    		online_appointment_active_flag=1
+    </sql-query>
+    
+    <sql-query name="com.bfrc.dataaccess.model.store.Store.findStoreTypes">
+    	<return-scalar column="storeType" type="string"/>
+    	select distinct store_type as storeType from store
+    </sql-query>
+    
+</hibernate-mapping>

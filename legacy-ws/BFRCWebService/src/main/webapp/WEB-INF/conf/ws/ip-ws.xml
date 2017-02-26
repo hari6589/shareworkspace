@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                            http://www.springframework.org/schema/tx
+                            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+	
+	<bean id="ipInfoWebServiceConfig" class="com.bsro.api.rest.ws.ipinfo.IPInfoWebServiceConfig">
+		<property name="endpoint" value="${ipinfo.api.endpoint}" />
+		<property name="apikey" value="${ipinfo.api.apikey}" />
+		<property name="secret" value="${ipinfo.api.secret}" />
+		<property name="desktopCountryCF" value="${ipinfo.api.desktop.countryCF}" />
+		<property name="desktopStateCF" value="${ipinfo.api.desktop.stateCF}" />
+		<property name="desktopCityCF" value="${ipinfo.api.desktop.cityCF}" />
+		<property name="mobileCountryCF" value="${ipinfo.api.mobile.countryCF}" />
+		<property name="mobileStateCF" value="${ipinfo.api.mobile.stateCF}" />
+		<property name="mobileCityCF" value="${ipinfo.api.mobile.cityCF}" />
+		<property name="connectionTimeout" value="${ipinfo.api.conn.timeout}" />
+		<property name="soTimeout" value="${ipinfo.api.so.timeout}" />
+	</bean>
+
+</beans>

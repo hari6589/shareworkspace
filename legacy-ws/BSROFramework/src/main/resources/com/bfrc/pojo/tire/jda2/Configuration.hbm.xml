@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 19, 2011 12:15:51 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class entity-name="Configuration2" name="com.bfrc.pojo.tire.jda2.Configuration" table="CONFIGURATION" schema="BFS_TIRE_CATALOG_JDA">
+        <id name="sku" type="long">
+            <column name="SKU" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="crossSection" type="string">
+            <column name="CROSS_SECTION" length="4" not-null="true" />
+        </property>
+        <property name="aspect" type="string">
+            <column name="ASPECT" length="4" not-null="true" />
+        </property>
+        <property name="rimSize" type="string">
+            <column name="RIM_SIZE" length="4" not-null="true" />
+        </property>
+        <property name="displayId" type="long">
+            <column name="DISPLAY_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="mileageId" type="long">
+            <column name="MILEAGE_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="speedId" type="long">
+            <column name="SPEED_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="treadwear" type="string">
+            <column name="TREADWEAR" length="4" not-null="true" />
+        </property>
+        <property name="tractionId" type="long">
+            <column name="TRACTION_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="temperatureId" type="long">
+            <column name="TEMPERATURE_ID" precision="11" scale="0" not-null="true" />
+        </property>
+        <property name="label" type="string">
+            <column name="LABEL" not-null="true" />
+        </property>
+        <property name="sidewallId" type="java.lang.Long">
+            <column name="SIDEWALL_ID" precision="11" scale="0" />
+        </property>
+        <property name="oemFlag" type="string">
+            <column name="OEM_FLAG" length="2" />
+        </property>
+        <property name="loadIndex" type="java.lang.Long">
+            <column name="LOAD_INDEX" precision="11" scale="0" />
+        </property>
+        <property name="loadRange" type="string">
+            <column name="LOAD_RANGE" length="2" />
+        </property>
+        <property name="DLoadIndex" type="java.lang.Long">
+            <column name="D_LOAD_INDEX" precision="11" scale="0" />
+        </property>
+        <property name="ply" type="string">
+            <column name="PLY" length="4" />
+        </property>
+        <property name="dd" type="java.lang.Character">
+            <column name="DD" length="1" />
+        </property>
+        <property name="technologyId" type="java.lang.Long">
+            <column name="TECHNOLOGY_ID" precision="11" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 3, 2011 11:23:41 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.gas.BsroEpaMpgLookup" table="BSRO_EPA_MPG_LOOKUP" schema="RTMS_WEBDB">
+        <id name="lookupId" type="long">
+            <column name="LOOKUP_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">BSRO_EPA_MPG_LOOKUP_SEQ</param>
+            </generator>
+        </id>
+        <property name="modelYear" type="string">
+            <column name="MODEL_YEAR" length="30" not-null="true" />
+        </property>
+        <property name="makeName" type="string">
+            <column name="MAKE_NAME" length="30" not-null="true" />
+        </property>
+        <property name="modelName" type="string">
+            <column name="MODEL_NAME" length="50" not-null="true" />
+        </property>
+        <property name="submodel" type="string">
+            <column name="SUBMODEL" length="80" />
+        </property>
+        <property name="mpgCity" type="java.lang.Short">
+            <column name="MPG_CITY" precision="3" scale="0" />
+        </property>
+        <property name="mpgHwy" type="java.lang.Short">
+            <column name="MPG_HWY" precision="3" scale="0" />
+        </property>
+        <property name="mpgCombined" type="java.lang.Short">
+            <column name="MPG_COMBINED" precision="3" scale="0" />
+        </property>
+        <property name="engineSize" type="big_decimal">
+            <column name="ENGINE_SIZE" precision="4" scale="1" />
+        </property>
+        <property name="cylinders" type="java.lang.Short">
+            <column name="CYLINDERS" precision="3" scale="0" />
+        </property>
+        <property name="fuelType" type="string">
+            <column name="FUEL_TYPE" length="4" />
+        </property>
+        <property name="transmission" type="string">
+            <column name="TRANSMISSION" length="5" />
+        </property>
+        <property name="drive" type="string">
+            <column name="DRIVE" length="3" />
+        </property>
+        <property name="annualCost" type="java.lang.Integer">
+            <column name="ANNUAL_COST" precision="6" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

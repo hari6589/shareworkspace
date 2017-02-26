@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 9, 2007 10:54:09 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.admin.GlobalAdmin" table="GLOBAL_ADMIN" schema="RTMS_WEBDB">
+        <id name="userId" type="long">
+            <column name="USER_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="20" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="10" not-null="true" />
+        </property>
+        <set name="adminApps" table="ADMIN_APPS_USERS" inverse="true">
+            <key>
+                <column name="USER_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <many-to-many column="APPLICATION_ID" class="com.bfrc.pojo.admin.AdminApp" />
+        </set>
+        <property name="emailAddress" type="string">
+            <column name="EMAIL_ADDRESS" length="80" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="80" />
+        </property>
+          <property name="emailSettings" type="string">
+            <column name="EMAIL_SETTINGS" length="50" />
+        </property>
+        <property name="createdDate" type="date">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="permissionLevel" type="string">
+            <column name="PERMISSION_LEVEL" length="10" />
+        </property>
+        <property name="token" type="string">
+            <column name="TOKEN" length="10" />
+        </property>
+        <property name="passwordReset" type="java.lang.Boolean">
+            <column name="PASSWORD_RESET" precision="1" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

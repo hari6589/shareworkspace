@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.bfrc.dataaccess.model.vehicle.UserVehicle" table="USER_VEHICLE">
+    <id name="id" type="long">
+      <column name="ID" precision="10" scale="0"/>
+      <generator class="sequence">
+        <param name="sequence">USER_VEHICLE_SEQ</param>
+      </generator>
+    </id>
+    <property name="acesVehicleId" type="long">
+      <column name="ACES_VEHICLE_ID" not-null="true" precision="10" scale="0"/>
+    </property>
+    <property name="year" type="string">
+      <column length="50" name="YEAR" not-null="true"/>
+    </property>
+    <property name="make" type="string">
+      <column length="50" name="MAKE" not-null="true"/>
+    </property>
+    <property name="model" type="string">
+      <column length="80" name="MODEL" not-null="true"/>
+    </property>
+    <property name="submodel" type="string">
+      <column length="150" name="SUBMODEL"/>
+    </property>
+    <property name="originalTires" type="string">
+      <column length="1" name="ORIG_TIRES"/>
+    </property>
+    <property name="tiresReplaced" type="string">
+      <column length="1" name="TIRES_REPLACED"/>
+    </property>
+    <property name="annualMileage" type="int">
+      <column name="ANNUAL_MILEAGE" not-null="true" precision="6" scale="0"/>
+    </property>
+    <property name="currentMileage" type="int">
+      <column name="CURR_MILEAGE" not-null="true" precision="6" scale="0"/>
+    </property>
+    <property name="mileageDate" type="timestamp">
+      <column length="7" name="MILEAGE_DATE" not-null="true"/>
+    </property>
+    <property name="createdDate" type="timestamp">
+      <column length="7" name="CREATED_DATE" not-null="true"/>
+    </property>
+    <property name="active" type="boolean">
+      <column name="ACTIVE" not-null="true" precision="1" scale="0"/>
+    </property>
+    <property name="name" type="string">
+        <column name="NAME" length="200" />
+    </property>
+    <property name="defaultFlag" type="java.lang.Boolean">
+        <column name="DEFAULT_FLAG" precision="1" scale="0" />
+    </property>
+    <property name="vehicleImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+        <column name="VEHICLE_IMAGE" />
+    </property>
+<!--     <many-to-one class="com.bfrc.pojo.User" column="USERS_ID" name="user"/> -->
+  </class>
+  
+</hibernate-mapping>

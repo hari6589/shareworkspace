@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 19, 2011 7:57:35 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.storeadmin.StoreAdminOfferStoreJoin" table="STORE_ADMIN_OFFER_STORE_JOIN" schema="RTMS_WEBDB">
+        <composite-id name="id" class="com.bfrc.pojo.storeadmin.StoreAdminOfferStoreJoinId">
+            <key-property name="offerId" type="long">
+                <column name="OFFER_ID" precision="10" scale="0" />
+            </key-property>
+            <key-property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="6" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

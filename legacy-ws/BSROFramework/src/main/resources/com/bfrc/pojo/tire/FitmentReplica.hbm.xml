@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.tire.FitmentReplica" table="FITMENT_SEARCH" schema="BFS_TIRE_SELECTOR">
+        <id name="friendlyId" type="long">
+            <column name="FITMENT_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+            <property name="makeName" type="string">
+                <column name="MAKE_NAME" length="30" />
+            </property>
+            <property name="modelName" type="string">
+                <column name="MODEL_NAME" length="30" />
+            </property>
+            <property name="submodel" type="string">
+                <column name="SUBMODEL" length="80" />
+            </property>
+            <property name="friendlyMakeName" type="string">
+                <column name="MAKE_NAME_STR" length="30" />
+            </property>
+            <property name="friendlyModelName" type="string">
+                <column name="MODEL_NAME_STR" length="30" />
+            </property>
+            <property name="friendlySubmodel" type="string">
+                <column name="SUBMODEL_STR" length="80" />
+            </property>
+    </class>
+</hibernate-mapping>

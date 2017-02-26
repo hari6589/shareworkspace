@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 18, 2007 10:31:31 AM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.pricing.TpUserLog" table="TP_USER_LOG" schema="RTMS_WEBDB">
+        <id name="tpUserId" type="long">
+            <column name="TP_USER_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">TP_USER_SEQ</param>
+            </generator>
+        </id>
+            <property name="emailAddress" type="string">
+                <column name="EMAIL_ADDRESS" />
+            </property>
+            <property name="requestDate" type="timestamp">
+                <column name="REQUEST_DATE" length="7" />
+            </property>
+            <property name="storeNumber" type="long">
+                <column name="STORE_NUMBER" precision="6" scale="0" />
+            </property>
+            <property name="firstName" type="string">
+                <column name="FIRST_NAME" length="50" />
+            </property>
+            <property name="lastName" type="string">
+                <column name="LAST_NAME" length="80" />
+            </property>
+            <property name="quantity" type="long">
+                <column name="QUANTITY" precision="10" scale="0" />
+            </property>
+            <property name="modelYear" type="string">
+                <column name="MODEL_YEAR" length="30" />
+            </property>
+            <property name="makeName" type="string">
+                <column name="MAKE_NAME" length="30" />
+            </property>
+            <property name="modelName" type="string">
+                <column name="MODEL_NAME" length="30" />
+            </property>
+            <property name="submodel" type="string">
+                <column name="SUBMODEL" length="80" />
+            </property>
+            <property name="webSite" type="string">
+                <column name="WEB_SITE" length="50" />
+            </property>
+            <property name="rearQuantity" type="long">
+                <column name="REAR_QUANTITY" precision="10" scale="0" />
+            </property>
+    </class>
+</hibernate-mapping>

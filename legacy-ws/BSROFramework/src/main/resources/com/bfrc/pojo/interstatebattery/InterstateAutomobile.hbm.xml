@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 1, 2009 2:08:01 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.interstatebattery.InterstateAutomobile" table="INTERSTATE_AUTOMOBILE" schema="RTMS_WEBDB">
+        <id name="automobileId" type="long">
+            <column name="AUTOMOBILE_ID" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="productCode" type="string">
+            <column name="PRODUCT_CODE" length="10" />
+        </property>
+        <property name="productLine" type="string">
+            <column name="PRODUCT_LINE" length="50" />
+        </property>
+        <property name="make" type="string">
+            <column name="MAKE" length="50" />
+        </property>
+        <property name="model" type="string">
+            <column name="MODEL" length="50" />
+        </property>
+        <property name="year" type="java.lang.Short">
+            <column name="YEAR" precision="4" scale="0" />
+        </property>
+        <property name="engine" type="string">
+            <column name="ENGINE" length="50" />
+        </property>
+        <property name="ptr" type="string">
+            <column name="PTR" length="50" />
+        </property>
+        <property name="note" type="string">
+            <column name="NOTE" length="50" />
+        </property>
+        <property name="note1" type="string">
+            <column name="NOTE1" length="50" />
+        </property>
+        <property name="note2" type="string">
+            <column name="NOTE2" length="50" />
+        </property>
+        <property name="note3" type="string">
+            <column name="NOTE3" length="50" />
+        </property>
+        <property name="optn" type="string">
+            <column name="OPTN" />
+        </property>
+        <property name="bci" type="string">
+            <column name="BCI" length="50" />
+        </property>
+        <property name="notes" type="string">
+            <column name="NOTES" length="50" />
+        </property>
+        <property name="cca" type="string">
+            <column name="CCA" length="10" />
+        </property>
+    </class>
+    <sql-query name="getInterstateBatteryYearList">
+	 <return-scalar column="Year" type="long"/>
+	  <![CDATA[
+	   SELECT DISTINCT YEAR
+       FROM  INTERSTATE_AUTOMOBILE
+       ORDER BY 1 DESC
+     ]]>
+    </sql-query>
+    <sql-query name="getInterstateBatteryMakeList">
+	 <return-scalar column="Make" type="string"/>
+	  <![CDATA[
+	   SELECT DISTINCT MAKE
+       FROM  INTERSTATE_AUTOMOBILE
+       WHERE YEAR= ?
+       ORDER BY 1
+     ]]>
+    </sql-query>
+    <sql-query name="getInterstateBatteryModelList">
+	 <return-scalar column="MODEL" type="string"/>
+	  <![CDATA[
+	   SELECT DISTINCT MODEL
+       FROM  INTERSTATE_AUTOMOBILE
+       WHERE YEAR= ?
+       AND MAKE= ?
+       ORDER BY 1
+     ]]>
+    </sql-query>
+    <sql-query name="getInterstateBatteryModelListIgnoreCase">
+	 <return-scalar column="MODEL" type="string"/>
+	  <![CDATA[
+	   SELECT DISTINCT MODEL
+       FROM  INTERSTATE_AUTOMOBILE
+       WHERE YEAR= ?
+       AND lower(MAKE)=lower(?)
+       ORDER BY 1
+     ]]>
+    </sql-query>
+    <sql-query name="getInterstateBatteryEngineList">
+	 <return-scalar column="Engine" type="string"/>
+	  <![CDATA[
+	   SELECT DISTINCT ENGINE
+       FROM  INTERSTATE_AUTOMOBILE
+       WHERE YEAR= ?
+       AND MAKE= ?
+       AND MODEL= ?
+       ORDER BY 1
+     ]]>
+    </sql-query>
+    <sql-query name="getInterstateBatteryEngineListIgnoreCase">
+	 <return-scalar column="Engine" type="string"/>
+	  <![CDATA[
+	   SELECT DISTINCT ENGINE
+       FROM  INTERSTATE_AUTOMOBILE
+       WHERE YEAR= ?
+       AND lower(MAKE)=lower(?)
+       AND lower(MODEL)=lower(?)
+       ORDER BY 1
+     ]]>
+    </sql-query>
+    <sql-query name="getInterstateBatteryList">
+      <return class="com.bfrc.pojo.interstatebattery.InterstateAutomobile" />
+	  <![CDATA[
+	   SELECT AUTOMOBILE_ID, PRODUCT_CODE, PRODUCT_LINE, MAKE, MODEL, YEAR, ENGINE, 
+	          PTR, NOTE, NOTE1, NOTE2, NOTE3, OPTN, BCI, NOTES, CCA
+       FROM  INTERSTATE_AUTOMOBILE
+       WHERE YEAR = ?
+           AND MAKE = ?
+           AND MODEL = ?
+           AND ENGINE = ?
+       ORDER BY PRODUCT_CODE, CCA
+     ]]>
+    </sql-query>
+    <sql-query name="getInterstateBatteryListIgnoreCase">
+      <return class="com.bfrc.pojo.interstatebattery.InterstateAutomobile" />
+	  <![CDATA[
+	   SELECT AUTOMOBILE_ID, PRODUCT_CODE, PRODUCT_LINE, MAKE, MODEL, YEAR, ENGINE, 
+	          PTR, NOTE, NOTE1, NOTE2, NOTE3, OPTN, BCI, NOTES, CCA
+       FROM  INTERSTATE_AUTOMOBILE
+       WHERE YEAR = ?
+           AND lower(MAKE)=lower(?)
+           AND lower(MODEL)=lower(?)
+           AND lower(ENGINE)=lower(?)
+       ORDER BY PRODUCT_CODE, CCA
+     ]]>
+    </sql-query>
+    <sql-query name="getAppointmentRuleById">
+      <return class="com.bfrc.pojo.appointment.rules.AppointmentRule" />
+	  <![CDATA[
+	   SELECT *
+       FROM  APPOINTMENT_RULE
+       WHERE APPOINTMENT_ID = ?
+     ]]>
+    </sql-query>
+</hibernate-mapping>

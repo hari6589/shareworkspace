@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.bfrc.dataaccess.model.uid.BsroUidLogins" table="BSRO_UID_LOGINS" schema="RTMS_WEBDB">
+        <id name="userName" type="string">
+            <column name="USER_NAME" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="password" type="string">
+            <column name="PASSWORD" />
+        </property>
+        <property name="userId" type="integer">
+            <column name="USER_ID" />
+        </property>
+        <property name="emailAddress" type="string">
+            <column name="EMAIL_ADDRESS" />
+        </property>
+        <property name="activeCd" type="string">
+            <column name="ACTIVE_CODE" />
+        </property>
+        <property name="emailConfirmCd" type="string">
+            <column name="EMAIL_CONFIRM_CODE" />
+        </property>
+        <property name="emailConfirmDt" type="date">
+            <column name="EMAIL_CONFIRM_DATE" />
+        </property>
+        <property name="creationDt" type="date">
+            <column name="CREATION_DATE" />
+        </property>
+        <property name="lastLoginDt" type="date">
+            <column name="LAST_LOGIN_DATE" />
+        </property>
+        <property name="tosCd" type="string">
+            <column name="TOS_CODE" />
+        </property>
+        <property name="passwordResetCd" type="string">
+            <column name="PASSWORD_RESET_CODE" />
+        </property>
+        
+        <many-to-one name="bsroUids" 
+	        column="USER_ID" 
+	        unique="true"
+	        not-null="true" insert="false" update="false"/>
+	        
+    </class>
+    
+     	
+	<query name="com.bfrc.dataaccess.model.uid.BsroUidLogins.findByCredentials" cacheable="false">
+		FROM BsroUidLogins 
+		WHERE userName = ? and password = ?
+	</query>
+	
+	<query name="com.bfrc.dataaccess.model.uid.BsroUidLogins.findByEmployeeId" cacheable="false">
+		FROM BsroUidLogins 
+		WHERE userId = ?
+	</query>
+	
+	<query name="com.bfrc.dataaccess.model.uid.BsroUidLogins.findByActiveCd" cacheable="false">
+		FROM BsroUidLogins 
+		WHERE activeCd = ?
+	</query>
+</hibernate-mapping>

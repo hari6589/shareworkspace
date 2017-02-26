@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.keyvalue.KeyValue" table="KEY_VALUE" schema="RTMS_WEBDB">
+        <id name="keyValueId" type="long">
+            <column name="KEY_VALUE_ID"  precision="10" scale="0"/>
+                  <generator class="sequence">
+            	<param name="sequence">KEY_VALUE_SEQ</param>
+            </generator>
+        </id>
+        <property name="parentKeyValueId" type="long">
+            <column name="PARENT_KEY_VALUE_ID"  precision="10" scale="0" />
+        </property>
+        <property name="keyValueCategoryId" type="long">
+            <column name="KEY_VALUE_CATEGORY_ID"  precision="10" scale="0" />
+        </property>
+        <property name="key" type="string">
+            <column name="KEY" length="100" />
+        </property>
+        <property name="value" type="string">
+            <column name="VALUE" length="100" />
+        </property>
+        <property name="alternateValue1" type="string">
+            <column name="ALT_VALUE_1" length="100" />
+        </property> 
+        <property name="displayOrder" type="long">
+            <column name="DISPLAY_ORDER"  precision="10" scale="0" />
+        </property>               
+    </class>
+    
+   	<sql-query name="GetKeysAndValuesOrderedByValuesToDepth2">
+		<return-scalar column="parentKey" type="string"/>
+		<return-scalar column="parentValue" type="string"/> 
+		<return-scalar column="parentAlternateValue1" type="string"/>
+		<return-scalar column="childKey" type="string"/>
+		<return-scalar column="childValue" type="string"/> 
+		<return-scalar column="childAlternateValue1" type="string"/> 		 
+		select /*+ INDEX (child KEY_VALUE_PK )  INDEX (parent KEY_VALUE_PK )*/ parent.key parentKey, parent.VALUE parentValue, parent.ALT_VALUE_1 parentAlternateValue1, child.key childKey, child.VALUE childValue, child.ALT_VALUE_1 childAlternateValue1 from KEY_VALUE parent inner join KEY_VALUE child on parent.key_value_id = child.parent_key_value_id where parent.parent_key_value_id=(select key_value_id from key_value where key=? and key_value_category_id=(select key_value_category_id from key_value_category where site_name=? and name=?)) order by parent.value, child.value
+	</sql-query>
+	
+  	<sql-query name="GetSpecificDepth2KeyAndValue">
+		<return-scalar column="parentKey" type="string"/>
+		<return-scalar column="parentValue" type="string"/> 
+		<return-scalar column="parentAlternateValue1" type="string"/>
+		<return-scalar column="childKey" type="string"/>
+		<return-scalar column="childValue" type="string"/> 
+		<return-scalar column="childAlternateValue1" type="string"/> 		 
+		select parent.key parentKey, parent.VALUE parentValue, parent.ALT_VALUE_1 parentAlternateValue1, child.key childKey, child.VALUE childValue, child.ALT_VALUE_1 childAlternateValue1 from KEY_VALUE parent inner join KEY_VALUE child on parent.key_value_id = child.parent_key_value_id where parent.parent_key_value_id=(select key_value_id from key_value where key=? and key_value_category_id=(select key_value_category_id from key_value_category where site_name=? and name=?)) and parent.key=? and child.key=?
+	</sql-query>
+</hibernate-mapping>

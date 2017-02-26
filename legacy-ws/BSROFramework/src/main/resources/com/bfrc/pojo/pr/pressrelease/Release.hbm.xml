@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bfrc.pojo.pr.pressrelease">
+
+    <class name="Release" table="PR_PRESSRELEASE">
+        <id name="releaseId" column="PR_PRESSRELEASE_ID" type="java.lang.String">
+            <generator class="uuid.hex" />
+        </id>
+ 
+        <property name="releaseTitle" column="PRESSRELEASE_TITLE" type="java.lang.String" />
+        <property name="releaseSubtitle" column="PRESSRELEASE_SUBTITLE" type="java.lang.String" />
+        <property name="releaseReleaseDate" column="PRESSRELEASE_RELEASEDATE" type="java.lang.String" />
+        <property name="releaseReleaseDateSearch" column="PRESSRELEASE_RELEASEDATESEARCH" type="java.util.Date" />
+        <property name="releaseCopy" column="PRESSRELEASE_COPY" type="text" />
+        <property name="releaseContactInfo" column="PRESSRELEASE_CONTACTINFO" type="java.lang.String" />
+        <property name="releaseCreatorId" column="PRESSRELEASE_CREATOR_ID" type="java.lang.Long" />
+    </class>
+    
+</hibernate-mapping>

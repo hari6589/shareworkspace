@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.error.ErrorMessage" table="APPLICATION_ERROR_MESSAGE" schema="RTMS_WEBDB">
+        <id name="errorId" type="long">
+            <column name="ERROR_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">ERROR_MESSAGE_SEQ</param>
+            </generator>
+        </id>
+        <property name="errorMessage" type="string">
+            <column name="ERROR_MESSAGE" length="4000" not-null="true"/>
+        </property>
+		<property name="insertDate" type="date">
+            <column name="INSERT_DATE" length="7" not-null="true" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="1" not-null="true" />
+        </property>
+        <many-to-one name="site" class="com.bfrc.pojo.contact.WebSite" fetch="select">
+            <column name="SITE_ID" precision="10" scale="0" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

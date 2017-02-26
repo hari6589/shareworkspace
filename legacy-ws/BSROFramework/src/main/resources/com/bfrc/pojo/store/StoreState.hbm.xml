@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bfrc.pojo.store">
+    <class name="StoreState" table="STATES" schema="RTMS_WEBDB">
+        <id name="state" column="STATE" type="java.lang.String"/>
+        <property name="name" column="NAME" type="java.lang.String"/>
+    </class>
+
+	<sql-query name="StoreState">
+	    <return class="StoreState" alias="StoreState" >
+			<return-property name="state" column="STATE"/>
+			<return-property name="name" column="NAME"/>
+		</return>
+ 		select distinct a.state,a.name 
+		from rtms_webdb.store o,rtms_webdb.states a 
+		where o.state=a.state 
+		and trim(o.store_type)=:siteName
+		order by name
+	</sql-query>
+</hibernate-mapping>

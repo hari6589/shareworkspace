@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 29, 2010 11:51:09 AM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bfrc.pojo.realestate.RealestateStoreGallery" table="REALESTATE_STORE_GALLERY" schema="RTMS_WEBDB">
+        <id name="galleryId" type="java.lang.Long">
+            <column name="GALLERY_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">REALESTATE_STORE_GALLERY_SEQ</param>
+            </generator>
+        </id>
+        <property name="galleryYear" type="java.lang.Short">
+            <column name="GALLERY_YEAR" precision="4" scale="0" />
+        </property>
+        <property name="thumbImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="THUMB_IMAGE" />
+        </property>
+        <property name="largeImage" type="org.springframework.orm.hibernate3.support.BlobByteArrayType">
+            <column name="LARGE_IMAGE" />
+        </property>
+        <property name="addressInfo" type="string">
+            <column name="ADDRESS_INFO" length="500" />
+        </property>
+        <property name="sortOrder" type="string">
+            <column name="SORT_ORDER" length="10" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <property name="webSite" type="string">
+            <column name="WEB_SITE" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

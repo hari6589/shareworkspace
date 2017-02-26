@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 7, 2012 5:06:59 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.bfrc.dataaccess.model.quote.QuoteType" table="QUOTE_TYPE">
+        <id name="quoteTypeId" type="long">
+            <column name="QUOTE_TYPE_ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">QUOTE_TYPE_SEQ</param>
+            </generator>
+        </id>
+        <property name="friendlyId" type="string">
+            <column name="FRIENDLY_ID" length="50" unique="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="50" />
+        </property>
+    </class>  
+</hibernate-mapping>

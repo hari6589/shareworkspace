@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+    <class name="com.bfrc.dataaccess.model.email.EmailSignup" schema="RTMS_WEBDB" table="EMAIL_SIGNUP">
+        <id name="signupId" column="SIGNUP_ID" type="java.lang.Long">
+            <generator class="sequence">
+            	<param name="sequence">LOCALSTORE_SIGNUP_SEQ</param>
+            </generator>
+        </id>
+
+        <property name="firstName" column="FIRST_NAME" type="java.lang.String"  not-null="true" />
+        <property name="middleInitial" column="MIDDLE_INITIAL" type="java.lang.String" />
+        <property name="lastName" column="LAST_NAME" type="java.lang.String"  not-null="true" />
+        <property name="address1" column="ADDRESS_1" type="java.lang.String"  />
+        <property name="address2" column="ADDRESS_2" type="java.lang.String" />
+        <property name="city" column="CITY" type="java.lang.String"  />
+        <property name="state" column="STATE" type="java.lang.String"  />
+        <property name="zip" column="ZIP" type="java.lang.String"  />
+        <property name="emailAddress" column="EMAIL_ADDRESS" type="java.lang.String" />
+        <property name="createdDate" column="CREATED_DATE" type="timestamp"  not-null="true" />
+        <property name="source" column="SOURCE" type="java.lang.String"  not-null="true" />
+        <property name="optinCode" column="OPTIN_CODE" type="java.lang.String" />
+        <property name="confirmOptin" column="CONFIRM_OPTIN" type="java.lang.String" />
+        <property name="couponId" type="string" column="COUPON_ID" length="100" />
+        <property name="friendsEmail" type="string" column="FRIENDS_EMAIL" />
+        <property name="phoneNumber" type="string" column="PHONE_NUMBER" length="25" />
+        <property name="actionCode" type="string" column="ACTION_CODE" length="10" />
+        <property name="modifiedDate" type="timestamp" column="MODIFIED_DATE" length="7" />
+        <property name="accessCode" type="string" column="ACCESS_CODE" length="10" />
+    </class>
+    
+</hibernate-mapping>

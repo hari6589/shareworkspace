@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+    <class name="com.bfrc.pojo.partner.Record" table="PARTNER_RECORD">
+        <id name="id" type="long">
+            <column name="ID" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">PARTNER_RECORD_SEQ</param>
+            </generator>
+        </id>
+        <property name="status" type="string">
+            <column name="STATUS" length="1" />
+        </property>
+        <property name="data" type="string">
+            <column name="DATA" not-null="true" length="4000" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="noteDate" type="date">
+            <column name="NOTE_DATE" length="7" />
+        </property>
+        <property name="contactDate" type="date">
+            <column name="CONTACT_DATE" length="7" />
+        </property>
+        <property name="contactType" type="string">
+            <column name="CONTACT_TYPE" length="1" />
+        </property>
+        <property name="companyName" type="string">
+            <column name="COMPANY_NAME" length="100" not-null="true" />
+        </property>
+        <property name="source" type="string">
+            <column name="SOURCE" length="50" not-null="true" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" not-null="true" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="80" not-null="true" />
+        </property>
+        <property name="note" type="string">
+            <column name="NOTE" length="500" />
+        </property>
+    </class>
+</hibernate-mapping>
