@@ -1,8 +1,12 @@
 package bsro.handler.appointment;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -52,8 +56,6 @@ public class BSROAppointmentMetadataFunctionHandler implements RequestHandler<Ob
 			return getValidationMessage("Invalid Services");
 		}
 		
-		String url = "https://sandbox-api.appointment-plus.com/Bridgestone/Rules"; // Move this uri to prop
-		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost httpPost = null;
 		HttpEntity responseEntity = null;
@@ -61,7 +63,7 @@ public class BSROAppointmentMetadataFunctionHandler implements RequestHandler<Ob
 		
 		try {
 			// Prepare url with query parameters
-			url = url + parameterBuilder(storeNumberParam, servicesParam);
+			String url = constructURL(storeNumberParam, servicesParam);
 			httpPost = new HttpPost(url);
 			
 			// Set request configuration
@@ -79,7 +81,7 @@ public class BSROAppointmentMetadataFunctionHandler implements RequestHandler<Ob
 					String responseBody = "";
 				    ObjectMapper objectMapper = new ObjectMapper();
 				    JSONObject json = new JSONObject(EntityUtils.toString(responseEntity));
-				    if(json.getString("data") != null) {
+				    if(json.has("data")) {
 						responseBody = json.get("data").toString();
 						Metadata result = objectMapper.readValue(responseBody, Metadata.class);
 					    bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.SUCCESSFUL.name());
@@ -106,19 +108,38 @@ public class BSROAppointmentMetadataFunctionHandler implements RequestHandler<Ob
 			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - ConnectTimeoutException Occured while fetching Appointment Metadata : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
 			bsroWebServiceResponse.setMessage("ConnectTimeoutException : " + e.getMessage());
+		} catch (UnsupportedEncodingException e) {
+			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - UnsupportedEncodingException Occured while fetching Appointment Metadata : " + e.getMessage());
+			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.UNKNOWN_ERROR.name());
+			bsroWebServiceResponse.setMessage("UnsupportedEncodingException : " + e.getMessage());
+		} catch (IOException e) {
+			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - IOException Occured while fetching Appointment Metadata : " + e.getMessage());
+			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.UNKNOWN_ERROR.name());
+			bsroWebServiceResponse.setMessage("IOException : " + e.getMessage());
 		} catch (Exception e) {
 			context.getLogger().log("BSROAppointmentMetadataFunctionHandler - Exception Occured while fetching Appointment Metadata : " + e.getMessage());
 			bsroWebServiceResponse.setStatusCode(BSROWebServiceResponseCode.UNKNOWN_ERROR.name());
 			bsroWebServiceResponse.setMessage("Exception : " + e.getMessage());
 		}
+		
+		Properties prop = new Properties();
+		InputStream inputStream = BSROAppointmentMetadataFunctionHandler.class.getClassLoader().getResourceAsStream("application.properties");
+		try {
+			prop.load(inputStream);
+		} catch (IOException e) {
+			bsroWebServiceResponse.setMessage("IOException while getting property value");
+		}
+		bsroWebServiceResponse.setMessage(prop.getProperty("environment"));
+		
 		return bsroWebServiceResponse;
 	}
 	
-	public String parameterBuilder(String storeNumber, String services) throws UnsupportedEncodingException {
-		String siteId = "appointplus846/776";
-		String devApiKey = "b18371f34b0931963f62add253820169cfa05cf7";
-		//String liveApiKey = "123ba713955f286356423d59d03618db7ceecfc7";
-		String responseType = "JSON";
+	public String constructURL(String storeNumber, String services) throws UnsupportedEncodingException, IOException {
+		
+		Properties prop = new Properties();
+		InputStream input = BSROAppointmentMetadataFunctionHandler.class.getClassLoader().getResourceAsStream("application.properties");
+		prop.load(input);
+		input.close();
 		
 		String queryDeli = "?";
 		String nameValueDeli = "&";
@@ -127,11 +148,13 @@ public class BSROAppointmentMetadataFunctionHandler implements RequestHandler<Ob
 		String paddedStoreNumber = ("000000" + storeNumber);
 		StringBuilder paramBuilder = new StringBuilder();
 		
+		paramBuilder.append(prop.getProperty("appointment.plus.url.base")+prop.getProperty("appointment.plus.url.metadata"));
+		
 		paramBuilder.append(queryDeli).append("store_number").append(nameValuePairDeli).append(paddedStoreNumber.substring(paddedStoreNumber.length()-6));
-		paramBuilder.append(nameValueDeli).append("services").append(nameValuePairDeli).append(services);
-		paramBuilder.append(nameValueDeli).append("site_id").append(nameValuePairDeli).append(siteId);
-		paramBuilder.append(nameValueDeli).append("api_key").append(nameValuePairDeli).append(URLEncoder.encode(devApiKey,"UTF-8"));
-		paramBuilder.append(nameValueDeli).append("response_type").append(nameValuePairDeli).append(URLEncoder.encode(responseType,"UTF-8"));
+		paramBuilder.append(nameValueDeli).append("services").append(nameValuePairDeli).append(URLEncoder.encode(services,"UTF-8"));
+		paramBuilder.append(nameValueDeli).append("site_id").append(nameValuePairDeli).append(prop.getProperty("siteId"));
+		paramBuilder.append(nameValueDeli).append("api_key").append(nameValuePairDeli).append(URLEncoder.encode(prop.getProperty("apiKey"),"UTF-8"));
+		paramBuilder.append(nameValueDeli).append("response_type").append(nameValuePairDeli).append(URLEncoder.encode(prop.getProperty("responseType"),"UTF-8"));
 		
 		return paramBuilder.toString();
 	}

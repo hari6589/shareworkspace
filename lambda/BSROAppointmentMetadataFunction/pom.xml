@@ -10,6 +10,24 @@
 		<jackson.version>2.0.5</jackson.version>
   </properties>
 	
+	<profiles>
+		<profile>
+	        <id>dev</id>
+	        <activation>
+		    	<activeByDefault>true</activeByDefault>
+		    </activation>
+	        <properties>
+	            <build.profile.id>dev</build.profile.id>
+	        </properties>
+	    </profile>
+	    <profile>
+	        <id>prod</id>
+	        <properties>
+	            <build.profile.id>prod</build.profile.id>
+	        </properties>
+	    </profile>
+	</profiles>
+	
   <dependencies>
 		<dependency>
 		    <groupId>com.amazonaws</groupId>
@@ -54,6 +72,15 @@
 		
 	</dependencies>
 	<build>
+		<resources>
+	    	<resource>
+	        	<filtering>true</filtering>
+	        	<directory>src/main/resources</directory>
+	    	</resource>
+	  	</resources>
+	  	<filters>
+		    <filter>src/main/resources/${build.profile.id}/application.properties</filter>
+		</filters>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
