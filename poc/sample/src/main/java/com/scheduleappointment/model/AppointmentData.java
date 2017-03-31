@@ -1,18 +1,17 @@
 package com.scheduleappointment.model;
 
 public class AppointmentData {
-	
 	private Long storeNumber;
-	private String locationId;
+	private Long locationId;
 	private String employeeId;
 	private Long quoteId;
 	private String appointmentStatusId;
 	private String appointmentStatusDesc;
-	private String vehicleYear;
+	private Long vehicleYear;
 	private String vehicleMake;
 	private String vehicleModel;
 	private String vehicleSubmodel;
-	private String mileage;
+	private int mileage;
 	private String customerFirstName;
 	private String customerLastName;
 	private String customerDayTimePhone;
@@ -32,10 +31,10 @@ public class AppointmentData {
 	public void setStoreNumber(Long storeNumber) {
 		this.storeNumber = storeNumber;
 	}
-	public String getLocationId() {
+	public Long getLocationId() {
 		return locationId;
 	}
-	public void setLocationId(String locationId) {
+	public void setLocationId(Long locationId) {
 		this.locationId = locationId;
 	}
 	public String getEmployeeId() {
@@ -62,10 +61,10 @@ public class AppointmentData {
 	public void setAppointmentStatusDesc(String appointmentStatusDesc) {
 		this.appointmentStatusDesc = appointmentStatusDesc;
 	}
-	public String getVehicleYear() {
+	public Long getVehicleYear() {
 		return vehicleYear;
 	}
-	public void setVehicleYear(String vehicleYear) {
+	public void setVehicleYear(Long vehicleYear) {
 		this.vehicleYear = vehicleYear;
 	}
 	public String getVehicleMake() {
@@ -86,10 +85,10 @@ public class AppointmentData {
 	public void setVehicleSubmodel(String vehicleSubmodel) {
 		this.vehicleSubmodel = vehicleSubmodel;
 	}
-	public String getMileage() {
+	public int getMileage() {
 		return mileage;
 	}
-	public void setMileage(String mileage) {
+	public void setMileage(int mileage) {
 		this.mileage = mileage;
 	}
 	public String getCustomerFirstName() {

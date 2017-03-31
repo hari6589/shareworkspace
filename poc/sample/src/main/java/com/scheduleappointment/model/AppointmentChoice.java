@@ -1,9 +1,11 @@
 package com.scheduleappointment.model;
 
+import java.util.Date;
+
 public class AppointmentChoice {
 	
 	private String choice;
-	private String datetime;
+	private Date datetime;
 	private String dropWaitOption;
 	
 	public String getChoice() {
@@ -13,10 +15,10 @@ public class AppointmentChoice {
 		this.choice = choice;
 	}
 	
-	public String getDatetime() {
+	public Date getDatetime() {
 		return datetime;
 	}
-	public void setDatetime(String datetime) {
+	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
 	}
 	
@@ -26,10 +28,10 @@ public class AppointmentChoice {
 	public void setDropWaitOption(String dropWaitOption) {
 		this.dropWaitOption = dropWaitOption;
 	}
-	
 	@Override
 	public String toString() {
-		return "SubApp [choice=" + choice + ", datetime=" + datetime
+		return "AppointmentChoice [choice=" + choice + ", datetime=" + datetime
 				+ ", dropWaitOption=" + dropWaitOption + "]";
 	}
+	
 }

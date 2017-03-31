@@ -6,19 +6,22 @@ import javax.mail.internet.*;
 
 public class SESSample {
 
-    static final String FROM = "hari6589@gmail.com";   // Replace with your "From" address. This address must be verified.
-    static final String TO = "hari6589@gmail.com";  // Replace with a "To" address. If your account is still in the 
+    static final String FROM = "aravindhan.jayakumar@csscorp.com";   // Replace with your "From" address. This address must be verified.
+    static final String TO = "aravindhan.jayakumar@csscorp.com";  // Replace with a "To" address. If your account is still in the 
                                                        // sandbox, this address must be verified.
     
     static final String BODY = "This email was sent through the Amazon SES SMTP interface by using Java.";
     static final String SUBJECT = "Amazon SES test (SMTP interface accessed using Java)";
     
     // Supply your SMTP credentials below. Note that your SMTP credentials are different from your AWS credentials.
-    static final String SMTP_USERNAME = "AKIAIQPJUYCVIB7HT5GQ";  // Replace with your SMTP username.
-    static final String SMTP_PASSWORD = "AqKU5ozO3PcrhxO9EcoHZ2n++QSLKJd1d7e3QvjX6U0a";  // Replace with your SMTP password.
+    //static final String SMTP_USERNAME = "AKIAIQPJUYCVIB7HT5GQ";  // Replace with your SMTP username.
+    //static final String SMTP_PASSWORD = "AqKU5ozO3PcrhxO9EcoHZ2n++QSLKJd1d7e3QvjX6U0a";  // Replace with your SMTP password.
+    
+    static final String SMTP_USERNAME = "AKIAI2HIRXY2Z2ZCUTBA";  // Replace with your SMTP username.
+    static final String SMTP_PASSWORD = "AvHHbHqg6Ss8j7U6t9d5Y+uQpWKiGEMvv35onR1n87Bk";  // Replace with your SMTP password.
     
     // Amazon SES SMTP host name. This example uses the US West (Oregon) region.
-    static final String HOST = "email-smtp.us-west-2.amazonaws.com";    
+    static final String HOST = "email-smtp.us-east-1.amazonaws.com";    
     
     // The port you will connect to on the Amazon SES SMTP endpoint. We are choosing port 25 because we will use
     // STARTTLS to encrypt the connection.
