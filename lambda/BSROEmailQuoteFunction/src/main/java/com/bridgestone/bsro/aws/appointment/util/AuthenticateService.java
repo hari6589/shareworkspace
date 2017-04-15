@@ -6,6 +6,7 @@ import java.util.Properties;
 public class AuthenticateService {
 	public boolean authenticateService(Properties properties, String tokenId, String appName) throws IOException{
 		if(tokenId!=null && appName!=null && !tokenId.equals("") && !appName.equals("") && properties.containsKey(appName)) {
+			properties.getProperty("Auth appname: " + appName);
 			if(properties.getProperty(appName).equals(tokenId)) {
 				return true;
 			}

@@ -42,7 +42,6 @@ public class Quote {
 		
 		TireQuote tireQuote = null;
 		
-		/*
 		Table table = dynamoDB.getTable("TireQuote");
 		System.out.println("Quote Id: " + quoteId);
 		GetItemSpec spec = new GetItemSpec()
@@ -51,23 +50,38 @@ public class Quote {
 		Item item = table.getItem(spec);
 		
 		if(item.hasAttribute("payload")) {
-			String jsonStr = item.getJSON("payload");
-			System.out.println(jsonStr);
+			JSONObject jsonObj = new JSONObject(item.getJSON("payload"));
+			System.out.println(">>" + jsonObj.getString("payload"));
 			ObjectMapper mapper = new ObjectMapper();
-			tireQuote = mapper.readValue(jsonStr, TireQuote.class);
-		}*/
+			tireQuote = mapper.readValue(jsonObj.getString("payload"), TireQuote.class);
+		}
 		
+		/*
 		String jsonStr = "{\"storeInventory\":{\"storeNumber\":\"23817\",\"articleNumber\":\"97725\",\"quantityOnOrder\":\"0\",\"quantityOnHand\":\"4\",\"inventoryId\":10318146},\"storeNumber\":\"23817\",\"createdDate\":\"2015-12-30T11:23:16.000+05:30\",\"quantity\":\"4\",\"quoteItem\":{\"totalTirePrice\":\"535.96\",\"unitPrice\":\"133.99\",\"scrapTireRecyclingCharge\":\"12.0\",\"total\":\"560.76\",\"wheelBalance\":\"59.96\",\"tpmsValveServiceKitLabor\":\"8.0\",\"shopSupplies\":\"4.08\",\"tpmsValveServiceKit\":\"27.96\",\"stateEnvironmentalFee\":\"10.0\",\"tax\":\"36.8\",\"totalUnits\":\"4\"},\"vehicleFitment\":{\"year\":\"2010\",\"submodel\":\"WT\",\"acesVehicleId\":\"143886\",\"model\":\"Colorado\",\"tpmsInd\":\"true\",\"make\":\"Chevrolet\"},\"tireQuoteId\":\"1061397\",\"tire\":{\"description\":\"DESTINATION LE 2 P-METRIC P215/70R16 99H\",\"tireBrandImage\":\"Destination_logo.png\",\"loadIndexPounds\":\"1709\",\"warrantyName\":\"Gold Pledge Limited Warranty\",\"standardOptional\":\"S\",\"loadIndex\":\"99\",\"frb\":\"B\",\"speedRating\":\"H\",\"brand\":\"Firestone\",\"mileage\":\"60000\",\"tireName\":\"Destination LE2 \",\"tireBrandName\":\"Destination\",\"tireImage\":\"DestinationLE2.png\",\"discontinued\":\"N\",\"generateCatalogPage\":\"Y\",\"technology\":\"NONE\",\"article\":\"97725\",\"speedRatingMPH\":\"130\",\"notBrandedProduct\":\"false\",\"tireClassName\":\"CUV/SUV Highway All-Season\",\"tireType\":\"SUV/CUV\",\"tireGroupName\":\"Light Truck Tires\",\"tireSize\":\"P215/70R16\",\"retailPrice\":\"133.99\",\"sidewallDescription\":\"Black Letter/Black Wall\"}}";
-			
 		ObjectMapper mapper = new ObjectMapper();
 		tireQuote = mapper.readValue(jsonStr, TireQuote.class);
+		*/
+		
 		return tireQuote;
 	}
 	
 	public BatteryQuote getBatteryQuote(String quoteId) throws JSONException, JsonParseException, JsonMappingException, IOException {
+		/*
+		Table table = dynamoDB.getTable("InterstateBatteryQuote");
+		System.out.println("Quote Id: " + quoteId);
+		GetItemSpec spec = new GetItemSpec()
+			.withPrimaryKey("quoteId", Long.parseLong(quoteId))
+			.withConsistentRead(true);
+		Item item = table.getItem(spec);
+		System.out.println("To JSON: " + item.toJSON());
+		ObjectMapper mapper = new ObjectMapper();
+		BatteryQuote batteryQuote = mapper.readValue(item.toJSON(), BatteryQuote.class);
+		*/
+		
 		String jsonStr = "{\"batteryQuoteId\":\"9038\",\"storeNumber\":\"11940\",\"zip\":\"85308\",\"createdDate\":\"2016-06-01T12:48:52.000-05:00\",\"donationName\":\"0\",\"donationAmount\":\"0.0\",\"donationArticle\":\"\",\"quantity\":\"1\",\"priceForQuantity\":\"99.99\",\"installationForQuantity\":\"14.99\",\"subtotal\":\"114.98\",\"total\":\"114.98\",\"isEligibleForBatteryRebate\":\"false\",\"battery\":{\"productName\":\"Mega-Tron II\",\"productCode\":\"MT-24F\",\"product\":\"MT\",\"partNumber\":\"7005423\",\"totalWarrantyMonths\":\"60\",\"replacementWarrantyMonths\":\"24\",\"performanceWarrantyMonths\":\"60\",\"coldCrankingAmps\":\"600\",\"reserveCapacityMinutes\":\"110\",\"webPrice\":\"99.99\",\"tradeInCredit\":\"20\",\"installationAmount\":\"14.99\",\"salesText\":\"Get long life and premium performance with the Maintenance-Free Mega-Tron II, backed by 24 months free replacement and a 5-year performance warranty.\",\"regularPrice\":\"119.99\",\"discountAmount\":\"0\",\"hasPricing\":\"true\",\"expirayDate\":null},\"vehicle\":{\"year\":\"2012\",\"make\":\"Acura\",\"model\":\"MDX\",\"engine\":\"V6/3.7L\"}}";
 		ObjectMapper mapper = new ObjectMapper();
 		BatteryQuote batteryQuote = mapper.readValue(jsonStr, BatteryQuote.class);
+		
 		return batteryQuote;
 	}
 	

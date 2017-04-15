@@ -37,9 +37,9 @@ public class BSROEmailQuoteFunctionHandler implements RequestHandler<Object, Obj
 			properties.load(inputStream);
 			inputStream.close();			
 		} catch (IOException e) {
-			System.out.println("IOException  in BSROScheduleAppointmentFunctionHandler Constructor!");
+			System.out.println("IOException  in BSROEmailQuoteFunctionHandler Constructor!");
 		} catch (Exception e) {
-			System.out.println("Exception  in BSROScheduleAppointmentFunctionHandler Constructor!");
+			System.out.println("Exception  in BSROEmailQuoteFunctionHandler Constructor!");
 		}
 	}
 	
@@ -134,12 +134,13 @@ public class BSROEmailQuoteFunctionHandler implements RequestHandler<Object, Obj
 			}
 			
 			// Mail prepared content
-			mailer.sendMail(messageContent, email);
+			mailer.sendMail(messageContent, email, siteName, sourceType);
 			
 		} catch (Exception e) {
 			System.out.println("Exception : " + e.getMessage());
 			e.printStackTrace();
 			System.out.println("FAILURE");
+			return "FAILURE";
 		}
 		System.out.println("SUCCESS");
 		return "SUCCESS";
