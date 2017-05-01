@@ -167,7 +167,7 @@ public class MobileAppUserService {
 					if(bfsUser != null && bfsUser.getJsonData() != null ) {
 						bfsUser.setDescFlag("R");
 						dynamoDBMapper.save(bfsUser, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.CLOBBER));
-						return bfsUser.getJsonData().toString();
+						return bfsUser.getJsonData();
 					}
 				}
 			}
