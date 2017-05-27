@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+    <scr:component name="com.bridgestone.bsro.aem.appointment.controller.AppointmentSlingController">
+        <implementation class="com.bridgestone.bsro.aem.appointment.controller.AppointmentSlingController"/>
+        <service servicefactory="false">
+            <provide interface="javax.servlet.Servlet"/>
+        </service>
+        <property name="sling.servlet.paths">
+            /bsro/services/appointment/get-service-assignments
+            /bsro/services/appointment/get-available-days
+            /bsro/services/appointment/get-available-times
+            /bsro/services/appointment/confirm
+        </property>
+        <property name="sling.servlet.methods">
+            GET
+        </property>
+        <property name="service.vendor" value="BSRO"/>
+        <property name="service.pid" value="com.bridgestone.bsro.aem.appointment.controller.AppointmentSlingController"/>
+        <reference name="appointmentService" interface="com.bridgestone.bsro.aem.appointment.services.IAppointmentService" cardinality="1..1" policy="static" bind="bindAppointmentService" unbind="unbindAppointmentService"/>
+        <reference name="siteService" interface="com.bridgestone.bsro.aem.core.site.ISiteService" cardinality="1..1" policy="static" bind="bindSiteService" unbind="unbindSiteService"/>
+        <reference name="tireFunnelService" interface="com.bridgestone.bsro.aem.tire.funnel.services.ITireFunnelService" cardinality="1..1" policy="static" bind="bindTireFunnelService" unbind="unbindTireFunnelService"/>
+    </scr:component>
+</components>

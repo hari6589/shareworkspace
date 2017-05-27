@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+    <scr:component immediate="true" name="com.bridgestone.bsro.aem.appointment.services.impl.AppointmentServiceImpl">
+        <implementation class="com.bridgestone.bsro.aem.appointment.services.impl.AppointmentServiceImpl"/>
+        <service servicefactory="false">
+            <provide interface="com.bridgestone.bsro.aem.appointment.services.IAppointmentService"/>
+        </service>
+        <property name="service.vendor" value="BSRO"/>
+        <property name="service.pid" value="com.bridgestone.bsro.aem.appointment.services.impl.AppointmentServiceImpl"/>
+        <reference name="profileService" interface="com.bridgestone.bsro.aem.core.IProfileService" cardinality="1..1" policy="static" bind="bindProfileService" unbind="unbindProfileService"/>
+        <reference name="serviceCaller" interface="com.bridgestone.bsro.aem.core.client.IServiceCaller" cardinality="1..1" policy="static" bind="bindServiceCaller" unbind="unbindServiceCaller"/>
+        <reference name="configAdmin" interface="org.osgi.service.cm.ConfigurationAdmin" cardinality="1..1" policy="static" bind="bindConfigAdmin" unbind="unbindConfigAdmin"/>
+        <reference name="istoreService" interface="com.bridgestone.bsro.aem.storelocator.services.IStoreServices" cardinality="1..1" policy="static" bind="bindIstoreService" unbind="unbindIstoreService"/>
+        <reference name="securityService" interface="com.bridgestone.bsro.aem.core.security.ISecurityService" cardinality="1..1" policy="static" bind="bindSecurityService" unbind="unbindSecurityService"/>
+        <reference name="siteService" interface="com.bridgestone.bsro.aem.core.site.ISiteService" cardinality="1..1" policy="static" bind="bindSiteService" unbind="unbindSiteService"/>
+    </scr:component>
+</components>

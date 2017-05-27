@@ -1,0 +1,36 @@
+{
+  "appointmentRequest": {
+    "storeNumber": 11940,
+    "locationId": 1243,
+    "employeeId": 7309,
+    "appointmentStatusId": 4089,
+    "appointmentStatusDesc": "Confirmed",
+    "vehicleYear": "2015",
+    "vehicleMake": "Acura",
+    "vehicleModel": "ILX",
+    "vehicleSubmodel": "Base",
+    "mileage": "25000",
+    "customerNotes": "someNotes",
+    "comments": "Test",
+    "customerFirstName": "FirstName",
+    "customerLastName": "LastName",
+    "customerCity": "city",
+    "customerDayTimePhone": "987-654-3210",
+    "customerEmailAddress": "test@bfrc.com",
+    "websiteName": "FCAC",
+    "appointmentType": "New",
+    "quoteId": "null",
+    "choice": {
+      "appointmentChoiceId": "1",
+      "choice": 1,
+      "datetime": 1441243800000,
+      "dropWaitOption": "drop",
+      "appointmentId": 0,
+      "pickUpTime": "4PM",
+      "dropOffTime": "11AM"
+    },
+    "selectedServices": [
+      "2751,2762"
+    ]
+  }
+}
