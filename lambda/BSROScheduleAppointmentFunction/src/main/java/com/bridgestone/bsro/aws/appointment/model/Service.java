@@ -69,12 +69,8 @@ public class Service implements Comparable<Service> {
 	//@Override
 	public int compareTo(Service service) {
 		int sortOrder = ((Service) service).getSortOrder();
-
-		//ascending order
-		return this.sortOrder - sortOrder;
-		
-		//descending order
-		//return sortOrder - this.sortOrder;
+		return this.sortOrder - sortOrder; //ascending order
+		//return sortOrder - this.sortOrder; //descending order
 	}
 	
 }
