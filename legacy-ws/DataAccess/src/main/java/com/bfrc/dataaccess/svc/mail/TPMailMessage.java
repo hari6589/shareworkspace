@@ -273,7 +273,7 @@ public class TPMailMessage extends MailMessage {
 	
 	@Override
 	public String getTireQuoteURL() {
-		return "%%BASE_URL%%/content/bsro/tiresplus/en/tires/tire-quote.html?quoteId=%%QUOTE_ID%%";
+		return "%%BASE_URL%%/tires/tire-quote/%%QUOTE_ID%%?lw_cmp=int-em_tp_eg-tp-tires-other_em-link";
 	}
 	
 	@Override
@@ -283,12 +283,12 @@ public class TPMailMessage extends MailMessage {
 	
 	@Override
 	public String getBatteryQuoteURL() {
-		return "%%BASE_URL%%/content/bsro/tiresplus/en/auto-repair-services/auto-battery-service/battery-quote.html?quoteId=%%QUOTE_ID%%";
+		return "%%BASE_URL%%/content/bsro/tiresplus/en/auto-repair-services/auto-battery-service/battery-quote.html?quoteId=%%QUOTE_ID%%&lw_cmp=int-em_tp_eg-tp-btry-other_em-link";
 	}
 	
 	@Override
 	public String getAlignmentQuoteURL() {
-		return "%%BASE_URL%%/content/bsro/tiresplus/en/auto-repair-services/wheel-alignment-service/alignment-quote.html?quoteId=%%QUOTE_ID%%";
+		return "%%BASE_URL%%/content/bsro/tiresplus/en/auto-repair-services/wheel-alignment-service/alignment-quote.html?quoteId=%%QUOTE_ID%%&lw_cmp=int-em_tp_eg-tp-align-other_em-link";
 	}
 	
 	@Override

@@ -220,7 +220,7 @@ public class TireVehicleServiceImpl implements TireVehicleService {
 	
 	public SeoVehicleData getSEOVehicleDataBean(String friendlyMake, String siteName)  {		
 		
-		SeoVehicleData seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE_MODEL_YEAR_TRIM", "/vehicle/"+friendlyMake+"/");
+		SeoVehicleData seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE", "/vehicle/"+friendlyMake+"/");
 		if (seoVehicleData == null) {
 			FriendlyVehicleDataBean friendlyVehicleDataBean = generateFriendlyVehicleDataBean(friendlyMake, null, null, null);
 			seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE", "/vehicle/generic-make/");
@@ -231,7 +231,7 @@ public class TireVehicleServiceImpl implements TireVehicleService {
 	
 	public SeoVehicleData getSEOVehicleDataBean(String friendlyMake, String friendlyModel, String siteName)  {		
 		
-		SeoVehicleData seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE_MODEL_YEAR_TRIM", "/vehicle/"+friendlyMake+"/"+friendlyModel+"/");
+		SeoVehicleData seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE_MODEL", "/vehicle/"+friendlyMake+"/"+friendlyModel+"/");
 		if (seoVehicleData == null) {
 			FriendlyVehicleDataBean friendlyVehicleDataBean = generateFriendlyVehicleDataBean(friendlyMake, friendlyModel, null, null);
 			seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE_MODEL", "/vehicle/generic-make/generic-model/");
@@ -242,7 +242,7 @@ public class TireVehicleServiceImpl implements TireVehicleService {
 	
 	public SeoVehicleData getSEOVehicleDataBean(String friendlyMake, String friendlyModel, String year, String siteName)  {		
 		
-		SeoVehicleData seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE_MODEL_YEAR_TRIM", "/vehicle/"+friendlyMake+"/"+friendlyModel+"/"+year+"/");
+		SeoVehicleData seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE_MODEL_YEAR", "/vehicle/"+friendlyMake+"/"+friendlyModel+"/"+year+"/");
 		if (seoVehicleData == null) {
 			FriendlyVehicleDataBean friendlyVehicleDataBean = generateFriendlyVehicleDataBean(friendlyMake, friendlyModel, year, null);
 			seoVehicleData = seoVehicleDataDAO.getSEOVehicleData(siteName, "VEHICLE_MAKE_MODEL_YEAR", "/vehicle/generic-make/generic-model/generic-year/");

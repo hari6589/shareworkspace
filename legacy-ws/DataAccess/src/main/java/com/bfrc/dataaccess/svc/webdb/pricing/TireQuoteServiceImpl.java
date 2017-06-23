@@ -340,6 +340,7 @@ public class TireQuoteServiceImpl implements TireQuoteService {
 			}	
 	    	tpTireQuotesLedger.setPayload(jsonString);
 	    	tpTireQuotesLedger.setUpdateDate(new Date());
+	    	tpTireQuotesLedger.setWebsiteName(siteName);
 	        quoteDao.saveTpTireQuotesLedger(tpTireQuotesLedger);
         }
         

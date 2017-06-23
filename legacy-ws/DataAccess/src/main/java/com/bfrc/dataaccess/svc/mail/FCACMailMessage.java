@@ -193,7 +193,7 @@ public class FCACMailMessage extends MailMessage {
 	
 	@Override
 	public String getTireQuoteURL() {
-		return "%%BASE_URL%%/content/bsro/fcac/en/tires/tire-quote.html?quoteId=%%QUOTE_ID%%";
+		return "%%BASE_URL%%/tires/tire-quote/%%QUOTE_ID%%?lw_cmp=int-em_fcac_eg-fcac-tires-other_em-link";
 	}
 	
 	@Override
@@ -203,12 +203,12 @@ public class FCACMailMessage extends MailMessage {
 	
 	@Override
 	public String getBatteryQuoteURL() {
-		return "%%BASE_URL%%/content/bsro/fcac/en/maintain/batteries/battery-quote.html?quoteId=%%QUOTE_ID%%";
+		return "%%BASE_URL%%/content/bsro/fcac/en/maintain/batteries/battery-quote.html?quoteId=%%QUOTE_ID%%&lw_cmp=int-em_fcac_eg-fcac-btry-other_em-link";
 	}
 	
 	@Override
 	public String getAlignmentQuoteURL() {
-		return "%%BASE_URL%%/content/bsro/fcac/en/repair/alignment/alignment-quote.html?quoteId=%%QUOTE_ID%%";
+		return "%%BASE_URL%%/content/bsro/fcac/en/repair/alignment/alignment-quote.html?quoteId=%%QUOTE_ID%%&lw_cmp=int-em_fcac_eg-fcac-align-other_em-link";
 	}
 	
 	@Override

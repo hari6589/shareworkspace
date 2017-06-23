@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+
+<project name="integrateDependencies" basedir="." default="integrateDependencies">
+	<!-- Setup any necessary ant tasks not provided by the core ant library -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b2.jar" />
+		</classpath>
+	</taskdef>
+	
+	<if>
+		<os family="windows"/>
+		<then>
+			<echo message="Windows"/>
+			<property file="workstation.properties" />
+			<echo message="root.working.dir=${root.root.working.dir}"/>
+		</then>
+	</if>
+	<if>
+		<os family="unix"/>
+		<then>
+			<echo message="Unix"/>
+			<property file="linuxDeploy.properties" />
+		</then>
+	</if>
+	<property file="build.properties"/>
+	
+	<target name="integrateDependencies">
+		<if>
+			<not><isset property="dependencies" /></not>
+			<then>
+				<fail message="Please include a parameter called 'dependencies' with a comma-delimited list of dependencies. For the framework version 2, please use bsro_framework_version2. For all other projects, just use the repository name."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="branch" /></not>
+			<then>
+				<fail message="Please include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="root.site.checkout.dir" /></not>
+			<then>
+				<fail message="Please include a parameter called 'root.site.checkout.dir' that specifies the root directory wher sites are checked out."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="site" /></not>
+			<then>
+				<fail message="Please include a parameter called 'site' with the (svn repository) name of the site for which you're integrating dependencies."/>
+			</then>
+		</if>			
+				
+		<for list="${dependencies}" param="dependency">
+			<sequential>
+			    <if>
+			        <available file="${root.root.working.dir}/${branch}/@{dependency}/build.properties" />	
+					<then>
+						<var file="${root.root.working.dir}/${branch}/@{dependency}/build.properties" />
+
+						<echo message="Revert ${root.site.checkout.dir}/${site}/${branch}/src/main/webapp/WEB-INF/lib/${jar.name} in case a previous failure left things in a conflicted state"/>
+						<exec executable="svn" dir="${root.site.checkout.dir}/${site}/${branch}/src/main/webapp/WEB-INF/lib" failonerror="true">
+							<arg value="revert" />
+							<arg value="${jar.name}" />
+							<arg value="--username" />
+							<arg value="${svn.username}" />
+							<arg value="--password" />
+							<arg value="${svn.password}" />
+						</exec>
+						
+					</then>
+			    	<else>
+			    		<fail message="${root.root.working.dir}/${branch}/@{dependency}/build.properties not found"/>
+			    	</else>
+				</if>
+			</sequential>
+		</for>
+		
+		<echo message="Update to avoid conflicts"/>
+		<exec executable="svn" dir="${root.site.checkout.dir}/${site}/${branch}/src/main/webapp/WEB-INF/lib" failonerror="true">
+			<arg value="update" />
+			<arg value="--username" />
+			<arg value="${svn.username}" />
+			<arg value="--password" />
+			<arg value="${svn.password}" />
+		</exec>
+		
+		<for list="${dependencies}" param="dependency">
+			<sequential>
+				<echo message="!!!--------------------------- @{dependency} ---------------------------!!!" />
+			    <if>
+			        <available file="${root.root.working.dir}/${branch}/@{dependency}/build.properties" />	
+					<then>
+						<var file="${root.root.working.dir}/${branch}/@{dependency}/build.properties" />
+
+						<if>
+							<available file="${root.root.working.dir}/${branch}/@{dependency}/${dist.dir}/${jar.name}"/>
+							<then>								
+								<!-- Copy the newly-built file over to the site's WEB-INF dir-->
+								<copy file="${root.root.working.dir}/${branch}/@{dependency}/${dist.dir}/${jar.name}" tofile="${root.site.checkout.dir}/${site}/${branch}/src/main/webapp/WEB-INF/lib/${jar.name}" overwrite="true" verbose="true" />
+							
+								<echo message="Add all jars, on the off chance we're adding a new jar here"/>
+								<exec executable="svn" dir="${root.site.checkout.dir}/${site}/${branch}/src/main/webapp/WEB-INF/lib" failonerror="true">
+									<arg value="add" />
+									<arg value="${jar.name}" />
+								</exec>
+							</then>
+							<else>
+								<fail message="${root.root.working.dir}/${branch}/@{dependency}/${dist.dir}/${jar.name} not found!"/>
+							</else>	
+						</if>
+					</then>
+			    	<else>
+			    		<fail message="${root.root.working.dir}/${branch}/@{dependency}/build.properties not found"/>
+			    	</else>
+				</if>
+			</sequential>
+		</for>
+				
+		<echo message="Commit jars"/>
+		<exec executable="svn" dir="${root.site.checkout.dir}/${site}/${branch}/src/main/webapp/WEB-INF/lib" failonerror="true">
+			<arg value="commit" />
+			<arg value="-m" />
+			<arg value="Committing jar updates from continuous integration build"/>			
+			<arg value="--username" />
+			<arg value="${svn.username}" />
+			<arg value="--password" />
+			<arg value="${svn.password}" />
+		</exec>
+		
+	</target>
+	
+</project>

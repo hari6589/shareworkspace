@@ -1,8 +1,10 @@
 package com.bfrc.dataaccess.svc.contact;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import app.bsro.model.contact.ContactUs;
 
+import com.bfrc.Config;
 import com.bfrc.dataaccess.core.util.hibernate.HibernateUtil;
 import com.bfrc.dataaccess.dao.generic.CustomerContactUsEmailLogDAO;
 import com.bfrc.dataaccess.dao.generic.FeedbackDAO;
@@ -31,8 +34,11 @@ import com.bfrc.dataaccess.svc.webdb.website.WebsiteService;
 import com.bfrc.dataaccess.util.Sites.SiteTypes;
 import com.bfrc.dataaccess.util.StringUtils;
 import com.bfrc.framework.dao.ContactDAO;
+import com.bfrc.framework.dao.FleetCareDAO;
 import com.bfrc.framework.dao.store.LocatorOperator;
+import com.bfrc.framework.util.ServerUtil;
 import com.bfrc.pojo.contact.Feedback;
+import com.bfrc.pojo.fleetcare.NaManager;
 import com.bsro.databean.vehicle.TireVehicle;
 
 @Service
@@ -64,6 +70,9 @@ public class ContactUsServiceImpl implements ContactUsService {
 	
 	@Autowired
 	private TireVehicleService tireVehicleService;
+	
+	@Autowired
+	FleetCareDAO fleetCareDAO;
 	
 	public List<ValueTextBean> listAllSubjects(String siteType) {
 		List<ValueTextBean> loResult = new ArrayList<ValueTextBean>();
@@ -114,6 +123,138 @@ public class ContactUsServiceImpl implements ContactUsService {
 		
 		sendEmail(to, cc, bcc, from, body);
 	}
+	
+	public String sendFleetCareContactUs(ContactUs contactUs, String siteName, Long storeNumber) {
+		
+		List feedbacks = contactDAO.getAllFeedBacks();
+		String natureOfInquiry = contactDAO.getSubject(contactUs.getFeedbackId());
+		
+		java.text.DecimalFormat df8 = new java.text.DecimalFormat("00000000");
+		//--- to see if need use dyanmic email address if the email is "NA Manager"
+		String state = contactUs.getState();
+		
+		NaManager naManager = fleetCareDAO.getManagerByState(state);
+		String[] nato = null;
+		if(naManager != null)
+		    nato = new String[] {naManager.getAccountManagerEmailAddress()};
+		
+		locator.getConfig().setSiteName(siteName);
+		
+		StringBuffer invalid = new StringBuffer();
+		
+		String[] to = contactDAO.getTo(natureOfInquiry, siteName, storeNumber, state);
+		String[] validTo = {};
+		if(to!=null||to.length>0) //{
+			validTo = ServerUtil.sanitizeInvalidEmails(to, invalid, "TO");
+		
+		
+		String[] cc = contactDAO.getCc(natureOfInquiry, siteName, storeNumber, state);
+		String[] validCc = {};
+		if(cc!=null||cc.length>0) //{
+			validCc = ServerUtil.sanitizeInvalidEmails(cc, invalid, "CC");
+		
+		
+		String[] bcc = contactDAO.getBcc(natureOfInquiry, siteName, storeNumber, state);
+		String[] validBcc = {};
+		if(bcc!=null||bcc.length>0) //{
+			validBcc = ServerUtil.sanitizeInvalidEmails(bcc, invalid, "BCC");
+		
+		
+		if(to.length==0)
+		{   
+			System.out.println("To email is missing for Nature Of Inquiry:" +natureOfInquiry);
+			return "To email is missing for Nature Of Inquiry:" +natureOfInquiry;
+
+			
+		}		
+		if(nato != null && to != null && "NA_MANAGER".equalsIgnoreCase(to[0])){
+			to = nato;
+		}
+		String from = contactUs.getFirstName() + " " + contactUs.getLastName() + "<" + contactUs.getEmail() + ">";
+		//config.setSiteName(siteName);
+		
+		if (Config.isCustomerServiceFeedback(feedbacks, locator.getConfig(), natureOfInquiry)
+		        || Config.isComplimentFeedback(feedbacks, locator.getConfig(), natureOfInquiry)){
+			from = contactDAO.getFrom();
+		}
+		
+		
+		String storeBody = "", storeSuffix = "";
+		Store store = null;
+		if (storeNumber!=null && storeNumber.intValue()!=0) {
+			store = storeDao.get(storeNumber);
+			
+			storeBody = "Store Visited = "
+					+ store.getStoreName() + "\r\n" + store.getAddress() + "\r\n" + store.getCity() + ", " + store.getState() + "  " + store.getZip() + "\r\n";
+			if(store.getStoreName().indexOf("Licensee") > -1)
+				storeSuffix = " Licensee";
+		}
+		
+		String subject = locator.getConfig().getSiteFullName() + storeSuffix + " Contact Feedback - " + contactUs.getFirstName() + " " + contactUs.getLastName();
+		if(Config.isComplimentFeedback(feedbacks, locator.getConfig(), natureOfInquiry)){
+			subject = "Compliment - "+subject;
+		} 
+		
+		Long referenceNumber = new Long(-1);
+		
+		//--- Start Log Contact Us to Database 20101231 ---//
+		//UserVehicle v = getVehicle();
+		referenceNumber = saveFleetCareEmailLog(contactUs, siteName, store, to, cc, bcc, from, contactUs.getUserAgent(),natureOfInquiry );
+		// Log contact us information to the database
+		
+		
+
+		StringBuffer body = new StringBuffer();
+		body.append("The individual below has entered feedback on "
+				+ contactDAO.getUrl() + " website.\r\n\r\n");
+		if (referenceNumber.longValue() != -1) {
+			body.append("Reference # = " + df8.format(referenceNumber) + "\r\n");
+		}
+		body.append("Nature of Inquiry = " + natureOfInquiry
+				+ "\r\n");
+		// body.append("Company Name = " + contactUs.getCompanyName() + "\r\n");
+		body.append("First Name = " + contactUs.getFirstName() + "\r\n");
+		body.append("Last Name = " + contactUs.getLastName() + "\r\n");
+		String address = contactUs.getAddress();
+		if (address != null && !address.equals(""))
+			body.append(address + "\r\n");
+		String address2 = contactUs.getAddress2();
+		if (address2 != null && !address2.equals(""))
+			body.append(address2 + "\r\n");
+		String city = contactUs.getCity();
+		if (city != null && !city.equals(""))
+			body.append(city);
+		if (state != null && !state.equals(""))
+			body.append(", " + state + "  ");
+		String zip = contactUs.getZip();
+		if (zip != null && !zip.equals(""))
+			body.append(zip);
+		body.append("\r\n");
+		if (!"--".equals(contactUs.getPhone()))
+			body.append("Daytime Phone = " + contactUs.getPhone() + "\r\n");
+		if (!"--".equals(contactUs.getEveningPhone()))
+			body.append("Evening Phone = " + contactUs.getEveningPhone()
+					+ "\r\n");
+		if (!"--".equals(contactUs.getCellPhone()))
+			body.append("Mobile Phone = " + contactUs.getCellPhone() + "\r\n");
+		body.append("E-mail Address = " + contactUs.getEmail() + "\r\n");
+		body.append(storeBody);
+		// if(v != null && v.getSubmodel() != null)
+		// body.append("Vehicle = " + v.getYear() + " " + v.getMake() + " " +
+		// v.getModel() + " " + v.getSubmodel() + "\r\n");
+		body.append("Message = " + contactUs.getMessage() + "\r\n");
+		body.append("\r\nUser Agent: " + contactUs.getUserAgent() + "\r\n");
+
+		//sendMail(subject, to, cc, from, false, body.toString());
+		 List<String> toList = Arrays.asList(to);  
+		 List<String> ccList = Arrays.asList(cc);
+		 List<String> bccList = Arrays.asList(bcc);
+		 sendEmail(toList, ccList, bccList, from, body.toString());
+		 
+		 return "success";
+
+	}
+	
 	
 	private String generateBody(ContactUs contactUs, Long referenceNumber, String siteType, Integer feedbackId, String storeBody, TireVehicle tireVehicle, String userAgent) {
 		java.text.DecimalFormat df8 = new java.text.DecimalFormat("00000000");
@@ -213,6 +354,65 @@ public class ContactUsServiceImpl implements ContactUsService {
 		}
 		
 		return loResult;
+	}
+	
+	private Long saveFleetCareEmailLog(ContactUs contactUs, String siteType, Store store, String[] to, String[] cc, String[] bcc, String from, String userAgent, String natureOfInquiry) {
+		Long loResult = null;
+		CustomerContactUsEmailLog contactLog = new CustomerContactUsEmailLog();
+		//CustomerContactUsEmailLog contactLog = new CustomerContactUsEmailLog();
+		try {
+
+			contactLog.setComments(contactUs.getMessage());
+			contactLog.setEmailTo(ServerUtil.arrayToString(to, ";"));
+			contactLog.setEmailCc(ServerUtil.arrayToString(cc, ";"));
+			contactLog.setEmailBcc(ServerUtil.arrayToString(bcc, ";"));
+			contactLog.setEmailFrom(from);
+			contactLog.setFirstName(contactUs.getFirstName());
+			contactLog.setLastName(contactUs.getLastName());
+			contactLog.setEmailAddress(contactUs.getEmail());
+			contactLog.setDaytimePhone(contactUs.getPhone());
+			contactLog.setEveningPhone(contactUs.getEveningPhone());
+			contactLog.setMobilePhone(contactUs.getCellPhone());
+			contactLog.setStreetAddress1(contactUs.getAddress());
+			contactLog.setStreetAddress2(contactUs.getAddress2());
+			contactLog.setCity(contactUs.getCity());
+			contactLog.setState(contactUs.getState());
+			contactLog.setZipCode(contactUs.getZip());
+
+			// No company name asked for on Tires Plus
+			// contactLog.setCompanyName(getComanyName());
+
+			List subjects = contactDAO.getSubjects();
+			Iterator it = subjects.iterator();
+			Integer feedbackId = new Integer(-1);
+			while (it.hasNext()) {
+				Feedback feedback = (Feedback) it.next();
+				if (natureOfInquiry.equalsIgnoreCase(
+						feedback.getSubject())) {
+					feedbackId = new Integer(feedback.getFeedbackId());
+					break;
+				}
+			}
+			contactLog.setFeedbackId(feedbackId);
+			contactLog.setSiteId(new Integer(contactDAO.getSite().getSiteId()));
+			contactLog.setUserAgentInfo(contactUs.getUserAgent());
+
+			if (store != null) {
+				contactLog.setStoreNumber(store.getStoreNumber());
+				contactLog.setStoreName(store.getStoreName());
+				contactLog.setStoreAddress(store.getAddress());
+				contactLog.setStoreCity(store.getCity());
+				contactLog.setStoreState(store.getState());
+				contactLog.setStoreZip(store.getZip());
+			}
+			contactLog.setCreationDate(new Date());
+			loResult =  customerContactUsEmailLogDao.save(contactLog);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return loResult;
+		
 	}
 	
 	private void sendEmail(List<String> to, List<String> cc, List<String> bcc,

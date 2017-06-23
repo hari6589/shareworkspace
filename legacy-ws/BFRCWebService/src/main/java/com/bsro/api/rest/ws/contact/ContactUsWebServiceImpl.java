@@ -28,6 +28,7 @@ import app.bsro.model.wifi.WifiResponse_OUT;
 import com.bfrc.dataaccess.model.ValueTextBean;
 import com.bfrc.dataaccess.model.email.EmailSignup;
 import com.bfrc.dataaccess.svc.contact.ContactUsService;
+import com.bfrc.dataaccess.svc.mail.MailService;
 import com.bfrc.dataaccess.util.ValidationConstants;
 import com.bfrc.framework.util.ServerUtil;
 import com.bfrc.framework.util.StringUtils;
@@ -38,6 +39,9 @@ import com.bsro.core.security.RequireValidToken;
 import net.sf.json.util.JSONUtils;
 import com.bfrc.framework.dao.EmailSignupDAO;
 import com.bfrc.pojo.contact.Feedback;
+import com.bfrc.pojo.fleetcare.NaApplication;
+import com.bfrc.framework.dao.fleetcare.FleetCareOperator;
+import com.bfrc.framework.dao.FleetCareDAO;
 
 @Component
 public class ContactUsWebServiceImpl implements ContactUsWebService {
@@ -47,6 +51,13 @@ public class ContactUsWebServiceImpl implements ContactUsWebService {
 	
 	@Autowired
 	private EmailSignupDAO emailSignupDAO;
+	
+	
+	@Autowired
+	private FleetCareDAO fleetCareDAO;
+	
+	@Autowired
+	private MailService mailService;
 	
 	private final static String SUCCESS_RESPONSE_CODE = "000"; 
 	private final static String SUCCESS_RESPONSE_MESSAGE = "Success";
@@ -76,7 +87,7 @@ public class ContactUsWebServiceImpl implements ContactUsWebService {
 		return loData;
 	}
 	
-	@Override
+/*	@Override
 	@RequireValidToken
 	public ContactUs createContactUsTest(HttpHeaders headers) {
 		ContactUs us = new ContactUs();
@@ -102,14 +113,15 @@ public class ContactUsWebServiceImpl implements ContactUsWebService {
 			e.printStackTrace();
 		}
 		return us;
-	}
+	}*/
 
 	@Override
 	@RequireValidToken
-	public BSROWebServiceResponse createContactUs(ContactUs contactUs, String storeId, Long acesVehicleId,
-			String siteName, HttpHeaders headers) {
+	public BSROWebServiceResponse createContactUs(Object object, String storeId, Long acesVehicleId,
+			String siteName, boolean newFleet, HttpHeaders headers) {
 		String appDevice = null;
 		Long storeNumber = new Long(0);
+		BSROWebServiceResponse response = new BSROWebServiceResponse();
 		try {
 			if (siteName == null || siteName.isEmpty())
 				siteName = headers.getRequestHeader(HttpHeader.Params.APP_NAME.getValue()).get(0);
@@ -127,18 +139,77 @@ public class ContactUsWebServiceImpl implements ContactUsWebService {
 			return getValidationMessage("Invalid site name input");			
 		}
 		
-		if (contactUs == null || contactUs.getFeedbackId() <= 0) {
-			String msg = (contactUs == null) ? "Invalid inputs." : (contactUs.getFeedbackId() <= 0) ? "Invalid feedback id" : "Invalid inputs.";
-			return getValidationMessage(msg);			
+		if(newFleet)
+		{
+			NaApplication naApplication = null;
+			ObjectMapper mapper = new ObjectMapper();
+			if(object != null)
+				naApplication = mapper.convertValue(object, NaApplication.class);			
+			
+			if (naApplication == null ) {
+				String msg =  "Invalid inputs.";
+				return getValidationMessage(msg);			
+			}
+			
+			naApplication.setCreatedDate(new java.util.Date());
+			fleetCareDAO.addApplication(naApplication);
+			mailService.sendNewFleetRegistrationEmail(naApplication);
+			response.setStatusCode(BSROWebServiceResponseCode.SUCCESSFUL.toString());	
+			response.setMessage("Successfully Registered");
+			response.setPayload(null);
 		}
-		
-		contactUsService.sendContactUs(contactUs, siteName, storeNumber, acesVehicleId, appDevice);
-		
-		BSROWebServiceResponse response = new BSROWebServiceResponse();
-		response.setStatusCode(BSROWebServiceResponseCode.SUCCESSFUL.toString());	
-		response.setMessage("Feedback posted successfully");
-		response.setPayload(null);
-		
+		else
+		{
+			ContactUs contactUs = null;
+			String status = "";
+			ObjectMapper mapper = new ObjectMapper();
+			if(object != null)
+				contactUs = mapper.convertValue(object, ContactUs.class);			
+			
+			if(siteName.equalsIgnoreCase("FFC")){
+				String msg = "";
+				if (contactUs == null ) {
+					msg =  "Invalid inputs.";
+					return getValidationMessage(msg);			
+				}
+				else if(ServerUtil.isNullOrEmpty(contactUs.getFeedbackId())){ 	
+					
+					msg = "Invalid FeedbackId Value.";
+					return getValidationMessage(msg);			
+				}
+				else if(contactUs.getFeedbackId()==44  && ServerUtil.isNullOrEmpty(storeId)){
+			
+					msg = "Invalid StoreNumber";
+					return getValidationMessage(msg);			
+				}
+				
+				status = contactUsService.sendFleetCareContactUs(contactUs, siteName, storeNumber);
+				if(!status.equalsIgnoreCase("success")){
+					msg =  status;
+					return getValidationMessage(msg);				
+				}
+				response.setStatusCode(BSROWebServiceResponseCode.SUCCESSFUL.toString());	
+				response.setMessage("Feedback posted successfully");
+				response.setPayload(null);
+				
+				
+			}
+			else
+			{
+				
+				
+				if (contactUs == null || contactUs.getFeedbackId() <= 0) {
+					String msg = (contactUs == null) ? "Invalid inputs." : (contactUs.getFeedbackId() <= 0) ? "Invalid feedback id" : "Invalid inputs.";
+					return getValidationMessage(msg);			
+				}
+				
+				contactUsService.sendContactUs(contactUs, siteName, storeNumber, acesVehicleId, appDevice);
+				response.setStatusCode(BSROWebServiceResponseCode.SUCCESSFUL.toString());	
+				response.setMessage("Feedback posted successfully");
+				response.setPayload(null);
+			}
+				
+		}	
 		return response;
 	}
 	

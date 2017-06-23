@@ -31,6 +31,8 @@ import com.bfrc.dataaccess.model.promotion.TirePromotionEvent;
 import com.bfrc.dataaccess.svc.webdb.DisclaimerService;
 import com.bfrc.dataaccess.svc.webdb.PromotionsService;
 import com.bfrc.dataaccess.util.Sites;
+import com.bfrc.framework.dao.PromotionDAO;
+import com.bfrc.pojo.promotion.PromotionBrand;
 import com.bsro.core.exception.ws.InvalidArgumentException;
 import com.bsro.core.security.RequireValidToken;
 
@@ -50,6 +52,9 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 	
 	@Autowired
 	private PropertyAccessor propertyAccessor;
+	
+	@Autowired
+	private PromotionDAO promotionDAO;
 	
 	private String offerDateDisclaimerFormat = "MMMM d, yyyy";
 	
@@ -92,6 +97,8 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			return response;
 		}
 		
+		Map<Long, PromotionBrand> promotionBrandDetail =  promotionDAO.getPromotionBrandsDetails();
+		PromotionBrand promotionBrand = null;
 		Calendar now = GregorianCalendar.getInstance();
 		Map<String, List> tirePromos = promotionService.getSpecialOffers(siteName, storeNumber, now.getTime(), friendlyId, promoType, promoCategory);
 		List<TirePromotionEvent> tirePromotions = tirePromos.get("TIRES");
@@ -118,9 +125,11 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			
 			
 			if (t.getImageFileId() != null && !t.getImageFileId().isEmpty()) {
-				so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/"+t.getImageFileId()+".png");
+				// adding imagethuburl 
+				so.setImageThumbUrl("/static-fcac/images/promotion/"+t.getImageFileId()+".png"); 
+				
 			} else {
-				so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/fcac-tire.png");
+				so.setImageThumbUrl("/static-fcac/images/promotion/fcac-tire.png");
 			}
 				
 			if (t.getPromoDescription() != null && !t.getPromoDescription().isEmpty()) {
@@ -178,6 +187,10 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			so.setDisclaimer(StringUtils.trimToEmpty(promoFooterText));
 			}
 			
+			if (t.getStackFriendlyId() != null && !t.getStackFriendlyId().isEmpty()) {
+				so.setStackFriendlyId(t.getStackFriendlyId());
+			}
+			
 			tireSo.add(so);
 		}
 		
@@ -194,11 +207,11 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			so.setDisclaimer(StringUtils.trimToEmpty(c.getDisclaimer()));
 			if (!"O".equalsIgnoreCase(c.getPromoType())) {
 				if (c.getImageFileId() != null && !c.getImageFileId().isEmpty()) {
-					so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/"+c.getImageFileId()+".png");
+					so.setImageThumbUrl("/static-fcac/images/promotion/"+c.getImageFileId()+".png");
 				} else if (c.getTireOffer().booleanValue()) {
-					so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/fcac-tire.png");
+					so.setImageThumbUrl("/static-fcac/images/promotion/fcac-tire.png");
 				} else {
-					so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/fcac-service.png");
+					so.setImageThumbUrl("/static-fcac/images/promotion/fcac-service.png");
 				}
 			}
 				
@@ -207,6 +220,7 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			} else {
 				so.setDescription(c.getDescription());
 			}
+			
 			if (c.getPrice() != null && !c.getPrice().isEmpty()) {
 				so.setPrice(c.getPrice());
 			} else {
@@ -235,7 +249,12 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 				so.setLandingUrl(c.getUrl());
 			
 			/////// end //////
+			if (c.getDescription() != null && !c.getDescription().isEmpty())
+				so.setThumbTitle(c.getDescription());
 			
+			if (c.getPriceInfo() != null && !c.getPriceInfo().isEmpty())
+				so.setThumbSubtitle(c.getPriceInfo());
+				
 			if (c.getOrderId() != null) 
 				so.setOrderId(c.getOrderId());
 			else
@@ -245,7 +264,36 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			if(c.getOfferStartDate() != null) so.setOfferStartDate(sdf.format(c.getOfferStartDate()));
 			if(c.getOfferEndDate() != null) so.setOfferEndDate(sdf.format(c.getOfferEndDate()));	
 			so.setFriendlyId(c.getFriendlyId());
+			
+			if (c.getSubtitleOne() != null && !c.getSubtitleOne().isEmpty())
+				so.setSubtitleOne(c.getSubtitleOne());
+			
+			if (c.getSubtitleTwo() != null && !c.getSubtitleTwo().isEmpty())
+				so.setSubtitleTwo(c.getSubtitleTwo());
+			
+			if (c.getInvalidator() != null && !c.getInvalidator().isEmpty())
+				so.setInvalidator(c.getInvalidator());
+			
+			
+			if (c.getBrandImageId() != null)
+			{
+				promotionBrand= promotionBrandDetail.get(c.getBrandImageId());				
+				if(promotionBrand!= null && promotionBrand.getImagePath()!=null)
+					so.setBrandImageURL(promotionBrand.getImagePath());
+			}
+			
+			if (c.getBrandLogoId() != null)
+			{
+				promotionBrand= promotionBrandDetail.get(c.getBrandLogoId());	
+				if(promotionBrand!= null && promotionBrand.getImagePath()!=null)
+					so.setBrandLogoURL(promotionBrand.getImagePath());
+			}			
+			
 			if(c.getPromotionType() != null) so.setPromotionType(c.getPromotionType());
+			
+			if (c.getStackFriendlyId() != null && !c.getStackFriendlyId().isEmpty())
+				so.setStackFriendlyId(c.getStackFriendlyId());
+			
 			if (c.getTireOffer() != null && c.getTireOffer().booleanValue())
 				tireSo.add(so);
 			else
@@ -259,11 +307,11 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			so.setCategory(p.getTireOffer().booleanValue() ? TIRE_OFFERS : p.getRepairOffer().booleanValue() ? REPAIR_OFFERS : p.getMaintOffer().booleanValue() ? MAINTENANCE_OFFERS : "");
 			
 			if (p.getImageFileId() != null && !p.getImageFileId().isEmpty()) {
-				so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/"+p.getImageFileId()+".png");
+				so.setImageThumbUrl("/static-fcac/images/promotion/"+p.getImageFileId()+".png");
 			} else if (p.getTireOffer().booleanValue()) {
-				so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/fcac-tire.png");
+				so.setImageThumbUrl("/static-fcac/images/promotion/fcac-tire.png");
 			} else {
-				so.setSectionImageUrl(Sites.getWebSiteAppRoot(siteName)+"/static-fcac/images/promotion/fcac-service.png");
+				so.setImageThumbUrl("/static-fcac/images/promotion/fcac-service.png");
 			}
 				
 			if (p.getPromoDescription() != null && !p.getPromoDescription().isEmpty()) {
@@ -271,6 +319,7 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			} else {
 				so.setDescription(p.getDescription());
 			}
+			
 			if (p.getPrice() != null && !p.getPrice().isEmpty()) {
 				so.setPrice(p.getPrice());
 			} else {
@@ -300,6 +349,12 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			
 			/////// end //////
 			
+			if (p.getDescription() != null && !p.getDescription().isEmpty())
+				so.setThumbTitle(p.getDescription());
+			
+			if (p.getPriceInfo() != null && !p.getPriceInfo().isEmpty())
+				so.setThumbSubtitle(p.getPriceInfo());
+					
 			if (p.getOrderId() != null) 
 				so.setOrderId(p.getOrderId());
 			else
@@ -315,6 +370,34 @@ public class PromotionsWebServiceImpl implements PromotionsWebService {
 			so.setDisclaimer(StringUtils.trimToEmpty(p.getDisclaimer()));
 			so.setFriendlyId(p.getFriendlyId());
 			if(p.getPromotionType() != null) so.setPromotionType(p.getPromotionType());
+			
+			if (p.getSubtitleOne() != null && !p.getSubtitleOne().isEmpty())
+				so.setSubtitleOne(p.getSubtitleOne());
+			
+			if (p.getSubtitleTwo() != null && !p.getSubtitleTwo().isEmpty())
+				so.setSubtitleTwo(p.getSubtitleTwo());
+			
+			if (p.getInvalidator() != null && !p.getInvalidator().isEmpty())
+				so.setInvalidator(p.getInvalidator());
+			
+			
+			if (p.getBrandImageId() != null)
+			{
+				promotionBrand= promotionBrandDetail.get(p.getBrandImageId());				
+				if(promotionBrand!= null && promotionBrand.getImagePath()!=null)
+					so.setBrandImageURL(promotionBrand.getImagePath());
+			}
+			
+			if (p.getBrandLogoId() != null)
+			{
+				promotionBrand= promotionBrandDetail.get(p.getBrandLogoId());	
+				if(promotionBrand!= null && promotionBrand.getImagePath()!=null)
+					so.setBrandLogoURL(promotionBrand.getImagePath());
+			}
+			
+			if (p.getStackFriendlyId() != null && !p.getStackFriendlyId().isEmpty())
+				so.setStackFriendlyId(p.getStackFriendlyId());
+			
 			if (p.getTireOffer().booleanValue())
 				tireSo.add(so);
 			else

@@ -49,6 +49,7 @@ public class TirePromotionEvent {
 	private Boolean homePageOffer;
 	private Boolean offerWithoutPrice;
 	private PromotionType promotionType;
+	private String stackFriendlyId;
 	
 //    private Set<TirePromotionEventHistory> tirePromotionEventHistories = new HashSet<TirePromotionEventHistory>(0);
 //    private Set<TirePromotionSiteHistory> tirePromotionSiteHistories = new HashSet<TirePromotionSiteHistory>(0);
@@ -304,5 +305,14 @@ public class TirePromotionEvent {
 				+ promoMainText + ", promoFooterText=" + promoFooterText
 				+ ", statusFlag=" + statusFlag + ", orderId="+ orderId +"]";
 	}
+	
+	public String getStackFriendlyId() {
+		return stackFriendlyId;
+	}
+
+	public void setStackFriendlyId(String stackFriendlyId) {
+		this.stackFriendlyId = stackFriendlyId;
+	}
+	
 
 }

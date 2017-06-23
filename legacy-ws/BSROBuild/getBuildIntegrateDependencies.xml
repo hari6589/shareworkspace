@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<project name="getBuildIntegrateDependencies" basedir="." default="getBuildIntegrateDependencies">
+	<!-- Setup any necessary ant tasks not provided by the core ant library -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b2.jar" />
+		</classpath>
+	</taskdef>
+	
+	<if>
+		<os family="windows"/>
+		<then>
+			<echo message="Windows"/>
+			<property file="workstation.properties" />
+			<echo message="root.root.working.dir=${root.root.working.dir}"/>
+		</then>
+	</if>
+	<if>
+		<os family="unix"/>
+		<then>
+			<echo message="Unix"/>
+			<property file="linuxDeploy.properties" />
+		</then>
+	</if>
+	<property file="build.properties"/>
+	
+	<target name="getBuildIntegrateDependencies">
+		<if>
+			<not><isset property="branch" /></not>
+			<then>
+				<fail message="Please include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="root.site.checkout.dir" /></not>
+			<then>
+				<fail message="Please include a parameter called 'root.site.checkout.dir' that specifies the root directory wher sites are checked out."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="site" /></not>
+			<then>
+				<fail message="Please include a parameter called 'site' with the (svn repository) name of the site for which you're integrating dependencies."/>
+			</then>
+		</if>	
+		
+		<var name="root.working.dir" value="${root.root.working.dir}/${branch}" />
+		
+		<echo message="Looking for: ${root.working.dir}/${site}/dependency.properties"/>
+	    <if>
+	        <available file="${root.working.dir}/${site}/dependency.properties" />	
+			<then>
+	        		<var file="${root.working.dir}/${site}/dependency.properties" />
+					<if>
+						<and>
+						<isset property="project.dependencies"/>
+						<not><equals arg1="${project.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<var name="dependencies" value="${project.dependencies}"/>
+						</then>
+					</if>
+				</then>
+		</if>
+		
+		<if>
+			<not><isset property="dependencies" /></not>
+			<then>
+				<fail message="&quot;dependencies&quot; property has not been set via command line or via a &quot;project.dependencies&quot; property in ${root.working.dir}/${site}/dependency.properties" />
+			</then>
+		</if>		
+
+		<ant antfile="getDependencies.xml" target="getDependencies" inheritAll="false" inheritRefs="false">
+			<property name="dependencies" value="${dependencies}" />
+			<property name="branch" value="${branch}" />
+		</ant>
+		
+		<ant antfile="buildDependencies.xml" target="buildDependencies" inheritAll="false" inheritRefs="false">
+			<property name="dependencies" value="${dependencies}" />
+			<property name="branch" value="${branch}" />
+			<!-- default behavior is to always build (that is - to clean first), but in this case the cleaning decisions are already handled by getDependencies -->
+			<property name="build.even.if.jar.already.present" value="false" />
+		</ant>
+
+		<ant antfile="integrateDependencies.xml" target="integrateDependencies" inheritAll="false" inheritRefs="false">
+			<property name="dependencies" value="${dependencies}" />
+			<property name="branch" value="${branch}" />
+			<property name="root.site.checkout.dir" value="${root.site.checkout.dir}" />
+			<property name="site" value="${site}" />
+		</ant>
+
+	</target>
+	
+</project>

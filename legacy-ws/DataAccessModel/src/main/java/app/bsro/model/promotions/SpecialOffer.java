@@ -21,7 +21,6 @@ public class SpecialOffer implements Comparable<SpecialOffer>{
 	private String offerStartDate;
 	private String friendlyId;
 	private Long orderId;
-	private String sectionImageUrl;
 	private String title;
 	private String price;
 	private String brand;
@@ -32,7 +31,35 @@ public class SpecialOffer implements Comparable<SpecialOffer>{
 	private String rebateText;
 	
 	private PromotionType promotionType;
-	
+	private String subtitleOne;
+ 	private String invalidator;
+ 	private String subtitleTwo;
+ 	private String brandLogoURL;
+ 	private String brandImageURL;
+ 	
+ 	private String imageThumbUrl;
+ 	private String stackFriendlyId;
+ 	private String thumbTitle;
+ 	private String thumbSubtitle;
+ 		
+	public String getThumbTitle() {
+		return thumbTitle;
+	}
+	public void setThumbTitle(String thumbTitle) {
+		this.thumbTitle = thumbTitle;
+	}
+	public String getThumbSubtitle() {
+		return thumbSubtitle;
+	}
+	public void setThumbSubtitle(String thumbSubtitle) {
+		this.thumbSubtitle = thumbSubtitle;
+	}
+	public String getImageThumbUrl() {
+		return imageThumbUrl;
+	}
+	public void setImageThumbUrl(String imageThumbUrl) {
+		this.imageThumbUrl = imageThumbUrl;
+	}
 	@JsonSerialize(using=ToStringSerializer.class)
 	public Long getId() {
 		return id;
@@ -109,12 +136,6 @@ public class SpecialOffer implements Comparable<SpecialOffer>{
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
-	public String getSectionImageUrl() {
-		return sectionImageUrl;
-	}
-	public void setSectionImageUrl(String sectionImageUrl) {
-		this.sectionImageUrl = sectionImageUrl;
-	}
 	public String getTitle() {
 		return title;
 	}
@@ -180,4 +201,45 @@ public class SpecialOffer implements Comparable<SpecialOffer>{
 		
 		return this.getId().compareTo(o.getId());
 	}
+	
+	public String getSubtitleOne() {
+		return subtitleOne;
+	}
+	public void setSubtitleOne(String subtitleOne) {
+		this.subtitleOne = subtitleOne;
+	}
+	public String getInvalidator() {
+		return invalidator;
+	}
+	public void setInvalidator(String invalidator) {
+		this.invalidator = invalidator;
+	}
+	public String getSubtitleTwo() {
+		return subtitleTwo;
+	}
+	public void setSubtitleTwo(String subtitleTwo) {
+		this.subtitleTwo = subtitleTwo;
+	}
+	public String getBrandLogoURL() {
+		return brandLogoURL;
+	}
+	public void setBrandLogoURL(String brandLogoURL) {
+		this.brandLogoURL = brandLogoURL;
+	}
+	public String getBrandImageURL() {
+		return brandImageURL;
+	}
+	public void setBrandImageURL(String brandImageURL) {
+		this.brandImageURL = brandImageURL;
+	}
+	
+	public String getStackFriendlyId() {
+		return stackFriendlyId;
+	}
+
+	public void setStackFriendlyId(String stackFriendlyId) {
+		this.stackFriendlyId = stackFriendlyId;
+	}
+		
+	
 }

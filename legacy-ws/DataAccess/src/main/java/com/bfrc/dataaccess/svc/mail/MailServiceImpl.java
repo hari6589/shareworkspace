@@ -32,6 +32,7 @@ import com.bfrc.dataaccess.svc.webdb.StoreService;
 import com.bfrc.dataaccess.svc.webdb.TireQuoteService;
 import com.bfrc.dataaccess.util.Sites;
 import com.bfrc.dataaccess.util.Sites.SiteTypes;
+import com.bfrc.framework.dao.FleetCareDAO;
 import com.bfrc.framework.dao.PricingDAO;
 import com.bfrc.framework.dao.InterstateBatteryDAO;
 import com.bfrc.framework.util.ServerUtil;
@@ -39,7 +40,9 @@ import com.bfrc.framework.util.StringUtils;
 import com.bfrc.pojo.alignment.AlignmentPricingQuote;
 import com.bfrc.pojo.pricing.TpArticleLog;
 import com.bfrc.pojo.pricing.TpUserLog;
+import com.bfrc.pojo.fleetcare.NaApplication;
 import com.bfrc.pojo.interstatebattery.InterstateBatteryQuote;
+import com.bfrc.pojo.fleetcare.NaManager;
 
 import app.bsro.model.battery.BatteryQuote;
 import app.bsro.model.error.Errors;
@@ -53,6 +56,7 @@ import app.bsro.model.webservice.BSROWebServiceResponseCode;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import com.bfrc.framework.dao.ContactDAO;
 
 /**
  * @author smoorthy 
@@ -91,6 +95,12 @@ public class MailServiceImpl implements MailService {
 	
 	@Autowired
 	private InterstateBatteryDAO batteryDAO;
+	
+	@Autowired
+	private ContactDAO contactDAO;
+	
+	@Autowired
+	FleetCareDAO fleetCareDAO;
 	
 	@Resource(name="emailSender")
 	private JavaMailSender mailSender;
@@ -312,6 +322,108 @@ public class MailServiceImpl implements MailService {
 		
 	}
 	
+	public void sendNewFleetRegistrationEmail(NaApplication naApplication) {
+		
+		
+		String[] tos = null;
+		String[] dbTo = null;
+		String[] ccAddresses = null;
+		int feedbackId = 55;
+		
+		List l = contactDAO.getToAddresses(new Integer(feedbackId));
+		dbTo = new String[l.size()];
+		l.toArray(dbTo);
+		l = contactDAO.getCCAddresses(new Integer(feedbackId));
+		if(!ServerUtil.isNullOrEmpty(l)){
+			ccAddresses = new String[l.size()];
+			l.toArray(ccAddresses);
+		}
+		tos = dbTo;
+		
+		try{
+			//Send E-mail
+			NaManager naManager = fleetCareDAO.getManagerByState(naApplication.getCompanyState()); 
+	
+			//Mail mail = new Mail();
+			String[] nato = new String[] {naManager.getAccountManagerEmailAddress()};
+			if(nato != null && dbTo != null && "NA_MANAGER".equalsIgnoreCase(dbTo[0])){
+				tos = nato;
+			}
+
+			String from = naApplication.getApplcntFirstName() + " " + naApplication.getApplcntLastName() + "<" + naApplication.getApplcntEmail() + ">";
+			String subject = contactDAO.getSubject(new Integer(feedbackId));
+			StringBuffer body = new StringBuffer();
+			body.append("The New Fleet Registration information was submitted to the FirestoneCompleteFleetcare.com website.\r\n\r\n");
+			
+			//Company Info
+			body.append("Company Information\r\n");
+			body.append("-------------------\r\n");
+			body.append("Company Name: " + naApplication.getCompanyName() + "\r\n");
+			if (naApplication.getParentCompanyName() != null && !"".equals(naApplication.getParentCompanyName()))
+				body.append("Subsidiary Of: " + naApplication.getParentCompanyName() + "\r\n");
+			body.append("Type of Business: " + naApplication.getNatureOfBusiness() + "\r\n");
+			body.append("Address: " + naApplication.getCompanyAddress1() + "\r\n");
+			if (naApplication.getCompanyAddress2() != null && !"".equals(naApplication.getCompanyAddress2()))
+				body.append("Address Line 2: " + naApplication.getCompanyAddress2() + "\r\n");
+			body.append("City: " + naApplication.getCompanyCity() + "\r\n");
+			body.append("State: " + naApplication.getCompanyState() + "\r\n");
+			body.append("ZIP Code: " + naApplication.getCompanyZipCode() + "\r\n");
+			body.append("Phone Number: " + naApplication.getCompanyPhoneNumber() + "\r\n");
+			if (naApplication.getCompanyFaxNumber() != null && !"".equals(naApplication.getCompanyFaxNumber()))
+				body.append("Fax Number: " + naApplication.getCompanyFaxNumber() + "\r\n");
+			
+			//Contact Info
+			body.append("\r\nContact Information\r\n");
+			body.append("-------------------\r\n");
+			body.append("First Name: " + naApplication.getApplcntFirstName() + "\r\n");
+			body.append("Middle Initial: " + naApplication.getApplcntMiddleInitial() + "\r\n");
+			body.append("Last Name: " + naApplication.getApplcntLastName() + "\r\n");
+			body.append("E-mail Address: " + naApplication.getApplcntEmail() + "\r\n");
+			body.append("Phone Number: " + naApplication.getApplcntPhoneNumber() + "\r\n");
+			body.append("Fax Number: " + naApplication.getApplcntFaxNumber() + "\r\n");
+
+			if(naApplication.isOtherAccounts())
+				body.append("Other National Account Programs: " + naApplication.getOtherNationalAccntDesc() + "\r\n");
+			
+			if ("C".equals(naApplication.getPurchasingMngmntType()))
+				body.append("Purchasing Is: Centralized\r\n");
+			else
+				body.append("Purchasing Is: Decentralized\r\n");
+			if ("Y".equals(naApplication.getPurchasingContactIsApplcnt()))
+				body.append("Is Purchasing Contact?: Yes\r\n");
+			else {
+				body.append("Is Purchasing Contact?: No\r\n");
+				body.append("Purchasing Contact Name: " + naApplication.getPurchasingContactName() + "\r\n");
+				body.append("Purchasing Contact Phone Number: " + naApplication.getPurchasingContactPhone() + "\r\n");
+			}
+			
+			//Number of Vehicles
+			body.append("\r\nNumber of Vehicles\r\n");
+			body.append("-------------------\r\n");
+			body.append("Passenger: " + naApplication.getNumVehiclesPassenger().toString() + "\r\n");
+			body.append("Light Truck: " + naApplication.getNumVehiclesLighttruck().toString() + "\r\n");
+			if (naApplication.getNumVehiclesOther() != null && naApplication.getNumVehiclesOther().longValue() > 0) {
+				body.append("Other: " + naApplication.getNumVehiclesOther().toString() + "\r\n");
+				body.append("Description of Other: " + naApplication.getVehiclesOtherDesc() + "\r\n");
+			}
+			
+			//Annual Purchases
+			body.append("\r\nEstimated Annual Purchases\r\n");
+			body.append("-------------------\r\n");
+			body.append("Tires: $" + naApplication.getEstAnnualPurchasesTires().toString() + "\r\n");
+			body.append("Services: $" + naApplication.getEstAnnualPurchasesServices().toString() + "\r\n");
+	
+			sendMail(subject, tos, ccAddresses, from, false, body.toString());
+			
+			
+		}catch(Exception ex){
+			// log it, but return success so we don't bother user with email problems
+			ex.printStackTrace();
+			
+		}
+		
+	}
+	
 	private String getTireQuoteMailMessage(BSROWebServiceResponse tireQuote,
 			String siteName, String firstName, String lastName) {
 		String mailBody = null;
@@ -340,6 +452,19 @@ public class MailServiceImpl implements MailService {
 						+ java.net.URLEncoder.encode(quote.getTireQuoteId().toString(), "utf-8")
 						+ "&amp;nav=tire&amp;appointment.comments="
 						+ java.net.URLEncoder.encode(getAppointmentComments(tire, quote), "utf-8");
+				
+				if(siteName.toLowerCase().contains("fcac")){
+					appointmentURL+= "&amp;lw_cmp=int-em_fcac_eg-fcac-tires-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("tp")){
+					appointmentURL+= "&amp;lw_cmp=int-em_tp_eg-tp-tires-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("ht")){
+					appointmentURL+= "&amp;lw_cmp=int-em_hib_eg-hib-tires-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("wwt")){
+					appointmentURL+= "&amp;lw_cmp=int-em_ww_eg-ww-tires-other_em-link";
+				}
 				
 				if (!StringUtils.isNullOrEmpty(firstName)) {
 					customerName = firstName + " ";
@@ -412,6 +537,19 @@ public class MailServiceImpl implements MailService {
 						+ "&amp;nav=battery&amp;appointment.comments="
 						+ java.net.URLEncoder.encode(getAppointmentComments(quote), "utf-8");
 				
+				if(siteName.toLowerCase().contains("fcac")){
+					appointmentURL+= "&amp;lw_cmp=int-em_fcac_eg-fcac-btry-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("tp")){
+					appointmentURL+= "&amp;lw_cmp=int-em_tp_eg-tp-btry-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("ht")){
+					appointmentURL+= "&amp;lw_cmp=int-em_hib_eg-hib-btry-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("wwt")){
+					appointmentURL+= "&amp;lw_cmp=int-em_ww_eg-ww-btry-other_em-link";
+				}
+				
 				if (!StringUtils.isNullOrEmpty(firstName)) {
 					customerName = firstName + " ";
 				}
@@ -475,6 +613,20 @@ public class MailServiceImpl implements MailService {
 						+ "&amp;pricing=false&amp;nav=alignment"
 						+ "&amp;appointment.comments="
 						+ java.net.URLEncoder.encode(getAppointmentComments(alignmentQuote), "utf-8");
+				
+				if(siteName.toLowerCase().contains("fcac")){
+					appointmentURL+= "&amp;lw_cmp=int-em_fcac_eg-fcac-align-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("tp")){
+					appointmentURL+= "&amp;lw_cmp=int-em_tp_eg-tp-align-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("ht")){
+					appointmentURL+= "&amp;lw_cmp=int-em_hib_eg-hib-align-other_em-link";
+				}
+				if(siteName.toLowerCase().contains("wwt")){
+					appointmentURL+= "&amp;lw_cmp=int-em_ww_eg-ww-align-other_em-link";
+				}
+				
 				if (alignmentQuote.getVehicleModel() != null) {
 					data.put("USER_VEHILE", alignmentQuote.getVehicleYear() + " " +alignmentQuote.getVehicleMake() + " " + alignmentQuote.getVehicleModel() + " " + alignmentQuote.getVehicleSubmodel());
 					appointmentURL += "&amp;vehicle.year="

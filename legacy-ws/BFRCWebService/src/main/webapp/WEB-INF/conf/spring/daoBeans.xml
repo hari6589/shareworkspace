@@ -86,7 +86,9 @@
              <ref local="frameworkStoreDAO" />
             </property>
     </bean>
-        
+     
+    <bean id="fleetCareDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.FleetCareDAOImpl" />   
+     
     <bean id="pricingDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.PricingDAOImpl" />
 
     <bean id="promotionDAO" parent="abstractDAO" class="com.bfrc.framework.dao.hibernate3.PromotionDAOImpl">

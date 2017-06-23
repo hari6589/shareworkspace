@@ -12,6 +12,7 @@ public interface ContactUsService {
 
 	public List<ValueTextBean> listAllSubjects(String siteType);
 	public void sendContactUs(ContactUs contactUs, String siteType, Long storeId, Long acesVehicleId, String userAgent);
+	public String sendFleetCareContactUs(ContactUs contactUs, String siteName, Long storeNumber);
 	public Long createEmailSignup(EmailSignup emailSignup);
 	public EmailSignup getEmailSignup(Long signUpId);
 	

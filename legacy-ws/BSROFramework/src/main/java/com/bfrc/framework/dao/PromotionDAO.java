@@ -1,6 +1,7 @@
 package com.bfrc.framework.dao;
 
 import java.util.List;
+import java.util.*;
 import java.util.Date;
 
 import com.bfrc.pojo.promotion.*;
@@ -65,4 +66,5 @@ public interface PromotionDAO {
 	int updatePromotionApproved(Long promotionId, boolean approved);	
 	List<String> getPromotionImageFileIds();
 	int updatePromotionStartDate(Long promotionId, String startDate);
+	public Map<Long, PromotionBrand> getPromotionBrandsDetails();	
 }

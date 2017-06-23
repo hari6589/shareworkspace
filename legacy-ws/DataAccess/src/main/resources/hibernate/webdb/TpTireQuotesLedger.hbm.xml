@@ -10,5 +10,8 @@
         <property name="updateDate" type="timestamp">
             <column name="UPDATE_DATE" not-null="true" />
         </property>
+        <property name="websiteName" type="string">
+            <column name="WEBSITE_NAME" length="10" />
+        </property>
     </class>
 </hibernate-mapping>

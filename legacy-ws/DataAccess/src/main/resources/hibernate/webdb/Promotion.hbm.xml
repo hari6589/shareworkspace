@@ -48,6 +48,15 @@
         <property name="offerDescription" type="string" column="OFFER_DESCRIPTION" length="4000"/>
         <property name="imageFileId" type="string" column="IMAGE_FILE_ID" length="100"/>
         <property name="urlText" type="string" column="URL_TEXT" length="100" />
+        <property name="subtitleOne" type="string" column="SUBTITLE_1" length="300" />
+        <property name="invalidator" type="string" column="INVALIDATOR" length="300" />
+        <property name="subtitleTwo" type="string" column="SUBTITLE_2" length="300" />
+        <property name="brandLogoId" type="java.lang.Long" column="BRAND_LOGO_ID" precision="10" scale="0" />
+        <property name="brandImageId" type="java.lang.Long" column="BRAND_IMAGE_ID" precision="10" scale="0" />
+        <property name="stackFriendlyId" type="string">
+          <column name="Stacked_Friendly_Unique_ID" length="300"  unique="true" />
+        </property>
+        
     </class>
     <query name="com.bfrc.dataaccess.model.promotion.Promotion.findBySiteStartExpirationAndType">
      	<![CDATA[

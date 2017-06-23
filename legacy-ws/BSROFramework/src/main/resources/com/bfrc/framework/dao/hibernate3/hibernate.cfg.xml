@@ -65,6 +65,7 @@
   <mapping resource="com/bfrc/pojo/pricing/TpUserLog.hbm.xml"/>
   <mapping resource="com/bfrc/pojo/pricing/MobileTireInstallFee.hbm.xml"/>
   <mapping resource="com/bfrc/pojo/promotion/Promotion.hbm.xml"/>
+  <mapping resource="com/bfrc/pojo/promotion/PromotionBrand.hbm.xml"/>
   <mapping resource="com/bfrc/pojo/promotion/PromotionImages.hbm.xml"/>
   <mapping resource="com/bfrc/pojo/promotion/PromotionType.hbm.xml" />
   <mapping resource="com/bfrc/pojo/store/BfrcStoreMap.hbm.xml"/>

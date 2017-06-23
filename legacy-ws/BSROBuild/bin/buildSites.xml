@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<project name="buildSites" basedir="." default="buildAll">
+	<import file="buildAntSite.xml"/>
+
+	<target name="buildAll">
+		<antcall target="buildSite" >
+			<param name="comp" value="FCAC"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="true"/>
+			<param name="copyDependencies" value="false"/>
+		</antcall>	
+		<antcall target="buildSite" >
+			<param name="comp" value="BFRCWebService"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="true"/>
+			<param name="copyDependencies" value="false"/>
+		</antcall>	
+		<antcall target="buildSite" >
+			<param name="comp" value="Bridgestone5Star"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="false"/>
+		</antcall>
+		<antcall target="buildSite" >
+			<param name="comp" value="BSROCom"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="false"/>
+		</antcall>		
+		<antcall target="buildSite" >
+			<param name="comp" value="FCACMobile"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="true"/>
+		</antcall>
+		<antcall target="buildSite" >
+			<param name="comp" value="FleetCare"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="false"/>
+		</antcall>		
+		<antcall target="buildSite" >
+			<param name="comp" value="PartnersPlus"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="true"/>
+		</antcall>
+		<antcall target="buildSite" >
+			<param name="comp" value="PennyTireTest"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="true"/>
+		</antcall>
+		<antcall target="buildSite" >
+			<param name="comp" value="TiresPlus"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="true"/>
+		</antcall>	
+		<antcall target="buildSite" >
+			<param name="comp" value="TiresPlusMobile"/>
+			<param name="branch" value="integrationDev"/>
+			<param name="buildDependencies" value="false"/>
+			<param name="copyDependencies" value="true"/>
+		</antcall>
+	</target>
+</project>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -118,6 +119,8 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		final HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
 		HttpConnectionParams.setSoTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
+		BSROWebServiceResponse errorResponse = null;
+		StringBuilder params = null;
 		try {
 			httpClient = new DefaultHttpClient(httpParams);	
 			//if(!ServerUtil.isProduction()) {
@@ -127,7 +130,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			
 			postParameters = new ArrayList<NameValuePair>();
 			postParameters.add(new BasicNameValuePair("store_number", String.valueOf(storeNumber)));
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
@@ -146,24 +149,28 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 					return new Long(String.valueOf(wsResponse.getPayload()));
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from getLocationId API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling getLocationId API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("ProtocolException in calling getLocationId API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling getLocationId API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling getLocationId API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Exception in calling getLocationId API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}
@@ -194,6 +201,8 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		String responseBody="";
 		ArrayList<NameValuePair> postParameters;
 		Long locationId = null;
+		BSROWebServiceResponse errorResponse = null;
+		StringBuilder params = null;
 		if(storeNumber != null){
 			locationId = getLocationId(storeNumber);
 			logger.info("LocationId="+locationId);
@@ -207,7 +216,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			//	httpClient = WebClientDevWrapper.wrapClient(httpClient);
 			//}
 			httpPost = new HttpPost(baseEndpoint+GET_SERVICES_URI);
-			StringBuilder params = new StringBuilder();
+			params = new StringBuilder();
 			if(storeNumber != null){
 				postParameters = new ArrayList<NameValuePair>();
 				postParameters.add(new BasicNameValuePair("c_id", String.valueOf(locationId)));
@@ -232,28 +241,37 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 					return processAPIResponse(responseBody, SERVICES);
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from getServices API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling getServices API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "MalformedURLException in calling Appointment Plus API");
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling getServices API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "ProtocolException in calling Appointment Plus API");
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling getServices API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "SocketTimeoutException in calling Appointment Plus API");
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling getServices API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
-		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "IOException in calling Appointment Plus API");
+		} catch (Exception e) {
+			System.err.println("Exception in calling getServices API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "GenericException in calling Appointment Plus API");
 		}
-		return null;
+		return errorResponse;
 		
 	}
 	
@@ -266,6 +284,8 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		final HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
 		HttpConnectionParams.setSoTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
+		BSROWebServiceResponse errorResponse = null;
+		StringBuilder params = null;
 		try {
 			httpClient = new DefaultHttpClient(httpParams);	
 			//if(!ServerUtil.isProduction()) {
@@ -278,7 +298,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			postParameters.add(new BasicNameValuePair("store_number", String.valueOf(paddedStore.substring(paddedStore.length()-6))));
 			postParameters.add(new BasicNameValuePair("services", String.valueOf(serviceDescCSV)));
 
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
@@ -296,28 +316,37 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 					return processAPIResponse(responseBody, METADATA);
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from AppointmentRules API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling AppointmentRules API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "MalformedURLException in calling Appointment Plus API");
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling AppointmentRules API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "ProtocolException in calling Appointment Plus API");
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling AppointmentRules API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "SocketTimeoutException in calling Appointment Plus API");
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling AppointmentRules API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
-		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "IOException in calling Appointment Plus API");
+		} catch (Exception e) {
+			System.err.println("Exception in calling AppointmentRules API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "GenericException in calling Appointment Plus API");
 		}
-		return null;
+		return errorResponse;
 	}
 	
 	public BSROWebServiceResponse getStaffOpenDates(Long locationId, String startDate, Integer numDays, Long employeeId){
@@ -329,6 +358,8 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		final HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
 		HttpConnectionParams.setSoTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
+		BSROWebServiceResponse errorResponse = null;
+		StringBuilder params = null;
 		try {
 			httpClient = new DefaultHttpClient(httpParams);	
 			//if(!ServerUtil.isProduction()) {
@@ -342,7 +373,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			postParameters.add(new BasicNameValuePair("c_id", String.valueOf(locationId)));
 			postParameters.add(new BasicNameValuePair("employee_id", String.valueOf(employeeId)));
 
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
@@ -361,28 +392,37 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 				    return processAPIResponse(responseBody, OPEN_DATES);
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from getStaffOpenDates API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling getStaffOpenDates API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "MalformedURLException in calling Appointment Plus API");
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling getStaffOpenDates API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "ProtocolException in calling Appointment Plus API");
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling getStaffOpenDates API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "SocketTimeoutException in calling Appointment Plus API");
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling getStaffOpenDates API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "IOException in calling Appointment Plus API");
 		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Exception in calling getStaffOpenDates API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "GenericException in calling Appointment Plus API");
 		}
-		return null;
+		return errorResponse;
 	
 	}
 	
@@ -396,6 +436,8 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		final HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
 		HttpConnectionParams.setSoTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
+		BSROWebServiceResponse errorResponse = null;
+		StringBuilder params = null;
 		try {
 			httpClient = new DefaultHttpClient(httpParams);	
 			//if(!ServerUtil.isProduction()) {
@@ -413,7 +455,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 				postParameters.add(new BasicNameValuePair("addons", String.valueOf(secondaryServiceIds)));
 			postParameters.add(new BasicNameValuePair("show_duplicates", "no"));
 
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
@@ -431,28 +473,37 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 				    return processAPIResponse(responseBody, OPEN_SLOTS);
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from getAppointmentOpenSlots API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling getAppointmentOpenSlots API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "MalformedURLException in calling Appointment Plus API");
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling getAppointmentOpenSlots API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "ProtocolException in calling Appointment Plus API");
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling getAppointmentOpenSlots API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "SocketTimeoutException in calling Appointment Plus API");
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling getAppointmentOpenSlots API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
-		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "IOException in calling Appointment Plus API");
+		} catch (Exception e) {
+			System.err.println("Exception in calling getAppointmentOpenSlots in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "GenericException in calling Appointment Plus API");
 		}
-		return null;
+		return errorResponse;
 	}
 	
 	public Long getCustomer(String preferredPhoneNumber, String email, String lastName){
@@ -464,6 +515,8 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		final HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
 		HttpConnectionParams.setSoTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
+		BSROWebServiceResponse errorResponse = null;
+		StringBuilder params = null;
 		try {
 			httpClient = new DefaultHttpClient(httpParams);	
 			//if(!ServerUtil.isProduction()) {
@@ -475,12 +528,12 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			postParameters.add(new BasicNameValuePair("email", email));
 			postParameters.add(new BasicNameValuePair("last_name", lastName));
 
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
 			} catch (URISyntaxException e1) {
-				System.err.println("Malformed URL while trying to build ");
+				System.err.println("Malformed URL while trying to build ");				
 			}
 			logger.info("httpost uri = "+httpPost.getURI().toString());
 			HttpResponse response = httpClient.execute(httpPost);
@@ -495,24 +548,28 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 				    return (Long)wsResponse.getPayload();
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from getCustomer API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling getCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling getCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling getCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling getCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Exception in calling getCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}
@@ -529,6 +586,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		final HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
 		HttpConnectionParams.setSoTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
+		StringBuilder params = null;
 		try {
 			httpClient = new DefaultHttpClient(httpParams);	
 			//if(!ServerUtil.isProduction()) {
@@ -543,7 +601,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			postParameters.add(new BasicNameValuePair("email", String.valueOf(email)));
 			postParameters.add(new BasicNameValuePair("day_phone", String.valueOf(preferredPhoneNumber)));
 
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
@@ -563,24 +621,28 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 				    return (Long)wsResponse.getPayload();
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from createCustomer API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling createCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling createCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling createCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling createCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Exception in calling createCustomer API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}
@@ -597,12 +659,13 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		final HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
 		HttpConnectionParams.setSoTimeout(httpParams, Integer.parseInt(this.getSoTimeout()));
+		StringBuilder params = null;
 		try {
 			httpClient = new DefaultHttpClient(httpParams);				
 			httpPost = new HttpPost(baseEndpoint+GET_APPOINTMENT_STATUS_URI);
 			postParameters = new ArrayList<NameValuePair>();
 			
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
@@ -626,24 +689,24 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 				    }
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from getAppointmentStatus API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling getAppointmentStatus API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling getAppointmentStatus API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling getAppointmentStatus API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Exception in calling getAppointmentStatus API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
 		}
@@ -657,7 +720,8 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		HttpPost httpPost = null;
 		String responseBody="";
 		ArrayList<NameValuePair> postParameters;
-		
+		BSROWebServiceResponse errorResponse = null;
+		StringBuilder params = null;
 		Long customerId = getCustomer(appointment.getCustomerDayTimePhone(), 
 				appointment.getCustomerEmailAddress(), appointment.getCustomerLastName());
 		logger.info("retrieved customer id="+customerId);
@@ -724,7 +788,7 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			if(appointment.getMileage() != null && !appointment.getMileage().isEmpty())
 				postParameters.add(new BasicNameValuePair("odometer", appointment.getMileage()));
 
-			StringBuilder params = appendParameters(postParameters);
+			params = appendParameters(postParameters);
 			String finalUrl = httpPost.getURI().toString() + params.toString();
 			try {
 				httpPost.setURI(new URI(finalUrl));
@@ -744,28 +808,37 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 				    return wsResponse;
 				}
 			} catch (Exception e) {
-				System.err.println("JSON Parsing Exception in parsing response from Subscribe API "+ this.getClass().getSimpleName());
+				System.err.println("JSON Parsing Exception in parsing response from createAppointment API "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Malformed URL Exception in calling createAppointment API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "MalformedURLException in calling Appointment Plus API");
 		} catch (ProtocolException e) {
-			System.err.println("Protocol Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Protocol Exception in calling createAppointment API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "ProtocolException in calling Appointment Plus API");
+		} catch (SocketTimeoutException  e ){
+			System.err.println("SocketTimeoutException in calling createAppointment API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
+			httpClient.getConnectionManager().shutdown();
+			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "SocketTimeoutException in calling Appointment Plus API");
 		} catch (IOException e) {
-			System.err.println("IOException in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("IOException in calling createAppointment API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "IOException in calling Appointment Plus API");
 		}catch (Exception e) {
-			System.err.println("Exception in calling Subscribe and Send API in class "+ this.getClass().getSimpleName());
+			System.err.println("Exception in calling createAppointment API in class "+ this.getClass().getSimpleName()+"[Params:"+params.toString()+"]");
 			httpClient.getConnectionManager().shutdown();
 			e.printStackTrace();
+			errorResponse = generateErrorResponse(BSROWebServiceResponseCode.FAILURE.name(), "GenericException in calling Appointment Plus API");
 		}		
-		return null;
+		return errorResponse;
 	}
 	
 	@SuppressWarnings("unused")
@@ -778,6 +851,13 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		return httpPost;
 	}
 
+	private BSROWebServiceResponse generateErrorResponse(String statusCode, String message){		
+		BSROWebServiceResponse response = new BSROWebServiceResponse();
+		response.setStatusCode(statusCode);
+		response.setMessage(message);		
+		return response;		
+	}
+	
 	private BSROWebServiceResponse processAPIResponse(String responseBody, String method){
 		//logger.info("Inside processAPIResponse and param: "+ responseBody);
 		BSROWebServiceResponse response = new BSROWebServiceResponse();
@@ -786,6 +866,10 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 			responseJson = new org.json.JSONObject(responseBody);
 			if(responseJson.getString("result").equalsIgnoreCase(API_CALL_SUCCESSFUL)
 					&& !responseJson.getString("count").isEmpty()){
+				if(responseJson.has("data") == false || responseJson.get("data") == null){
+					response.setStatusCode(BSROWebServiceResponseCode.SUCCESSFUL.name());
+					response.setPayload(new ArrayList());
+				}	
 				if(responseJson.has("errors") && responseJson.getJSONArray("errors").length() > 0){
 					org.json.JSONArray array = responseJson.getJSONArray("errors");
 					Errors errors = new Errors();
@@ -966,8 +1050,9 @@ public class AppointmentPlusSchedulerImpl implements AppointmentPlusScheduler{
 		} catch (JSONException e) {
 			e.printStackTrace();
 			System.err.println("JsonException while trying to parse response"+e.toString());
-			response.setMessage("Error while trying to parse API response");
-			response.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
+			//response.setMessage("Error while trying to parse API response");
+			//response.setStatusCode(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name());
+			generateErrorResponse(BSROWebServiceResponseCode.BUSINESS_SERVICE_ERROR.name(), "Error while trying to parse API response");
 		} catch (Exception e){
 			e.printStackTrace();
 		}

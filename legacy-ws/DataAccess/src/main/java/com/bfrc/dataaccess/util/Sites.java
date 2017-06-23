@@ -54,6 +54,25 @@ public class Sites {
 		return approot;
 	}
 	
+	public static String getWebSiteFullPathWithAppRoot(String siteType) {
+		String approot = null;
+		siteType = (siteType != null) ? siteType.trim() : siteType;
+		if (!StringUtils.isNullOrEmpty(siteType)) {
+			approot = "http://www.";
+			
+			if ("FCAC".equalsIgnoreCase(siteType)) {
+				approot += "firestonecompleteautocare.com";
+			} else if ("TP".equalsIgnoreCase(siteType)) {
+				approot += "tiresplus.com";
+			} else if ("HT".equalsIgnoreCase(siteType)) {
+				approot += "hibdontire.com";
+			} else if ("WWT".equalsIgnoreCase(siteType)) {
+				approot += "wheelworks.net";
+			}
+		}
+		return approot;
+	}
+	
 	public static String getAssetsRoot(String siteType) {
 		String approot = null;
 		siteType = (siteType != null) ? siteType.trim() : siteType;

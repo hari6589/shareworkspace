@@ -36,6 +36,7 @@ public class NaApplication implements java.io.Serializable {
 	private String purchasingContactPhone;
 	private String otherNationalAccntDesc;
 	private Date createdDate;
+	private boolean otherAccounts;
 
 	// Constructors
 
@@ -354,6 +355,14 @@ public class NaApplication implements java.io.Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public boolean isOtherAccounts() {
+		return otherAccounts;
+	}
+
+	public void setOtherAccounts(boolean otherAccounts) {
+		this.otherAccounts = otherAccounts;
 	}
 
 }

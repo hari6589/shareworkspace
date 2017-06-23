@@ -19,7 +19,8 @@ import org.apache.commons.lang.StringUtils;
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 public class Store implements Serializable{
-
+	private static final BigDecimal ECOMM_ACTIVE_FLAG_DEFAULT = new BigDecimal("0");
+	
 	private Long storeNumber;
 
 	private String districtId;
@@ -520,6 +521,7 @@ public class Store implements Serializable{
 	}
 
 	public void seteCommActiveFlag(BigDecimal eCommActiveFlag) {
+		if(eCommActiveFlag == null) eCommActiveFlag = ECOMM_ACTIVE_FLAG_DEFAULT;
 		this.eCommActiveFlag = eCommActiveFlag;
 	}
 

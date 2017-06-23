@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+
+<project name="getDependencies" basedir="." default="getDependencies">
+	<!-- Setup any necessary ant tasks not provided by the core ant library -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b2.jar" />
+		</classpath>
+	</taskdef>
+	
+	<if>
+		<os family="windows"/>
+		<then>
+			<echo message="Windows"/>
+			<property file="workstation.properties" />
+			<echo message="root.working.dir=${root.root.working.dir}"/>
+		</then>
+	</if>
+	<if>
+		<os family="unix"/>
+		<then>
+			<echo message="Unix"/>
+			<property file="linuxDeploy.properties" />
+		</then>
+	</if>
+	<property file="build.properties"/>
+	
+	<target name="getDependencies">
+		<if>
+			<not><isset property="dependencies" /></not>
+			<then>
+				<fail message="Please include a parameter called 'dependencies' with a comma-delimited list of dependencies. For the framework version 2, please use bsro_framework_version2. For all other projects, just use the repository name."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="branch" /></not>
+			<then>
+				<fail message="Please include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+			</then>
+		</if>	
+		
+		<antcall target="checkOutOrUpdateDependencies" inheritAll="false" inheritRefs="false">
+			<!-- name change to avoid scoping issues -->
+			<param name="projectDependencies" value="${dependencies}" />
+			<param name="projectBranch" value="${branch}" />
+		</antcall>
+		
+	</target>
+	
+	
+	<target name="checkOutOrUpdateDependencies" description="Get dependencies from SVN, build them, and commit them to the project that needs them">
+		<if>
+			<not><isset property="projectDependencies" /></not>
+			<then>
+				<fail message="Please include a parameter called 'projectDependencies' with a comma-delimited list of dependencies. For the framework version 2, please use bsro_framework_version2. For all other projects, just use the repository name."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="projectBranch" /></not>
+			<then>
+				<fail message="Please include a parameter called 'projectBranch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+			</then>
+		</if>		
+		
+		<var name="already.updated.this.run.internal" value=""/>
+		<if>
+			<isset property="already.updated.this.run"/>
+			<then>
+				<var name="already.updated.this.run.internal" value="${already.updated.this.run}"/>
+			</then>
+		</if>
+			
+		<for list="${projectDependencies}" param="dependency">
+			<sequential>
+				<echo message="!!!--------------------------- @{dependency} ---------------------------!!!" />
+				<local name="repository" />
+				<local name="actual.branch" />	
+								
+				<property name="repository" value="@{dependency}" />
+				<property name="actual.branch" value="branches/${projectBranch}" />
+
+				<if>
+					<or>
+					<not><isset property="repository"/></not>
+					<not><isset property="actual.branch"/></not>
+					</or>
+					<then>
+						<fail message="@{dependency} for ${projectBranch} is not yet supported by this process"/>
+					</then>
+					<else>
+						<antcall target="checkOutOrUpdateDependency" inheritAll="false" inheritRefs="false">
+							<param name="dependency" value="@{dependency}"/>
+							<param name="repository" value="${repository}" />
+							<param name="projectBranch" value="${projectBranch}" />
+							<param name="actual.branch" value="${actual.branch}" />
+							<param name="svn.root" value="${svn.root}"/>
+							<param name="root.working.dir" value="${root.root.working.dir}"/>
+							<param name="root.master.working.dir" value="${root.master.working.dir}"/>
+							<param name="bsro.build.dir" value="${bsro.build.dir}"/>
+							<param name="already.updated.this.run" value="${already.updated.this.run.internal}"/>
+						</antcall>
+						<var name="already.updated.this.run.internal" value="${already.updated.this.run.internal}[@{dependency}]"/>
+					</else>
+				</if>
+			</sequential>
+		</for>
+		
+	</target>
+	
+	<target name="checkOutOrUpdateDependency">
+		<echo message="DEPENDENCY: ${dependency}"/>
+				
+		<var name="already.updated.this.run.internal" value=""/>
+		<if>
+			<isset property="already.updated.this.run"/>
+			<then>
+				<var name="already.updated.this.run.internal" value="${already.updated.this.run}"/>
+				<echo message="DEPENDENCIES ALREADY UPDATED THIS RUN: ${already.updated.this.run.internal}"/>
+			</then>
+		</if>
+		
+		
+		<if>
+		    <contains string="${already.updated.this.run.internal}" substring="[${dependency}]" />
+		<then>
+			<echo message="SKIPPING: [${dependency}], as it's already been checked out this run"/>
+		</then>
+		<else>
+			<echo message="GETTING: ${svn.root}/${repository}/${actual.branch} for dependency [${dependency}], branch ${projectBranch}"/>
+			
+			<if>
+			<available file="${root.root.working.dir}/${projectBranch}/${dependency}" type="dir" />
+			<then>
+				<echo message="Updating ${root.root.working.dir}/${projectBranch}/${dependency}"/>
+				<exec executable="svn" dir="${root.root.working.dir}/${projectBranch}/${dependency}" failonerror="true" outputproperty="svn.update.output">
+					<arg value="update" />
+					<arg value="--username" />
+					<arg value="${svn.username}" />
+					<arg value="--password" />
+					<arg value="${svn.password}" />
+				</exec>
+
+				<echo message="Reading ${root.root.working.dir}/${projectBranch}/${dependency}/build.properties"/>
+				<var file="${root.root.working.dir}/${projectBranch}/${dependency}/build.properties" />
+				
+				<if>
+					<contains string="${svn.update.output}" substring="At revision" />
+					<then>
+						<echo message="No updates to report"/>
+						<if>
+							<available file="${root.root.working.dir}/${projectBranch}/${dependency}/${dist.dir}/${jar.name}"/>
+							<then>
+								<property name="jar.to.potentially.delete" value="${root.root.working.dir}/${projectBranch}/${dependency}/${dist.dir}/${jar.name}"/>
+							</then>
+						</if>
+					</then>
+					<else>
+						<echo message="There has been an update, so delete old jar, if it exists"/>
+						<if>
+							<available file="${root.root.working.dir}/${projectBranch}/${dependency}/${dist.dir}/${jar.name}"/>
+							<then>
+								<echo message="Deleting ${root.root.working.dir}/${projectBranch}/${dependency}/${dist.dir}/${jar.name}"/>
+								<delete file="${root.root.working.dir}/${projectBranch}/${dependency}/${dist.dir}/${jar.name}"/>
+							</then>
+							<else>
+								<echo message="${root.root.working.dir}/${projectBranch}/${dependency}/${dist.dir}/${jar.name} not found, nothing to delete"/>
+							</else>
+						</if>
+					</else>
+				</if>
+			</then>
+			<else>
+				<echo message="Checking out to ${root.root.working.dir}/${projectBranch}/${dependency}"/>
+				<exec executable="svn" failonerror="true">
+					<arg value="checkout" />
+					<arg value="${svn.root}/${repository}/${actual.branch}" />
+					<arg value="${root.root.working.dir}/${projectBranch}/${dependency}" />
+					<arg value="--username" />
+					<arg value="${svn.username}" />
+					<arg value="--password" />
+					<arg value="${svn.password}" />
+				</exec>
+			</else>
+			</if>
+					
+		    <if>
+		        <available file="${root.root.working.dir}/${projectBranch}/${dependency}/dependency.properties" />	
+				<then>
+		        	<property file="${root.root.working.dir}/${projectBranch}/${dependency}/dependency.properties" />
+					<if>
+						<isset property="project.dependencies"/>
+						<then>
+							<var name="already.updated.this.run.internal" value="${already.updated.this.run.internal}[${dependency}]"/>
+							<ant antfile="getDependencies.xml" dir="${root.master.working.dir}/${bsro.build.dir}" target="checkOutOrUpdateDependencies" inheritAll="false" inheritRefs="false">
+								<property name="projectDependencies" value="${project.dependencies}" />
+								<property name="projectBranch" value="${projectBranch}" />
+								<property name="root.working.dir" value="${root.root.working.dir}"/>
+								<property name="root.master.working.dir" value="${root.master.working.dir}"/>
+								<property name="already.updated.this.run" value="${already.updated.this.run.internal}"/>
+							</ant>
+							
+							<if>
+								<isset property="jar.to.potentially.delete"/>
+								<then>
+									<echo message="${jar.to.potentially.delete} was built at some point, make sure none of its dependencies have been updated. If so, it will need to be deleted."/>
+									<ant antfile="getDependencies.xml" dir="${root.master.working.dir}/${bsro.build.dir}" target="deleteJarIfOneOrMoreDependencyJarsHaveBeenDeleted" inheritAll="false" inheritRefs="false">
+										<property name="projectDependencies" value="${project.dependencies}" />
+										<property name="projectBranch" value="${projectBranch}" />
+										<property name="root.working.dir" value="${root.root.working.dir}"/>
+										<property name="jar.to.delete" value="${root.root.working.dir}/${projectBranch}/${dependency}/${dist.dir}/${jar.name}" />
+									</ant>
+								</then>
+							</if>
+						</then>
+					</if>
+		        </then>
+			</if>
+			
+		</else>
+		</if>
+	</target>
+
+	<!-- This will ensure that a project is rebuilt if one of the projects on which it depends has been updated rebuilt -->
+	<target name="deleteJarIfOneOrMoreDependencyJarsHaveBeenDeleted">
+		<if>
+			<not><isset property="projectDependencies" /></not>
+			<then>
+				<fail message="Please include a parameter called 'projectDependencies' with a comma-delimited list of dependencies. For the framework version 2, please use bsro_framework_version2. For all other projects, just use the repository name."/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="projectBranch" /></not>
+			<then>
+				<fail message="Please include 'projectBranch.'"/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="root.working.dir" /></not>
+			<then>
+				<fail message="Please include 'root.working.dir.'"/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="jar.to.delete" /></not>
+			<then>
+				<fail message="Please include a parameter called 'jar.to.delete' with the full path to the jar you wish to delete if any of its dependent jars have been deleted."/>
+			</then>
+		</if>	
+		
+		<for list="${projectDependencies}" param="dependency">
+			<sequential>
+				<var file="${root.root.working.dir}/${projectBranch}/@{dependency}/build.properties" />
+				<if>
+					<not><available file="${root.root.working.dir}/${projectBranch}/@{dependency}/${dist.dir}/${jar.name}"/></not>
+					<then>
+						<echo message="${root.root.working.dir}/${projectBranch}/@{dependency}/${dist.dir}/${jar.name} has been deleted or does not exist, so we must delete ${jar.to.delete} as well so it will be rebuilt"/>
+						<property name="delete.jar" value="true" />
+					</then>
+				</if>
+			</sequential>
+		</for>
+		
+		<if>
+			<isset property="delete.jar"/>
+			<then>
+				<if>
+					<available file="${jar.to.delete}"/>
+					<then>
+						<delete file="${jar.to.delete}"/>
+					</then>
+				</if>
+			</then>
+			<else>
+				<if>
+					<available file="${jar.to.delete}"/>
+					<then>
+						<echo message="None of ${jar.to.delete}'s dependencies have been updated, so we don't need to delete it to ensure a rebuild."/>
+					</then>
+				</if>
+			</else>
+		</if>
+		
+	</target>
+	
+</project>

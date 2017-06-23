@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<project name="buildAntSite" basedir="." default="buildSite">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b2.jar" />
+		</classpath>
+	</taskdef>
+
+	<property name="debug" value="true"/>
+	<property environment="env"/>
+
+	<target name="buildSite" description="Compile main source tree java files into class files">
+		<property file="build.properties" />
+	
+		<if>
+			<os family="windows"/>
+			<then>
+				<echo message="Windows"/>
+				<property file="workstation.properties" />
+			</then>
+		</if>
+		<if>
+			<os family="unix"/>
+			<then>
+				<echo message="Unix"/>
+				<property file="linuxDeploy.properties" />
+			</then>
+		</if>
+	
+		<if>
+			<not><isset property="site" /></not>
+			<then>
+				<fail message="Please include a parameter called 'site' with the name of the project you are trying to build. (e.g., bsro_fcac)"/>
+			</then>
+		</if>
+		
+		<if>
+			<not><isset property="use.branch.specific.working.dir" /></not>
+			<then>
+				<fail message="The use.branch.specific.working.dir property must be set" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${use.branch.specific.working.dir}" arg2="true"/>	
+			<then>
+				<if>
+					<not><isset property="branch" /></not>
+					<then>
+						<fail message="If use.branch.specific.working.dir=true, then you must include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+					</then>
+					<else>
+						<var name="root.working.dir" value="${root.root.working.dir}/${branch}" />
+					</else>
+				</if>
+			</then>
+			<else>
+				<var name="root.working.dir" value="${root.root.working.dir}" />
+			</else>
+		</if>
+	
+		<var name="working.dir" value="${root.root.working.dir}/${site}" />
+		
+		<if>
+			<and>
+				<isset property="buildDependencies"/>
+				<equals arg1="${buildDependencies}" arg2="true" />
+			</and>
+			<then>
+				<echo message="buildDependencies == true, so build them and copy them  over to the site" />
+				
+				<ant antfile="buildDependencies.xml" dir="${root.master.working.dir}/${bsro.build.dir}" target="buildDependencies" inheritAll="false" inheritRefs="false">
+					<property name="site" value="${site}" />
+				</ant>				
+			</then>
+			<else>
+				<echo message="buildDependencies != true, so skip that step" />
+			</else>
+		</if>
+		
+		<var file="${root.working.dir}/${site}/build.properties" />
+
+		<if>
+			<equals arg1="${clean.maven.webapp.target.dir}" arg2="true" />
+			<then>
+				<echo message="Clean the target dir"/>
+				<delete includeemptydirs="true" verbose="true">
+					<fileset dir="${root.working.dir}/${site}/target" includes="**/*"/>
+				</delete>
+			</then>
+			<else>
+				<echo message="Do not clean the target dir"/>
+			</else>
+		</if>
+		
+		<!-- These projects are built with maven-->						
+		<exec executable="mvn.bat" dir="${root.working.dir}/${site}" failonerror="true">
+			<arg value="clean" />
+			<arg value="install" />
+		</exec>		
+
+		<!-- Maven creates a war file, so we explode it (as WebSphere demands) and copy it to the htdocs directory -->		
+    	<unzip src="${root.working.dir}/${site}/target/${webapp.name}.war" dest="${root.working.dir}/${site}/target/${webapp.name}.exploded"/>					
+    	<move file="${root.working.dir}/${site}/target/${webapp.name}.exploded" tofile="${root.working.dir}/${site}/target/${webapp.name}" failonerror="true"/>						
+	</target>
+
+</project>

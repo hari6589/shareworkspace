@@ -50,12 +50,49 @@ public class Promotion {
 	private Boolean offerWithoutPrice;
 	private PromotionType promotionType;
 	
+	private String subtitleOne;
+ 	private String subtitleTwo;
+ 	private String invalidator;
+ 	private Long brandLogoId;
+ 	private Long brandImageId;
+ 	private String stackFriendlyId;
+	
 //	private boolean hasImage;
 //	private boolean hasThumb;
 //	private boolean hasFlashIcon;
 
 	
 	
+	public String getSubtitleOne() {
+		return subtitleOne;
+	}
+	public void setSubtitleOne(String subtitleOne) {
+		this.subtitleOne = subtitleOne;
+	}
+	public String getSubtitleTwo() {
+		return subtitleTwo;
+	}
+	public void setSubtitleTwo(String subtitleTwo) {
+		this.subtitleTwo = subtitleTwo;
+	}
+	public String getInvalidator() {
+		return invalidator;
+	}
+	public void setInvalidator(String invalidator) {
+		this.invalidator = invalidator;
+	}
+	public Long getBrandLogoId() {
+		return brandLogoId;
+	}
+	public void setBrandLogoId(Long brandLogoId) {
+		this.brandLogoId = brandLogoId;
+	}
+	public Long getBrandImageId() {
+		return brandImageId;
+	}
+	public void setBrandImageId(Long brandImageId) {
+		this.brandImageId = brandImageId;
+	}
 	public Long getPromotionId() {
 		return promotionId;
 	}
@@ -336,6 +373,13 @@ public class Promotion {
 				+ ", promoType=" + promoType + ", webSite=" + webSite
 				+ ", disclaimer=" + disclaimer + "]";
 	}
+	
+	public String getStackFriendlyId() {
+		return stackFriendlyId;
+	}
 
+	public void setStackFriendlyId(String stackFriendlyId) {
+		this.stackFriendlyId = stackFriendlyId;
+	}
 	
 }

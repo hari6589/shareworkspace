@@ -72,7 +72,13 @@ public class AbstractPromotion implements java.io.Serializable {
 	private String t5Desc;
 	private String brandName;
 	private Boolean offerWithoutPrice;		
-	
+	private String subtitleOne;
+ 	private String subtitleTwo;
+ 	private String invalidator;
+ 	private Long brandLogoId;
+ 	private Long brandImageId;	
+ 	private String stackFriendlyId;
+ 	
 	public String toString() {
 		StringBuffer sb = new StringBuffer("ID: " + promotionId + "\n");
 		if(description != null)
@@ -679,4 +685,53 @@ public class AbstractPromotion implements java.io.Serializable {
 			return false;
 		return true;
 	}
+
+	public String getSubtitleOne() {
+		return subtitleOne;
+	}
+
+	public void setSubtitleOne(String subtitleOne) {
+		this.subtitleOne = subtitleOne;
+	}
+
+	public String getSubtitleTwo() {
+		return subtitleTwo;
+	}
+
+	public void setSubtitleTwo(String subtitleTwo) {
+		this.subtitleTwo = subtitleTwo;
+	}
+
+	public String getInvalidator() {
+		return invalidator;
+	}
+
+	public void setInvalidator(String invalidator) {
+		this.invalidator = invalidator;
+	}
+
+	public Long getBrandLogoId() {
+		return brandLogoId;
+	}
+
+	public void setBrandLogoId(Long brandLogoId) {
+		this.brandLogoId = brandLogoId;
+	}
+
+	public Long getBrandImageId() {
+		return brandImageId;
+	}
+
+	public void setBrandImageId(Long brandImageId) {
+		this.brandImageId = brandImageId;
+	}
+	
+	public String getStackFriendlyId() {
+		return stackFriendlyId;
+	}
+
+	public void setStackFriendlyId(String stackFriendlyId) {
+		this.stackFriendlyId = stackFriendlyId;
+	}
+	
 }

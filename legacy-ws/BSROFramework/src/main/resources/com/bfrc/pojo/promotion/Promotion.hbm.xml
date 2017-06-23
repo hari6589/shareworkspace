@@ -127,5 +127,24 @@
          <property name="offerWithoutPrice" type="java.lang.Boolean">
         	<column name="OFFER_WITHOUT_PRICE" precision="1" scale="0" />
         </property>
+        <property name="subtitleOne" type="string">
+            <column name="SUBTITLE_1" length="300" />
+        </property>
+        <property name="invalidator" type="string">
+            <column name="INVALIDATOR" length="300" />
+        </property>
+        <property name="subtitleTwo" type="string">
+            <column name="SUBTITLE_2" length="300" />
+        </property>
+        <property name="brandLogoId" type="java.lang.Long">
+            <column name="BRAND_LOGO_ID" precision="10" scale="0" />
+        </property>
+        <property name="brandImageId" type="java.lang.Long">
+            <column name="BRAND_IMAGE_ID" precision="10" scale="0" />
+        </property>
+        <property name="stackFriendlyId" type="string">
+          <column name="Stacked_Friendly_Unique_ID" length="300"  unique="true" />
+        </property>
+        
     </class>
 </hibernate-mapping>

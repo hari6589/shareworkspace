@@ -8,7 +8,17 @@ public class TpTireQuotesLedger implements java.io.Serializable {
     private Long quoteId;
     private String payload;
     private Date updateDate;
-     
+    
+    private String websiteName;
+    
+	public String getWebsiteName() {
+		return websiteName;
+	}
+
+	public void setWebsiteName(String websiteName) {
+		this.websiteName = websiteName;
+	}
+
 	public Long getQuoteId() {
 		return quoteId;
 	}

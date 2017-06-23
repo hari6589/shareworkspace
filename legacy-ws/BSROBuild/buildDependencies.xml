@@ -1,0 +1,451 @@
+<?xml version="1.0"?>
+
+<project name="buildProjects" basedir="." default="buildDependencies">
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b2.jar" />
+		</classpath>
+	</taskdef>
+
+	<property name="debug" value="true"/>
+	<property environment="env"/>
+	<tstamp>
+		<format property="today" pattern="d-MMMM-yyyy" locale="en,US"/>
+	</tstamp>
+
+	<target name="buildDependencies" description="Build dependencies">
+		<property file="workstation.properties" />
+		
+		<echo message="root.root.working.dir=${root.root.working.dir}"/>
+		
+		<if>
+			<not><isset property="comp" /></not>
+			<then>
+				<fail message="Please include a parameter called 'comp' with the name of the project for which you are trying to build dependencies. (e.g., ExpertTire)"/>
+			</then>
+		</if>
+		
+		<if>
+			<equals arg1="${use.branch.specific.working.dir}" arg2="true"/>	
+			<then>
+				<if>
+					<not><isset property="branch" /></not>
+					<then>
+						<fail message="If use.branch.specific.working.dir=true, then you must include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+					</then>
+					<else>
+						<var name="root.working.dir" value="${root.root.working.dir}/${branch}" />
+					</else>
+				</if>
+			</then>
+			<else>
+				<var name="root.working.dir" value="${root.root.working.dir}" />
+			</else>
+		</if>
+		
+		<echo message="Looking for: ${root.working.dir}/${comp}/dependency.properties"/>
+	    <if>
+	        <available file="${root.working.dir}/${comp}/dependency.properties" />	
+			<then>
+	        		<var file="${root.working.dir}/${comp}/dependency.properties" />
+					<if>
+						<and>
+						<isset property="project.dependencies"/>
+						<not><equals arg1="${project.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<var name="dependencies" value="${project.dependencies}"/>
+						</then>
+						<else>
+							<echo message="${root.working.dir}/${comp}/dependency.properties does not specify any properties to be built, nothing to do here." />
+						</else>
+					</if>
+				</then>
+		</if>
+
+		<if>
+			<and>
+			<isset property="dependencies"/>
+			<not><equals arg1="${dependencies}" arg2="" /></not>
+			</and>
+			<then>
+				<if>
+					<or>
+					<!-- default is to clean first -->
+					<not><isset property="build.even.if.jar.already.present"/></not>
+					<equals arg1="${build.even.if.jar.already.present}" arg2="true" />
+					</or>
+					<then>
+						<for list="${dependencies}" param="dependency">
+							<sequential>
+								<echo message="!!!--------------------------- Cleaning @{dependency} ---------------------------!!!" />
+								<antcall target="cleanProject" inheritAll="false" inheritRefs="false">
+									<param name="project" value="@{dependency}"/>
+									<param name="root.working.dir" value="${root.working.dir}"/>
+									<param name="root.master.working.dir" value="${root.master.working.dir}"/>
+								</antcall>
+							</sequential>
+						</for>
+					</then>
+					<else>
+						<echo message="build.even.if.jar.already.present != true, so don't clean projects" />
+					</else>
+				</if>
+				<for list="${dependencies}" param="dependency">
+					<sequential>
+						<echo message="!!!--------------------------- @{dependency} ---------------------------!!!" />
+						<antcall target="buildProjectInternal" inheritAll="false" inheritRefs="false">
+							<param name="project" value="@{dependency}"/>
+							<param name="root.working.dir" value="${root.working.dir}"/>
+						</antcall>
+					</sequential>
+				</for>
+			</then>
+			<else>
+				<echo message="Nothing to do here. &quot;dependencies&quot; property has not been set via command line or via a &quot;project.dependencies&quot; property in ${root.working.dir}/${comp}/dependency.properties" />
+			</else>
+		</if>
+	
+	</target>
+	
+	<target name="cleanProject">
+		<var file="build.properties" />
+		
+		<antcall target="cleanProjectInternal" inheritAll="false" inheritRefs="false">
+			<param name="project" value="${project}"/>
+			<param name="root.working.dir" value="${root.working.dir}"/>
+			<param name="root.master.working.dir" value="${root.master.working.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="cleanProjectInternal">
+		<echo message="Cleaning ${project}" />
+
+		<var file="build.properties" />
+			
+		<var name="working.dir" value="${root.working.dir}/${project}" />
+
+		<if>
+			<!-- ant project -->
+			<available file="${working.dir}/_dist" type="dir" />	
+			<then>
+				<delete includeemptydirs="true">
+					<fileset dir="${working.dir}/_dist" includes="**/*"/>
+				</delete>
+			</then>
+		</if>
+		<if>
+			<!-- maven project -->
+			<available file="${working.dir}/target" type="dir" />	
+			<then>
+				<delete includeemptydirs="true">
+					<fileset dir="${working.dir}/target" includes="**/*"/>
+				</delete>
+			</then>
+		</if>
+
+		<echo message="Looking for: ${working.dir}/dependency.properties"/>	
+	    <if>
+	        <available file="${working.dir}/dependency.properties" />	
+			<then>
+	        	<var file="${working.dir}/dependency.properties" />
+					<if>
+						<and>
+						<isset property="project.dependencies"/>
+						<not><equals arg1="${project.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<var name="temp.project.dependencies.path" value="" />
+							<for list="${project.dependencies}" param="project.dependency">
+									<sequential>
+										<var file="${root.working.dir}/@{project.dependency}/build.properties" />
+						                <var name="temp.project.dependencies.path" value="${temp.project.dependencies.path},@{project.dependency}/${dist.dir}/${jar.name}" />
+										<ant antfile="buildDependencies.xml" dir="${root.working.dir}/${bsro.build.dir}" target="cleanProject" inheritAll="false" inheritRefs="false">
+											<property name="root.working.dir" value="${root.working.dir}"/>
+											<property name="root.master.working.dir" value="${root.master.working.dir}"/>
+											<property name="project" value="@{project.dependency}" />
+										</ant>
+						            </sequential>
+							</for>
+							<propertyregex property="project.dependencies.path" input="${temp.project.dependencies.path}" regexp="," replace="" global="false" defaultValue="${temp.project.dependencies.path}" />
+						</then>
+					</if>
+	        </then>
+		</if>	
+	</target>
+	
+	<!-- we have an "internal" version because we need to call it recursively and can't do so directly without a "wrapper" project -->
+	<target name="buildProjectInternal" description="Build project and dependent projects">
+		<property file="workstation.properties" />
+
+		<echo message="Building ${project}" />
+
+		<var file="build.properties" />
+			
+		<!-- The project name should be a parameter -->
+		<var name="working.dir" value="${root.working.dir}/${project}" />
+	    <if>
+	        <available file="${working.dir}/build.properties" />	
+			<then>
+				<var file="${working.dir}/build.properties" />
+			</then>
+	    	<else>
+	    		<fail message="${working.dir}/build.properties not found"/>
+	    	</else>
+		</if>
+		
+		<if>
+			<available file="${working.dir}/${dist.dir}/${jar.name}"/>
+			<then>
+				<echo message="${working.dir}/${dist.dir}/${jar.name} already exists. Skipping."/>
+			</then>
+			<else>
+			    <if>
+			        <equals arg1="${build.type}" arg2="ant"/>	
+					<then>
+						<antcall target="buildAntProjectInternal" inheritAll="false" inheritRefs="false">
+							<param name="root.working.dir" value="${root.working.dir}"/>
+							<param name="root.master.working.dir" value="${root.master.working.dir}"/>
+							<param name="project" value="${project}"/>
+							<param name="working.dir" value="${working.dir}"/>
+							<param name="build.even.if.jar.already.present" value="${build.even.if.jar.already.present}"/>
+						</antcall>
+					</then>
+			    	<else>
+			    	    <if>
+			    	        <equals arg1="${build.type}" arg2="maven"/>	
+			    			<then>
+			    				<antcall target="buildMavenProjectInternal" inheritAll="false" inheritRefs="false">
+			    					<param name="root.working.dir" value="${root.working.dir}"/>
+			    					<param name="root.master.working.dir" value="${root.master.working.dir}"/>
+			    					<param name="project" value="${project}"/>
+			    					<param name="working.dir" value="${working.dir}"/>
+			    				</antcall>
+			    			</then>
+			    	    	<else>
+								<fail message="Build type ${build.type} not recognized"/>
+			    	    	</else>
+			    		</if>
+			    	</else>
+				</if>	
+			</else>
+		</if>		
+	</target>
+
+	<!-- we have an "internal" version because we need to call it recursively and can't do so directly without a "wrapper" project -->
+	<target name="buildAntProjectInternal" description="Build project and dependent projects">
+		<!--<echo message="Building ${project}" />-->
+		<var file="build.properties" />
+			
+		<!-- The project name should be a parameter -->
+	    <if>
+	        <available file="${working.dir}/build.properties" />	
+			<then>
+				<var file="${working.dir}/build.properties" />
+			</then>
+	    	<else>
+	    		<fail message="${working.dir}/build.properties not found"/>
+	    	</else>
+		</if>
+		
+		<mkdir dir="${working.dir}/${build.dir}/${webinfclasses.dir}" />
+
+		<echo message="Looking for: ${working.dir}/dependency.properties"/>
+		
+	    <if>
+	        <available file="${working.dir}/dependency.properties" />	
+			<then>
+	        	<var file="${working.dir}/dependency.properties" />
+					<if>
+						<and>
+						<isset property="project.dependencies"/>
+						<not><equals arg1="${project.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<var name="temp.project.dependencies.path" value="" />
+							<for list="${project.dependencies}" param="project.dependency">
+									<sequential>
+										<var file="${root.working.dir}/@{project.dependency}/build.properties" />
+						                <var name="temp.project.dependencies.path" value="${temp.project.dependencies.path},@{project.dependency}/${dist.dir}/${jar.name}" />
+										<ant antfile="buildDependencies.xml" dir="${root.working.dir}/${bsro.build.dir}" target="buildProjectInternal" inheritAll="false" inheritRefs="false">
+											<property name="root.working.dir" value="${root.working.dir}"/>
+											<property name="root.master.working.dir" value="${root.master.working.dir}"/>
+											<property name="project" value="@{project.dependency}" />
+											<property name="build.even.if.jar.already.present" value="${build.even.if.jar.already.present}"/>
+										</ant>
+						            </sequential>
+							</for>
+							<propertyregex property="project.dependencies.path" input="${temp.project.dependencies.path}" regexp="," replace="" global="false" defaultValue="${temp.project.dependencies.path}" />
+						</then>
+					</if>
+					<if>
+						<and>
+						<isset property="jar.dependencies"/>
+						<not><equals arg1="${jar.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<var name="temp.jar.dependencies.path" value="" />
+							<for list="${jar.dependencies}" param="jar.dependency">
+									<sequential>
+						                <var name="temp.jar.dependencies.path" value="${temp.jar.dependencies.path},@{jar.dependency}/*.jar" />
+						            </sequential>
+							</for>
+							<propertyregex property="jar.dependencies.path" input="${temp.jar.dependencies.path}" regexp="," replace="" global="false" defaultValue="${temp.jar.dependencies.path}" />
+						</then>
+					</if>
+	        </then>
+		</if>	
+		
+		<!-- this is important! reset various build.properties to the main project values -->
+		<var file="${working.dir}/build.properties" />
+		
+		<echo message="Project Dependencies pattern: ${project.dependencies.path}"/>
+		<echo message="JAR Dependencies pattern: ${jar.dependencies.path}"/>
+		
+		<path id="master-classpath">
+			<fileset dir="${working.dir}/.." includes="${project.dependencies.path}" />
+			<fileset dir="${root.master.working.dir}/BSRO/${bsro.libraries.jars.dir}" includes="${jar.dependencies.path}" />
+			<!--currently accessing all the jars from library(TODO: change this) -->
+			<!--<fileset dir="${root.working.dir}/${bsro.libraries.jars.dir}" includes="**/*.jar" />-->
+		</path>
+
+		<if>
+			<isset property="debug" />
+			<then>
+				<pathconvert pathsep="${line.separator}|   |-- " property="echo.path.compile" refid="master-classpath">
+				</pathconvert>
+				<echo message="${echo.path.compile}" />
+			</then>
+		</if>
+		
+		<javac destdir="${working.dir}/${build.dir}/${webinfclasses.dir}" source="1.6" target="1.6" debug="true" deprecation="false" optimize="false" failonerror="true" nowarn="true" includeantruntime="false">
+			<src path="${working.dir}/${src.dir}" />
+			<classpath refid="master-classpath" />
+			<compilerarg value="-proc:none"/>
+		</javac>
+
+		<copy todir="${working.dir}/${build.dir}/${webinfclasses.dir}" preservelastmodified="true">
+			<fileset dir="${working.dir}/${src.dir}">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+		
+		<if>
+			<not><equals arg1="${resources.dir}" arg2=""/></not>
+			<then>
+				<copy todir="${working.dir}/${build.dir}/${webinfclasses.dir}" preservelastmodified="true">
+					<fileset dir="${working.dir}/${resources.dir}">
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<mkdir dir="${working.dir}/${dist.dir}" />
+		<jar jarfile="${working.dir}/${dist.dir}/${jar.name}" compress="true">
+			<fileset dir="${working.dir}/${build.dir}/${webinfclasses.dir}">
+				<include name="**/*" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Built-Date" value="${today}"/>
+				<attribute name="Specification-Title" value="${comp}"/>
+				<attribute name="Specification-Version" value="1.0.0"/>
+				<attribute name="Specification-Vendor" value="${organisation}"/>
+				<attribute name="Java-Version" value="${java.runtime.version}"/>
+			</manifest>
+		</jar>
+
+		<!--<delete dir="${working.dir}/${dist.dir}" />-->
+		<delete dir="${working.dir}/${build.dir}" />
+	</target>
+	
+	<!-- we have an "internal" version because we need to call it recursively and can't do so directly without a "wrapper" project -->
+	<target name="buildMavenProjectInternal" description="Build project and dependent projects">
+		<!-- Reload these so we don't need to pass maven.executable all over the eplace -->	
+		<property file="workstation.properties" />
+		<echo message="root.working.dir=${root.working.dir}"/>
+		
+		<echo message="Building ${project}" />
+		<var file="build.properties" />
+			
+		<echo message="Looking for: ${working.dir}/dependency.properties"/>
+		
+	    <if>
+	        <available file="${working.dir}/dependency.properties" />	
+			<then>
+	        	<var file="${working.dir}/dependency.properties" />
+					<if>
+						<and>
+						<isset property="project.dependencies"/>
+						<not><equals arg1="${project.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<var name="temp.project.dependencies.path" value="" />
+							<for list="${project.dependencies}" param="project.dependency">
+									<sequential>
+										<var file="${root.working.dir}/@{project.dependency}/build.properties" />
+						                <var name="temp.project.dependencies.path" value="${temp.project.dependencies.path},@{project.dependency}/${dist.dir}/${jar.name}" />
+										<ant antfile="buildDependencies.xml" dir="${root.master.working.dir}/${bsro.build.dir}" target="buildProjectInternal" inheritAll="false" inheritRefs="false">
+											<property name="root.working.dir" value="${root.working.dir}"/>
+											<property name="root.master.working.dir" value="${root.master.working.dir}"/>
+											<property name="project" value="@{project.dependency}" />
+											<property name="build.even.if.jar.already.present" value="${build.even.if.jar.already.present}"/>
+										</ant>
+						            </sequential>
+							</for>
+							<propertyregex property="project.dependencies.path" input="${temp.project.dependencies.path}" regexp="," replace="" global="false" defaultValue="${temp.project.dependencies.path}" />
+						</then>
+					</if>
+					<if>
+						<and>
+						<isset property="jar.dependencies"/>
+						<not><equals arg1="${jar.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<var name="temp.jar.dependencies.path" value="" />
+							<for list="${jar.dependencies}" param="jar.dependency">
+									<sequential>
+						                <var name="temp.jar.dependencies.path" value="${temp.jar.dependencies.path},@{jar.dependency}/*.jar" />
+						            </sequential>
+							</for>
+							<propertyregex property="jar.dependencies.path" input="${temp.jar.dependencies.path}" regexp="," replace="" global="false" defaultValue="${temp.jar.dependencies.path}" />
+						</then>
+					</if>
+	        </then>
+		</if>		
+		
+		<var file="${working.dir}/build.properties" />
+		
+		<exec executable="${maven.executable}" dir="${working.dir}" failonerror="true">
+			<arg value="clean" />
+			<arg value="install" />
+			<arg value="-f" />
+			<arg value="pom-no-dep.xml" />
+		</exec>
+				
+		<fileset dir="${working.dir}/${dist.dir}" id="maven.project.jar.fileset">
+			<include name="${maven.branch.jar.prefix}-*.jar" />
+		</fileset>
+		<echo message="Looking for ${working.dir}/${dist.dir}/${maven.branch.jar.prefix}-*.jar"/>
+		
+		<pathconvert pathsep="," property="maven.project.jar.list" refid="maven.project.jar.fileset" />
+		
+		<if>
+			 <or>
+			 <contains string="${maven.project.jar.list}" substring="," />
+			 <equals arg1="${maven.project.jar.list}" arg2="" /> 
+			 </or>
+		 	<then>
+			 	<fail message="There should only be one and only one jar in ${working.dir}/${dist.dir}! Found: ${maven.project.jar.list}"/>
+			 </then>
+		</if>
+		
+		<for list="${maven.project.jar.list}" param="maven.jar.with.branch.name">
+			<sequential>
+				<echo message="Maven needs to build the jars on any given branch with a different name, but our non-maven applications need them to have the same name."/>
+				<move file="@{maven.jar.with.branch.name}" tofile="${working.dir}/${dist.dir}/${jar.name}" verbose="true"/>
+			</sequential>
+		</for>
+	</target>
+	
+</project>

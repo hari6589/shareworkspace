@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -31,6 +31,7 @@ import com.bfrc.framework.spring.HibernateDAOImpl;
 import com.bfrc.framework.util.ServerUtil;
 import com.bfrc.framework.util.StringUtils;
 import com.bfrc.pojo.promotion.Promotion;
+import com.bfrc.pojo.promotion.PromotionBrand;
 import com.bfrc.pojo.promotion.PromotionImages;
 import com.bfrc.pojo.promotion.PromotionLandingType;
 import com.bfrc.pojo.promotion.PromotionType;
@@ -974,6 +975,32 @@ public class PromotionDAOImpl extends HibernateDAOImpl implements PromotionDAO {
 		        .executeUpdate();	
 		
 		return updatedEntities;
+	}
+	
+
+	public Map<Long, PromotionBrand> getPromotionBrandsDetails() {
+		String promoTypeQuery = "SELECT * FROM PROMOTION_BRAND";
+		Map<Long,PromotionBrand> promotionBrandDetail = new HashMap<Long, PromotionBrand>();
+		PromotionBrand  promotionBrand = null;
+		
+		List<PromotionBrand> results = new ArrayList<PromotionBrand>();
+		Session session = getSession();
+		try{
+			SQLQuery query = session.createSQLQuery(promoTypeQuery);
+			query.addEntity(PromotionBrand.class);
+			results = query.list();
+		}catch(Throwable t){
+			t.printStackTrace();
+		}finally{
+			releaseSession(session);
+		}
+		
+		 for (int i=0; i<results.size(); i++) {
+			 promotionBrand = (PromotionBrand) results.get(i);
+			 promotionBrandDetail.put(promotionBrand.getBrandId(), promotionBrand);
+		 }
+	
+		return promotionBrandDetail;
 	}
 
 }

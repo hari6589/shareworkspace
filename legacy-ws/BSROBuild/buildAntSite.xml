@@ -1,0 +1,403 @@
+<?xml version="1.0"?>
+
+<project name="buildAntSite" basedir="." default="buildSite">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b2.jar" />
+		</classpath>
+	</taskdef>
+
+	<property name="debug" value="true"/>
+	<property environment="env"/>
+	<property name="dependency.jar.fileset" value=""/>
+	<property name="dependency.jar.list" value=""/>
+
+	<target name="buildSite" description="Compile main source tree java files into class files" >
+		<property file="build.properties" />
+		<property file="workstation.properties" />
+	
+		<if>
+			<not><isset property="comp" /></not>
+			<then>
+				<fail message="Please include a parameter called 'comp' with the name of the project you are trying to build. (e.g., fcac)"/>
+			</then>
+		</if>
+		<if>
+			<not><isset property="use.branch.specific.working.dir" /></not>
+			<then>
+				<fail message="The use.branch.specific.working.dir property must be set" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${use.branch.specific.working.dir}" arg2="true"/>	
+			<then>
+				<if>
+					<not><isset property="branch" /></not>
+					<then>
+						<fail message="If use.branch.specific.working.dir=true, then you must include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+					</then>
+					<else>
+						<var name="root.working.dir" value="${root.root.working.dir}/${branch}" />
+					</else>
+				</if>
+			</then>
+			<else>
+				<var name="root.working.dir" value="${root.root.working.dir}" />
+			</else>
+		</if>
+	
+		<var name="working.dir" value="${root.working.dir}/${comp}" />
+		<echo message="${root.working.dir}" />
+		<!--<echo message="buildDependencies == true, so build them and copy them  over to the comp" />-->
+		<if>
+			<and>
+				<isset property="buildDependencies"/>
+				<equals arg1="${buildDependencies}" arg2="true" />
+			</and>
+			<then>
+				<echo message="buildDependencies == true, so build them and copy them over to the comp" />
+				
+				<ant antfile="buildDependencies.xml" dir="${root.working.dir}/${bsro.build.dir}" target="buildDependencies" inheritAll="false" inheritRefs="false">
+					<property name="comp" value="${comp}" />
+				</ant>
+				
+				<echo message="Looking for: ${working.dir}\dependency.properties"/>
+	    		<if>
+	        		<available file="${working.dir}\dependency.properties" />	
+					<then>
+	        		<var file="${working.dir}\dependency.properties" />
+					<if>
+						<and>
+						<isset property="project.dependencies"/>
+						<not><equals arg1="${project.dependencies}" arg2="" /></not>
+						</and>
+						<then>
+							<for list="${project.dependencies}" param="dependency">
+							<sequential>
+								<!--  the local tasks makes these properties local to this block, so the next iteration of the loop can re-set them -->
+								<!--<local name="dependency.jar.fileset" />
+								<local name="dependency.jar.list" />-->
+								
+								<!--this is added to unset the global property so that they can set set everytime in a loop-->
+								<var name="dependency.jar.fileset" unset="true"/>
+								<var name="dependency.jar.list" unset="true"/>
+								
+								<fileset dir="${root.working.dir}/@{dependency}"  id="dependency.jar.fileset">
+									<include name="**/_dist/*.jar" />
+									<include name="**/target/*.jar" />
+								</fileset>
+								
+								<pathconvert pathsep="," property="dependency.jar.list" refid="dependency.jar.fileset" />
+								
+								<if>
+									 <or>
+									 <contains string="${dependency.jar.list}" substring="," />
+									 <equals arg1="${dependency.jar.list}" arg2="" /> 
+									 </or>
+								 	<then>
+									 	<fail message="There should only be one and only one jar ${root.root.working.dir}/@{dependency}/_dist or ${root.root.working.dir}/@{dependency}/target! Found: ${dependency.jar.list}"/>
+									 </then>
+								</if>
+								
+								<for list="${dependency.jar.list}" param="dependency.jar">
+									<sequential>
+										<echo message="Copy @{dependency.jar} to ${working.dir}/${site.webinf.lib}"/>
+										<copy file="@{dependency.jar}" todir="${working.dir}/${site.webinf.lib}" verbose="true"/>
+									</sequential>
+								</for>
+								
+							</sequential>
+						</for>
+						</then>
+						<else>
+							<echo message="${working.dir}/dependency.properties does not specify any properties to be built, nothing to do here." />
+						</else>
+					</if>
+					</then>
+				</if>
+				
+			</then>
+			<else>
+				<echo message="buildDependencies != true, so just copy the dependency files, if needed" />
+				<if>
+					<and>
+						<isset property="copyDependencies"/>
+						<equals arg1="${copyDependencies}" arg2="true" />
+					</and>
+					<then>
+						<echo message="copyDependencies == true, so copy the existing dependencies over to the comp" />
+						
+						<echo message="Looking for: ${working.dir}\dependency.properties"/>
+						<if>
+							<available file="${working.dir}\dependency.properties" />	
+							<then>
+						   		<var file="${working.dir}\dependency.properties" />
+								<if>
+									<and>
+										<isset property="project.dependencies"/>
+										<not><equals arg1="${project.dependencies}" arg2="" /></not>
+									</and>
+									<then>
+										<for list="${project.dependencies}" param="dependency">
+											<sequential>
+												<!--this is added to unset the global property so that they can set set everytime in a loop-->
+												<var name="dependency.jar.fileset" unset="true"/>
+												<var name="dependency.jar.list" unset="true"/>
+																
+												<fileset dir="${root.working.dir}/@{dependency}"  id="dependency.jar.fileset">
+													<include name="**/_dist/*.jar" />
+													<!--only needed for maven -->
+													<!--<include name="**/target/*.jar" />-->
+												</fileset>
+																				
+												<pathconvert pathsep="," property="dependency.jar.list" refid="dependency.jar.fileset" />
+						
+												<if>
+													<or>
+														<contains string="${dependency.jar.list}" substring="," />
+														<equals arg1="${dependency.jar.list}" arg2="" /> 
+													</or>
+													<then>
+														<fail message="There should only be one and only one jar ${root.root.working.dir}/@{dependency}/_dist or ${root.root.working.dir}/@{dependency}/target! Found: ${dependency.jar.list}"/>
+													</then>
+												</if>
+																				
+												<for list="${dependency.jar.list}" param="dependency.jar">
+													<sequential>
+														<echo message="Copy @{dependency.jar} to ${working.dir}/${site.webinf.lib}"/>
+														<copy file="@{dependency.jar}" todir="${working.dir}\${site.webinf.lib}" verbose="true"/>
+													</sequential>
+												</for>
+											</sequential>
+										</for>
+									</then>											
+								</if>
+							</then>
+						</if>
+					</then>
+				</if>
+			</else>
+		</if>
+		
+		
+		<path id="master-classpath">
+			<!--  basic dependencies all of the sites need -->
+			<fileset dir="${root.working.dir}/${bsro.libraries.jars.dir}/websphere-7" includes="*.jar" />
+			<!--  site-specific dependencies -->
+			<fileset dir="${working.dir}/${site.webinf.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		
+		<!--  we can't afford to clean until we're sure our historical class files are actually in sync with source... -->
+	    <!--	
+	    <delete> 
+	         <fileset dir="${working.dir}/${site.webinfclasses.dir}/com/"> 
+	              <include name="**/*.class"/>                
+	         </fileset>
+	    </delete>
+	    -->	
+		
+		<pathconvert pathsep="${line.separator}|   |-- " property="echo.path.compile" refid="master-classpath">
+		</pathconvert>
+		<echo message="${echo.path.compile}" />
+
+		<mkdir dir="${working.dir}/${site.webinfclasses.dir}" />
+		<javac destdir="${working.dir}/${site.webinfclasses.dir}" source="1.6" target="1.6" debug="true" deprecation="false" 
+			optimize="false" failonerror="true" includeantruntime="false">
+			<src path="${working.dir}/${site.src.dir}" />
+			<classpath refid="master-classpath" />
+			<compilerarg value="-nowarn" />
+		</javac>
+		<copy todir="${working.dir}/${site.webinfclasses.dir}">
+			<fileset dir="${working.dir}/${site.resources.dir}" >
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="minify-javascripts">
+		<property file="build.properties" />
+		<property file="workstation.properties" />
+		<if>
+			<not><isset property="comp" /></not>
+			<then>
+				<fail message="Please include a parameter called 'comp' with the name of the project you are trying to build. (e.g., fcac)"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${use.branch.specific.working.dir}" arg2="true"/>	
+			<then>
+				<if>
+					<not><isset property="branch" /></not>
+					<then>
+						<fail message="If use.branch.specific.working.dir=true, then you must include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+					</then>
+					<else>
+						<var name="root.working.dir" value="${root.root.working.dir}/${branch}" />
+					</else>
+				</if>
+			</then>
+			<else>
+				<var name="root.working.dir" value="${root.root.working.dir}" />
+			</else>
+		</if>
+		
+		<var name="working.dir" value="${root.working.dir}/${comp}" />
+		<var file="${working.dir}/build.properties" />
+		<foreach target="scripts-src-folder" param="srcFile">
+			<path>
+				<dirset dir="${working.dir}/${site.webapp.dir}" includes="**/scripts-src"/>
+			</path>
+		</foreach>
+	</target>
+		
+	<target name="scripts-src-folder">
+		<echo message="${srcFile}"/>
+		<copy todir="${srcFile}/../scripts">
+		    <fileset dir="${srcFile}"/>
+		</copy>
+		<foreach target="execute-js-compressor" param="inFile">
+			<path>
+		    	<fileset dir="${srcFile}" casesensitive="yes">
+		      		<include name="**/*.js"/>	    		
+		    		<exclude name="**/min/*.js"/>
+		    	</fileset> 
+			</path>
+	  	</foreach>
+		<echo message="Minified all the js files in ${srcFile}"/>
+	</target>
+
+	<target name="execute-js-compressor">
+		<echo message="Minifying JS file: ${inFile}"/>
+		<java jar="lib/yuicompressor-2.4.8.jar" fork="true">
+			<arg value="${inFile}"/>
+			<arg value="-o"/>			
+			<arg value="scripts-src:scripts"/>
+		</java>
+	</target>
+
+	<target name="minify-css">
+		<property file="build.properties" />
+		<property file="workstation.properties" />
+		<if>
+			<not><isset property="comp" /></not>
+			<then>
+				<fail message="Please include a parameter called 'comp' with the name of the project you are trying to build. (e.g., fcac)"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${use.branch.specific.working.dir}" arg2="true"/>	
+			<then>
+				<if>
+					<not><isset property="branch" /></not>
+					<then>
+						<fail message="If use.branch.specific.working.dir=true, then you must include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+					</then>
+					<else>
+						<var name="root.working.dir" value="${root.root.working.dir}/${branch}" />
+					</else>
+				</if>
+			</then>
+			<else>
+				<var name="root.working.dir" value="${root.root.working.dir}" />
+			</else>
+		</if>
+		
+		<var name="working.dir" value="${root.working.dir}/${comp}" />
+		<var file="${working.dir}/build.properties" />
+		<foreach target="css-src-folder" param="srcFile">
+			<path>
+				<dirset dir="${working.dir}/${site.webapp.dir}" includes="**/css-src"/>
+			</path>
+		</foreach>
+	</target>
+		
+	<target name="css-src-folder">
+		<echo message="${srcFile}"/>
+		<copy todir="${srcFile}/../css">
+		    <fileset dir="${srcFile}"/>
+		</copy>
+		<foreach target="execute-css-compressor" param="inFile">
+			<path>
+		    	<fileset dir="${srcFile}" casesensitive="yes">
+		      		<include name="**/*.css"/>
+		    		<exclude name="**/min/*.css"/>
+		    	</fileset> 
+			</path>
+	  	</foreach>
+		<echo message="Minified all the css files in ${srcFile}"/>
+	</target>
+
+	<target name="execute-css-compressor">
+		<echo message="Minifying CSS file: ${inFile}"/>
+		<java jar="lib/yuicompressor-2.4.8.jar" fork="true">
+			<arg value="${inFile}"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>			
+			<arg value="css-src:css"/>
+		</java>
+	</target>
+	
+	<target name="build.war">
+		<property file="build.properties" />
+		<property file="workstation.properties" />
+		<if>
+			<not><isset property="comp" /></not>
+			<then>
+				<fail message="Please include a parameter called 'comp' with the name of the project you are trying to build. (e.g., fcac)"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${use.branch.specific.working.dir}" arg2="true"/>	
+			<then>
+				<if>
+					<not><isset property="branch" /></not>
+					<then>
+						<fail message="If use.branch.specific.working.dir=true, then you must include a parameter called 'branch' with the name of the branch you are building for your project. bsro_framework and the version2 framework have different branching schemes, but these will be handled appropriately."/>
+					</then>
+					<else>
+						<var name="root.working.dir" value="${root.root.working.dir}/${branch}" />
+					</else>
+				</if>
+			</then>
+			<else>
+				<var name="root.working.dir" value="${root.root.working.dir}" />
+			</else>
+		</if>
+		
+		<var name="working.dir" value="${root.working.dir}/${comp}" />
+		<var file="${working.dir}/build.properties" />
+		
+		<if>
+			<not><available file="${working.dir}/${dist.dir}" type="dir" /></not>
+			<then>
+			    <mkdir dir="${working.dir}/${dist.dir}"/>
+			</then>
+		</if>
+		
+		<if>
+			<available file="${working.dir}/${dist.dir}/${war.name}" />
+			<then>
+				<delete file="${working.dir}/${dist.dir}/${war.name}"/>
+			</then>
+		</if>
+		
+		<war destfile="${working.dir}/${dist.dir}/${war.name}">
+		    <fileset dir="${working.dir}/${site.webapp.dir}">
+		    	<include name="**"/>
+		    	<exclude name="**/*-src/**"/>
+		    </fileset>
+		    <manifest>
+		        <attribute name="Built-By" value="${user.name}"/>
+		        <attribute name="Built-Date" value="${today}"/>
+		        <attribute name="Specification-Title" value="${comp}"/>
+		        <attribute name="Specification-Version" value="1.0.0"/>
+		        <attribute name="Specification-Vendor" value="${organisation}"/>
+		        <attribute name="Java-Version" value="${java.runtime.version}"/>
+		    </manifest> 
+		</war> 
+	</target>
+
+</project>

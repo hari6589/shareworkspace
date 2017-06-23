@@ -15,6 +15,9 @@ public class ContactUs {
 	private String cellPhone;
 	private String message;
 	private int feedbackId;
+	private String natureOfInquiry;
+	private Long storeNumber;
+	private String userAgent;
 
 	public String getFirstName() {
 		return firstName;
@@ -94,5 +97,24 @@ public class ContactUs {
 	public void setCellPhone(String cellPhone) {
 		this.cellPhone = cellPhone;
 	}
+	public String getNatureOfInquiry() {
+		return natureOfInquiry;
+	}
+	public void setNatureOfInquiry(String natureOfInquiry) {
+		this.natureOfInquiry = natureOfInquiry;
+	}
+	public Long getStoreNumber() {
+		return storeNumber;
+	}
+	public void setStoreNumber(Long storeNumber) {
+		this.storeNumber = storeNumber;
+	}
+	public String getUserAgent() {
+		return userAgent;
+	}
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+	
 	
 }

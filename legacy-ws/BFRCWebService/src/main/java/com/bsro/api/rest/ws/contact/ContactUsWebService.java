@@ -48,16 +48,17 @@ public interface ContactUsWebService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/us")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BSROWebServiceResponse createContactUs(ContactUs contactUs, 
+	public BSROWebServiceResponse createContactUs(Object object, 
 			@QueryParam("storeId") final String storeId,
 			@QueryParam("acesVehicleId") final Long acesVehicleId,
 			@QueryParam("siteName") final String siteName,
+			@QueryParam("newFleet") final boolean newFleet,
 			@Context HttpHeaders headers);
 
-	@GET
+/*	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/them")
-	public ContactUs createContactUsTest(@Context HttpHeaders headers);
+	public ContactUs createContactUsTest(@Context HttpHeaders headers);*/
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

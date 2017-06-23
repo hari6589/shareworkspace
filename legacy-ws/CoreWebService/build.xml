@@ -1,0 +1,68 @@
+<project name="CoreWebService" basedir="." default="build-jar">
+		<property file="build.properties"/>
+		<property name="version" value="1.0"/>	    
+	    <property name="src" value="src/main/java"/>
+	    <property name="build.dir" value="_build"/>
+	    <property name="app.name" value="DataAccess"/>
+	    <property name="lib.name" value="DataAccess"/>
+	    <property name="dist.dir" value="_dist"/>
+		<property name="organization" value="bsro.inc"/>
+	    <property name="dist.file" value="${jar.name}"/>
+		<tstamp>
+	    	<format property="today" pattern="d-MMMM-yyyy" locale="en,US"/>
+	  	</tstamp>
+
+		<path id="classpath">
+			<fileset dir="${basedir}/../BSROLibraries/jars/" includes="**/*.jar"/>
+			<fileset dir="${basedir}/../DataAccessModel/_dist/" includes="**/*.jar"/>
+			<fileset dir="${basedir}/../DataAccessCore/_dist/" includes="**/*.jar"/>
+			<fileset dir="${basedir}/../BSROFramework/_dist/" includes="**/*.jar"/>
+	    </path>		
+		
+	    <!-- init -->
+	    <target name="init">
+	        <mkdir dir="${build.dir}"/>
+	        <mkdir dir="${dist.dir}"/>
+	    </target>
+	    
+	    <!-- clean -->
+	    <target name="clean" description="Clean build directory" depends="init">
+
+	    	<delete>
+	            <fileset dir="${build.dir}" includes="**/*.class, **/*.xml"/>
+	        </delete>
+	    </target>
+	    
+	    <!-- compile -->
+	    <target name="compile" description="Compile Source" depends="clean">
+	        
+	    	<javac srcdir="${src}" source="1.6" target="1.6"
+	             destdir="${build.dir}">
+	             <classpath refid="classpath"/>
+	        </javac>
+	    	<copy todir="${build.dir}" >
+	    				<fileset dir="src/main/resources/" includes="*.properties">
+	    				</fileset>
+	    			</copy>
+	    	<echo>Copying files </echo>
+	    </target>
+
+	    <!-- jar file creation -->
+	    <target name="build-jar" description="Jar Distribution" depends="compile">
+	    	<copy todir="${build.dir}"> <fileset dir="src/main/resources/"> </fileset> </copy>
+	        <delete file="${dist.dir}/${dist.file}"/>
+	        <jar basedir="${build.dir}" destfile="${dist.dir}/${dist.file}">
+	            <!-- <exclude name="*.xml"/> -->
+	        	
+	            <manifest>
+	                 <attribute name="Built-By" value="${user.name}"/>
+	            	 <attribute name="Created-By" value="${organization}"/>
+	            	 <attribute name="Built-Date" value="${today}"/>
+	                 <attribute name="Specification-Title" value="${app.name}"/>
+	                 <attribute name="Specification-Version" value="${version}"/>
+	                 <attribute name="Implementation-Title" value="${app.name}"/>
+	             </manifest> 
+	              
+	        </jar>
+	    </target>
+	</project>

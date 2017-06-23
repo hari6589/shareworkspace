@@ -124,7 +124,7 @@ public class StoreBusinessRulesDAOImpl extends HibernateDaoSupport
 					+ "s.state as storeState, s.zip as storeZip, s.phone as storePhone, s.fax as storeFax, s.manager_name as storeManagerName, s.manager_email_address as storeMEA, "
 					+ "s.active_flag as storeActiveFlag, s.geo_match as storeGeoMatch, s.latitude as storeLatitude, s.longitude as storeLongitude, "
 					+ "s.postal_status_code as storePostalStatusCode, s.online_appointment_active_flag as storeOAAF, s.tire_pricing_active_flag as storeTPAF, "
-					+ "s.tracking_phone as storeTrackingPhone, s.local_page_url as localPageURL, sr.REASON_DESC as reasonDesc, d.district_id as areaId, d.district_name as areaName, "
+					+ "s.tracking_phone as storeTrackingPhone, s.local_page_url as localPageURL,s.ecomm_active_flag as eCommActiveFlag, sr.REASON_DESC as reasonDesc, d.district_id as areaId, d.district_name as areaName, "
 					+ "r.region_id as regionId, r.region_description as regionName, z.zone_name as divisionId, z.zone_description as divisionName "
 					+ "from STORE s, HR_DISTRICTS d, REGION_LIST r, ZONE_LIST z, STORE_TEMPCLOSE_REASONS sr where "
 					+ "d.district_id(+) = s.district_id AND r.region_id(+) = d.region_id AND z.zone_id(+) = r.zone_id AND sr.REASON_ID(+) = s.REASON_ID and s.store_type in"
@@ -138,7 +138,7 @@ public class StoreBusinessRulesDAOImpl extends HibernateDaoSupport
 					.addScalar("storeLatitude", Hibernate.FLOAT).addScalar("storeLongitude", Hibernate.FLOAT)
 					.addScalar("storePostalStatusCode", Hibernate.STRING).addScalar("storeOAAF", Hibernate.BIG_DECIMAL)
 					.addScalar("storeTPAF", Hibernate.BIG_DECIMAL).addScalar("storeTrackingPhone", Hibernate.STRING).addScalar("localPageURL", Hibernate.STRING)
-					.addScalar("reasonDesc", Hibernate.STRING).addScalar("areaId", Hibernate.STRING).addScalar("areaName", Hibernate.STRING).addScalar("regionId", Hibernate.STRING)
+					.addScalar("eCommActiveFlag", Hibernate.BIG_DECIMAL).addScalar("reasonDesc", Hibernate.STRING).addScalar("areaId", Hibernate.STRING).addScalar("areaName", Hibernate.STRING).addScalar("regionId", Hibernate.STRING)
 					.addScalar("regionName", Hibernate.STRING).addScalar("divisionId", Hibernate.STRING).addScalar("divisionName", Hibernate.STRING)
 					.list();
 
@@ -168,6 +168,7 @@ public class StoreBusinessRulesDAOImpl extends HibernateDaoSupport
 					store.setTirePricingActiveFlag((BigDecimal) objects[i]);i++;
 					store.setTrackingPhone((String) objects[i]);i++;
 					store.setLocalPageURL((String) objects[i]);i++;
+					store.seteCommActiveFlag((BigDecimal) objects[i]);i++;
 					store.setReasonDesc((String) objects[i]);i++;
 					store.setDistrictId((String) objects[i]);store.setAreaId((String) objects[i]);i++;
 					store.setDistrictName((String) objects[i]);store.setAreaName((String) objects[i]);i++;
