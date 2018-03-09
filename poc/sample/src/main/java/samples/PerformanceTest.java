@@ -22,7 +22,7 @@ public class PerformanceTest {
 	    //https://1rw1yvhop9.execute-api.us-east-1.amazonaws.com/Dev/ws2/appointment/services
 	    final int numRequests = 100;
 	    final int[] histogram = new int[100];
-	    final List<Integer> latencies = new ArrayList<>();
+	    final List<Integer> latencies = new ArrayList<Integer>();
 
 	    final CloseableHttpClient client = HttpClients.createDefault();
 	    

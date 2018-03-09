@@ -116,7 +116,9 @@ public class BSROMobileAppUserFunctionHandler implements RequestHandler<Object, 
 					
 					appName = params.get("appName");
 					email = params.get("email");
-					//data = params.get("data").toString();
+					System.out.println(data);
+					data = String.valueOf(params.get("data"));
+					System.out.println(data);
 					return mobileAppUserService.backupData(dynamoDBMapper, appName, email, data);
 					
 				case FORGOT_PASSWORD:
